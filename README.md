@@ -9,8 +9,7 @@ and resolved through the stack with a layer-aware thickness model, so steady-sta
 in milliseconds and transients in well under a second — validated throughout against a consistent-mass
 3D-FEM reference.
 
-This repository hosts the **ChipletTherm marketing site** (`index.html`, a single self-contained page
-suitable for GitHub Pages), live at **<https://sheldonucr.github.io/chipletTherm_io/>**.
+This repository hosts the **ChipletTherm promotion site live at **<https://sheldonucr.github.io/chipletTherm_io/>**.
 
 > **Naming.** The tool is **ChipletTherm**, and it ships in two solver modes:
 > **ChipletTherm (TASTA)** — the thickness-resolved, most-accurate solver — and **ChipletTherm-2D
