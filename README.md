@@ -10,7 +10,7 @@ in milliseconds and transients in well under a second — validated throughout a
 3D-FEM reference.
 
 This repository hosts the **ChipletTherm marketing site** (`index.html`, a single self-contained page
-suitable for GitHub Pages).
+suitable for GitHub Pages), live at **<https://sheldonucr.github.io/chipletTherm_io/>**.
 
 > **Naming.** The tool is **ChipletTherm**, and it ships in two solver modes:
 > **ChipletTherm (TASTA)** — the thickness-resolved, most-accurate solver — and **ChipletTherm-2D
