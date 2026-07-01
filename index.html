@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ChipletTherm — Fast 3D Chiplet Thermal Analysis (Static &amp; Transient)</title>
+<meta name="description" content="ChipletTherm delivers FEM-grade static and transient thermal analysis for 2.5D/3D chiplet designs — up to 1400× faster than 3D FEM, with ~0.2 K accuracy and real-time solves. Powered by the ChipletTherm spectral engine." />
+<meta property="og:title" content="ChipletTherm — Fast 3D Chiplet Thermal Analysis" />
+<meta property="og:description" content="FEM-grade thermal sign-off for 2.5D/3D heterogeneous integration, up to 1400× faster. Static and transient analysis in real time, powered by ChipletTherm." />
+<meta property="og:type" content="website" />
+<style>
+  :root{
+    --bg:#070b16; --bg-2:#0a1020; --surface:#0e1628; --surface-2:#13203b;
+    --border:rgba(148,163,184,.14); --border-strong:rgba(148,163,184,.26);
+    --text:#e9eef8; --muted:#9aabc6; --muted-2:#6f829f;
+    --cyan:#22d3ee; --blue:#3b82f6; --indigo:#6366f1;
+    --amber:#fbbf24; --orange:#fb923c; --red:#ef4444; --hot:#ff5a3c;
+    --thermal:linear-gradient(90deg,#1d4ed8 0%,#0891b2 22%,#22d3ee 38%,#fde047 60%,#fb923c 80%,#ef4444 100%);
+    --accent-grad:linear-gradient(135deg,#22d3ee 0%,#3b82f6 55%,#6366f1 100%);
+    --radius:16px; --radius-sm:11px;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;
+    --maxw:1180px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; z-index:-2; pointer-events:none;
+    background:
+      radial-gradient(900px 480px at 78% -8%, rgba(239,68,68,.16), transparent 60%),
+      radial-gradient(820px 520px at 8% 4%, rgba(34,211,238,.14), transparent 58%),
+      radial-gradient(1000px 700px at 50% 110%, rgba(59,130,246,.10), transparent 60%),
+      var(--bg);
+  }
+  a{color:inherit; text-decoration:none}
+  h1,h2,h3{line-height:1.12; margin:0; letter-spacing:-.02em; font-weight:700}
+  p{margin:0}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px}
+  .mono{font-family:var(--mono)}
+  .grad-text{
+    background:linear-gradient(100deg,#67e8f9 0%,#60a5fa 45%,#fb923c 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    backdrop-filter:saturate(140%) blur(12px);
+    background:rgba(7,11,22,.72);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{display:flex; align-items:center; justify-content:space-between; height:64px}
+  .brand{display:flex; align-items:center; gap:11px; font-weight:700; font-size:18px; letter-spacing:-.02em}
+  .brand .dot{
+    width:22px; height:22px; border-radius:7px; background:var(--thermal);
+    box-shadow:0 0 0 1px rgba(255,255,255,.12), 0 0 18px rgba(251,146,60,.55);
+    position:relative; overflow:hidden;
+  }
+  .brand .dot::after{content:""; position:absolute; inset:0; background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.55), transparent 55%)}
+  .nav-links{display:flex; gap:30px; align-items:center}
+  .nav-links a{color:var(--muted); font-size:14.5px; font-weight:500; transition:color .15s}
+  .nav-links a:hover{color:var(--text)}
+  .nav-cta{display:flex; align-items:center; gap:14px}
+  .btn{
+    display:inline-flex; align-items:center; gap:9px; cursor:pointer; border:none;
+    font-family:var(--sans); font-weight:600; font-size:14.5px; line-height:1;
+    padding:12px 20px; border-radius:11px; transition:transform .12s ease, box-shadow .2s ease, background .2s;
+    white-space:nowrap;
+  }
+  .btn-primary{background:var(--accent-grad); color:#04101f; box-shadow:0 8px 26px -8px rgba(56,189,248,.6)}
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 14px 34px -8px rgba(56,189,248,.7)}
+  .btn-ghost{background:rgba(148,163,184,.08); color:var(--text); border:1px solid var(--border-strong)}
+  .btn-ghost:hover{background:rgba(148,163,184,.16); transform:translateY(-2px)}
+  .btn-lg{padding:15px 28px; font-size:15.5px; border-radius:13px}
+  .nav-toggle{display:none; background:none; border:none; color:var(--text); cursor:pointer; padding:6px}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative; padding:74px 0 64px}
+  .hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:54px; align-items:center}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:9px; font-family:var(--mono); font-size:12px;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--cyan);
+    padding:7px 13px; border:1px solid var(--border-strong); border-radius:100px;
+    background:rgba(34,211,238,.06);
+  }
+  .eyebrow .pulse{width:7px; height:7px; border-radius:50%; background:var(--cyan); box-shadow:0 0 10px var(--cyan); animation:pulse 1.8s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .hero h1{font-size:clamp(34px,5.2vw,58px); margin:22px 0 0}
+  .hero p.lead{color:var(--muted); font-size:clamp(16px,1.7vw,19px); margin-top:20px; max-width:560px}
+  .hero-cta{display:flex; gap:14px; margin-top:32px; flex-wrap:wrap}
+  .hero-sub{margin-top:22px; display:flex; gap:22px; flex-wrap:wrap; color:var(--muted-2); font-size:13.5px}
+  .hero-sub span{display:inline-flex; align-items:center; gap:7px}
+  .check{color:var(--cyan)}
+
+  /* ---------- HERO VISUAL (thermal floorplan) ---------- */
+  .viz-card{
+    position:relative; border:1px solid var(--border); border-radius:var(--radius);
+    background:linear-gradient(180deg,rgba(19,32,59,.85),rgba(10,16,32,.9));
+    box-shadow:0 30px 80px -30px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.04);
+    padding:18px; overflow:hidden;
+  }
+  .viz-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding:0 4px}
+  .viz-title{font-family:var(--mono); font-size:12px; color:var(--muted); letter-spacing:.04em}
+  .viz-dots{display:flex; gap:6px}
+  .viz-dots i{width:10px; height:10px; border-radius:50%; display:inline-block; opacity:.7}
+  .viz-dots i:nth-child(1){background:#ef4444}.viz-dots i:nth-child(2){background:#fbbf24}.viz-dots i:nth-child(3){background:#22d3ee}
+  .floorplan{width:100%; height:auto; display:block; border-radius:10px}
+  .hotspot{animation:glow 2.6s ease-in-out infinite}
+  .hotspot.b{animation-delay:.9s}.hotspot.c{animation-delay:1.6s}
+  @keyframes glow{0%,100%{opacity:.55}50%{opacity:1}}
+  .scan{animation:scan 4.5s linear infinite}
+  @keyframes scan{0%{transform:translateY(0);opacity:0}8%{opacity:.7}50%{opacity:.25}92%{opacity:.7}100%{transform:translateY(228px);opacity:0}}
+
+  /* ---------- STATS STRIP ---------- */
+  .stats{border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:rgba(10,16,32,.5)}
+  .stats-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:0}
+  .stat{padding:30px 22px; text-align:center; border-right:1px solid var(--border)}
+  .stat:last-child{border-right:none}
+  .stat .num{font-family:var(--mono); font-size:clamp(26px,3.4vw,38px); font-weight:700; letter-spacing:-.03em}
+  .stat .num.c1{color:#ff7a52}.stat .num.c2{color:#22d3ee}.stat .num.c3{color:#fbbf24}.stat .num.c4{color:#60a5fa}
+  .stat .lbl{color:var(--muted); font-size:13.5px; margin-top:6px}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:84px 0}
+  .sec-head{max-width:700px; margin-bottom:46px}
+  .kicker{font-family:var(--mono); font-size:12.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--orange)}
+  .sec-head h2{font-size:clamp(28px,3.6vw,42px); margin-top:14px}
+  .sec-head p{color:var(--muted); font-size:17px; margin-top:16px}
+
+  /* problem cards */
+  .cards-3{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+  .card{
+    border:1px solid var(--border); border-radius:var(--radius); padding:26px;
+    background:linear-gradient(180deg,rgba(19,32,59,.5),rgba(12,19,36,.5)); transition:border-color .2s, transform .2s;
+  }
+  .card:hover{border-color:var(--border-strong); transform:translateY(-3px)}
+  .card .ic{
+    width:46px; height:46px; border-radius:12px; display:grid; place-items:center; margin-bottom:16px;
+    background:rgba(34,211,238,.1); border:1px solid var(--border-strong); font-size:22px;
+  }
+  .card h3{font-size:18.5px}
+  .card p{color:var(--muted); font-size:14.5px; margin-top:9px}
+
+  /* feature grid */
+  .features{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+  .feat{border:1px solid var(--border); border-radius:var(--radius); padding:26px; background:rgba(14,22,40,.55); position:relative; overflow:hidden}
+  .feat::before{content:""; position:absolute; top:0; left:0; right:0; height:2px; background:var(--thermal); opacity:.0; transition:opacity .25s}
+  .feat:hover::before{opacity:.85}
+  .feat:hover{border-color:var(--border-strong)}
+  .feat .tag{font-family:var(--mono); font-size:11.5px; color:var(--muted-2); letter-spacing:.08em}
+  .feat h3{font-size:18px; margin-top:10px; display:flex; align-items:center; gap:10px}
+  .feat p{color:var(--muted); font-size:14.5px; margin-top:10px}
+  .feat .emoji{font-size:22px}
+
+  /* technology */
+  .tech-grid{display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:start}
+  .pipe{display:flex; flex-direction:column; gap:14px}
+  .pipe-step{
+    display:flex; gap:16px; align-items:flex-start; padding:18px 20px; border:1px solid var(--border);
+    border-radius:var(--radius-sm); background:rgba(14,22,40,.6); position:relative;
+  }
+  .pipe-step .n{
+    flex:none; width:34px; height:34px; border-radius:9px; display:grid; place-items:center;
+    font-family:var(--mono); font-weight:700; font-size:15px; color:#04101f; background:var(--accent-grad);
+  }
+  .pipe-step h4{margin:0 0 4px; font-size:16px}
+  .pipe-step p{color:var(--muted); font-size:14px}
+  .pipe-step::after{content:""; position:absolute; left:36px; bottom:-14px; width:2px; height:14px; background:var(--border-strong)}
+  .pipe-step:last-child::after{display:none}
+  .eqbox{
+    margin-top:8px; border:1px solid var(--border); border-radius:var(--radius); padding:22px 24px;
+    background:linear-gradient(180deg,rgba(19,32,59,.6),rgba(10,16,32,.7));
+  }
+  .eqbox .label{font-family:var(--mono); font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--orange)}
+  .eq{font-family:var(--mono); font-size:clamp(14px,1.9vw,18px); margin:12px 0 4px; color:#dbe6f7; text-align:center; letter-spacing:.01em}
+  .eqbox .legend{color:var(--muted); font-size:13px; margin-top:12px}
+  .eqbox .why{color:var(--muted); font-size:14.5px; line-height:1.66; margin:12px 0 2px}
+  .eqbox .divider{height:1px; background:var(--border); margin:18px 0}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:18px}
+  .chip{font-family:var(--mono); font-size:12px; color:var(--cyan); border:1px solid var(--border-strong); border-radius:100px; padding:6px 12px; background:rgba(34,211,238,.06)}
+  .twocard{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px}
+  .solver{border:1px solid var(--border); border-radius:var(--radius-sm); padding:18px; background:rgba(14,22,40,.6)}
+  .solver .nm{font-family:var(--mono); font-weight:700; font-size:15px}
+  .solver.fast .nm{color:#22d3ee}.solver.acc .nm{color:#ff7a52}
+  .solver .role{font-size:11.5px; color:var(--muted-2); font-family:var(--mono); letter-spacing:.05em; text-transform:uppercase; margin-top:3px}
+  .solver p{color:var(--muted); font-size:13px; margin-top:10px}
+  .solver .kv{margin-top:12px; display:flex; gap:16px; font-family:var(--mono); font-size:12.5px}
+  .solver .kv b{color:var(--text)}
+  .solver .paren{color:var(--muted-2); font-weight:400; font-size:.82em}
+
+  /* agentic flow */
+  .flowpts{list-style:none; padding:0; margin:6px 0 0; display:flex; flex-direction:column; gap:15px}
+  .flowpts li{position:relative; padding-left:26px; color:var(--muted); font-size:14.5px; line-height:1.6}
+  .flowpts li::before{content:"→"; position:absolute; left:0; top:0; color:var(--cyan); font-family:var(--mono)}
+  .flowpts li b{color:var(--text)}
+  .floloop{border:1px solid var(--border); border-radius:var(--radius); padding:20px; background:linear-gradient(180deg,rgba(19,32,59,.5),rgba(10,16,32,.6))}
+  .floloop-head{font-family:var(--mono); font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted-2); display:flex; align-items:center; gap:9px; margin-bottom:14px}
+  .loopdot{width:8px; height:8px; border-radius:50%; background:var(--cyan); box-shadow:0 0 10px var(--cyan); flex:none}
+  .flonode{border:1px solid var(--border-strong); border-radius:var(--radius-sm); padding:14px 16px; background:rgba(14,22,40,.7)}
+  .flonode .ft{font-family:var(--mono); font-size:13px; color:var(--cyan)}
+  .flonode.engine{border-color:rgba(251,146,60,.32)}
+  .flonode.engine .ft{color:#ff7a52}
+  .flonode .fd{color:var(--muted); font-size:13px; margin-top:5px; line-height:1.55}
+  .floarrow{display:flex; align-items:center; gap:9px; padding:9px 0 9px 4px; color:var(--muted-2); font-size:12.5px; font-family:var(--mono)}
+  .floarrow .ax{color:var(--cyan); font-size:16px; line-height:1}
+
+  /* results */
+  .res-group{margin-bottom:36px}
+  .res-label{font-family:var(--mono); font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--cyan); display:flex; align-items:center; gap:14px; margin:0 0 18px}
+  .res-label::after{content:""; flex:1; height:1px; background:var(--border)}
+  .res-label.warm{color:var(--orange)}
+  .res-grid{display:grid; grid-template-columns:1fr 1fr; gap:22px}
+  .panel{
+    border:1px solid var(--border); border-radius:var(--radius); padding:26px;
+    background:linear-gradient(180deg,rgba(19,32,59,.5),rgba(12,19,36,.55));
+  }
+  .panel.full{grid-column:1/-1}
+  .panel .phead{display:flex; align-items:baseline; justify-content:space-between; gap:14px; margin-bottom:6px; flex-wrap:wrap}
+  .panel h3{font-size:19px}
+  .panel .psub{color:var(--muted); font-size:13.5px}
+  .badge{font-family:var(--mono); font-size:11.5px; padding:5px 10px; border-radius:100px; border:1px solid var(--border-strong); color:var(--cyan); background:rgba(34,211,238,.06); white-space:nowrap}
+  .badge.warn{color:var(--orange); background:rgba(251,146,60,.07)}
+  table.data{width:100%; border-collapse:collapse; margin-top:14px; font-size:14px}
+  table.data th,table.data td{text-align:left; padding:10px 8px; border-bottom:1px solid var(--border)}
+  table.data th{color:var(--muted-2); font-weight:600; font-family:var(--mono); font-size:11.5px; letter-spacing:.05em; text-transform:uppercase}
+  table.data td.mono{font-family:var(--mono)}
+  table.data tr:last-child td{border-bottom:none}
+  table.data tr.total td{font-weight:700; color:var(--text)}
+  table.data tr.win td{color:#67e8f9; font-weight:700}
+  .muted-tag{color:var(--muted-2); font-weight:400; font-size:.85em}
+  .bars{margin-top:8px}
+  .bar-row{display:grid; grid-template-columns:118px 1fr 74px; align-items:center; gap:12px; margin:13px 0}
+  .bar-row .blab{font-size:13.5px; color:var(--muted)}
+  .bar-track{height:14px; border-radius:8px; background:rgba(148,163,184,.1); overflow:hidden}
+  .bar-fill{height:100%; border-radius:8px; background:var(--thermal); transform-origin:left; transform:scaleX(0); transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
+  .bar-row .bval{font-family:var(--mono); font-size:13.5px; text-align:right; color:var(--text)}
+  .note{color:var(--muted-2); font-size:12.5px; margin-top:16px; line-height:1.65}
+  .legend-row{display:flex; gap:18px; margin-top:12px; flex-wrap:wrap}
+  .legend-row span{display:inline-flex; align-items:center; gap:7px; font-size:13px; color:var(--muted)}
+  .swatch{width:14px; height:4px; border-radius:2px; display:inline-block}
+
+  /* figures (real paper images) */
+  .fig{border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:#0a0f1c; margin-top:22px}
+  .fig img{display:block; width:100%; height:auto; background:#0a0f1c}
+  .fig figcaption{padding:13px 18px; color:var(--muted); font-size:13px; border-top:1px solid var(--border); line-height:1.55}
+  .fig figcaption b{color:var(--text)}
+  .fig .ph{display:none}
+  .fig.noimg img{display:none}
+  .fig.noimg .ph{display:flex; min-height:200px; align-items:center; justify-content:center; text-align:center;
+    color:var(--muted-2); font-size:12.5px; padding:28px; font-family:var(--mono);
+    background:repeating-linear-gradient(45deg,rgba(148,163,184,.05),rgba(148,163,184,.05) 12px,transparent 12px,transparent 24px)}
+  .fig-2{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+  @media(max-width:560px){.fig-2{grid-template-columns:1fr}}
+
+  /* tool-flow diagram */
+  .toolflow{border:1px solid var(--border); border-radius:var(--radius); padding:24px; background:linear-gradient(180deg,rgba(19,32,59,.5),rgba(10,16,32,.6)); margin-top:26px}
+  .tf-head{font-family:var(--mono); font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted-2); display:flex; align-items:center; gap:9px; margin-bottom:18px}
+  .tf-row{display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:14px; align-items:stretch}
+  .tf-stage{border:1px solid var(--border-strong); border-radius:var(--radius-sm); padding:16px; background:rgba(14,22,40,.7); display:flex; flex-direction:column; gap:12px}
+  .tf-stage.engine{border-color:rgba(34,211,238,.3); background:rgba(19,32,59,.85)}
+  .tf-label{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--cyan)}
+  .tf-stage.engine .tf-label{color:var(--text)}
+  .tf-item{display:flex; gap:10px; align-items:flex-start}
+  .tf-ic{font-size:16px; line-height:1.3; flex:none}
+  .tf-swatch{width:17px; height:17px; border-radius:5px; background:var(--thermal); flex:none; box-shadow:0 0 0 1px rgba(255,255,255,.12); margin-top:1px}
+  .tf-tx{display:flex; flex-direction:column}
+  .tf-tx b{font-size:13.5px; color:var(--text)}
+  .tf-tx span{font-size:12px; color:var(--muted)}
+  .tf-algo{border:1px solid var(--border-strong); border-radius:9px; padding:10px 12px; display:flex; flex-direction:column; gap:2px}
+  .tf-algo.acc{border-color:rgba(255,122,82,.4); background:rgba(255,122,82,.06)}
+  .tf-algo.fast{border-color:rgba(34,211,238,.4); background:rgba(34,211,238,.06)}
+  .tf-algo b{font-size:12.5px; font-family:var(--mono)}
+  .tf-algo.acc b{color:#ff7a52}
+  .tf-algo.fast b{color:#22d3ee}
+  .tf-algo span{font-size:11.5px; color:var(--muted)}
+  .tf-arrow{display:flex; align-items:center; justify-content:center; color:var(--cyan); font-size:20px; font-family:var(--mono)}
+  @media(max-width:760px){
+    .tf-row{grid-template-columns:1fr}
+    .tf-arrow{transform:rotate(90deg); padding:4px 0}
+  }
+
+  /* transient video row */
+  .vid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:16px}
+  .vid{border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; background:#0a0f1c; margin:0}
+  .vid video{display:block; width:100%; height:clamp(180px,18vw,260px); object-fit:contain; background:#070c17}
+  .vid figcaption{padding:11px 14px; color:var(--muted); font-size:12.5px; border-top:1px solid var(--border); line-height:1.5}
+  .vid figcaption b{color:var(--text)}
+  .vid .vlab{font-family:var(--mono); font-size:11px; letter-spacing:.05em; color:var(--cyan); display:block; margin-bottom:3px}
+  .vid .ph{display:none}
+  .vid.novid video{display:none}
+  .vid.novid .ph{display:flex; min-height:clamp(180px,18vw,260px); align-items:center; justify-content:center; text-align:center; color:var(--muted-2); font-size:11.5px; padding:20px; font-family:var(--mono); background:repeating-linear-gradient(45deg,rgba(148,163,184,.05),rgba(148,163,184,.05) 12px,transparent 12px,transparent 24px)}
+  @media(max-width:760px){.vid-3{grid-template-columns:1fr}}
+
+  /* CTA */
+  .cta-band{
+    border:1px solid var(--border-strong); border-radius:24px; padding:54px 44px; text-align:center; position:relative; overflow:hidden;
+    background:linear-gradient(180deg,rgba(19,32,59,.8),rgba(10,16,32,.92));
+  }
+  .cta-band::before{content:""; position:absolute; inset:0; z-index:0; opacity:.5;
+    background:radial-gradient(600px 240px at 50% -20%, rgba(251,146,60,.22), transparent 60%),radial-gradient(500px 240px at 50% 120%, rgba(34,211,238,.18), transparent 60%)}
+  .cta-band>*{position:relative; z-index:1}
+  .cta-band h2{font-size:clamp(28px,3.6vw,40px)}
+  .cta-band p{color:var(--muted); font-size:17px; margin:16px auto 28px; max-width:560px}
+  .cta-btns{display:flex; gap:14px; justify-content:center; flex-wrap:wrap}
+  .cta-meta{margin-top:20px; color:var(--muted-2); font-size:13.5px; font-family:var(--mono)}
+
+  /* footer */
+  footer{border-top:1px solid var(--border); padding:46px 0 40px; margin-top:30px}
+  .foot-grid{display:flex; justify-content:space-between; gap:30px; flex-wrap:wrap; align-items:flex-start}
+  .foot-brand{max-width:340px}
+  .foot-brand p{color:var(--muted); font-size:14px; margin-top:12px}
+  .foot-cols{display:flex; gap:64px; flex-wrap:wrap}
+  .foot-col h5{font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted-2); margin:0 0 14px}
+  .foot-col a,.foot-col span{display:block; color:var(--muted); font-size:14px; margin-bottom:9px; transition:color .15s}
+  .foot-col a:hover{color:var(--text)}
+  .cite{margin-top:34px; padding-top:22px; border-top:1px solid var(--border); color:var(--muted-2); font-size:12.5px; line-height:1.75}
+  .cite b{color:var(--muted)}
+  .copyright{margin-top:18px; color:var(--muted-2); font-size:13px}
+
+  /* reveal */
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease}
+  .reveal.in{opacity:1; transform:none}
+
+  /* responsive */
+  @media(max-width:900px){
+    .hero-grid{grid-template-columns:1fr; gap:38px}
+    .tech-grid{grid-template-columns:1fr; gap:30px}
+    .stats-grid{grid-template-columns:repeat(2,1fr)}
+    .stat:nth-child(2){border-right:none}
+    .stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--border)}
+    .cards-3,.features,.res-grid{grid-template-columns:1fr}
+    .nav-links{display:none}
+    .nav-links.open{display:flex; position:absolute; top:64px; left:0; right:0; flex-direction:column; gap:0; background:rgba(8,12,24,.98); border-bottom:1px solid var(--border); padding:8px 0}
+    .nav-links.open a{padding:13px 24px}
+    .nav-toggle{display:block}
+    section{padding:62px 0}
+  }
+  @media(max-width:560px){
+    .stats-grid{grid-template-columns:1fr}
+    .stat{border-right:none; border-bottom:1px solid var(--border)}
+    .bar-row{grid-template-columns:84px 1fr 60px}
+    .twocard{grid-template-columns:1fr}
+    .cta-band{padding:38px 22px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top"><span class="dot"></span>ChipletTherm</a>
+    <nav class="nav-links" id="navlinks">
+      <a href="#features">Features</a>
+      <a href="#agentic">Agentic flow</a>
+      <a href="#technology">Technology</a>
+      <a href="#results">Results</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-primary" href="#contact">Request access</a>
+      <button class="nav-toggle" id="navtoggle" aria-label="Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<a id="top"></a>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="pulse"></span>Static &amp; transient thermal analysis</span>
+      <h1>Thermal sign-off for <span class="grad-text">3D chiplet designs</span>, up to 1400× faster.</h1>
+      <p class="lead">ChipletTherm computes FEM-grade temperature maps for 2.5D and 3D heterogeneous-integration stacks in milliseconds — so you can sweep thousands of floorplans, power maps, and stack-ups, or run thermal management in real time, where a single 3D-FEM run used to be your whole budget.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary btn-lg" href="#contact">Request access</a>
+        <a class="btn btn-ghost btn-lg" href="#results">See the results</a>
+      </div>
+      <div class="hero-sub">
+        <span><span class="check">✦</span> ~0.2 K agreement with 3D FEM</span>
+        <span><span class="check">✦</span> Real-time solves</span>
+        <span><span class="check">✦</span> Powered by the ChipletTherm spectral engine</span>
+      </div>
+    </div>
+
+    <!-- Thermal floorplan visual -->
+    <div class="viz-card reveal">
+      <div class="viz-head">
+        <span class="viz-title">chiplet_2.5D · steady-state · °C</span>
+        <span class="viz-dots"><i></i><i></i><i></i></span>
+      </div>
+      <svg class="floorplan" viewBox="0 0 520 360" role="img" aria-label="Thermal heatmap of a 2.5D chiplet floorplan">
+        <defs>
+          <radialGradient id="hsHot" cx="50%" cy="50%" r="55%">
+            <stop offset="0%" stop-color="#fff3c4"/><stop offset="28%" stop-color="#ef4444"/>
+            <stop offset="65%" stop-color="#b91c1c" stop-opacity=".55"/><stop offset="100%" stop-color="#7f1d1d" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="hsWarm" cx="50%" cy="50%" r="55%">
+            <stop offset="0%" stop-color="#fde047"/><stop offset="45%" stop-color="#fb923c" stop-opacity=".75"/>
+            <stop offset="100%" stop-color="#fb923c" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="hsCool" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="#67e8f9"/><stop offset="55%" stop-color="#22d3ee" stop-opacity=".5"/>
+            <stop offset="100%" stop-color="#0891b2" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="bar" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stop-color="#1d4ed8"/><stop offset="22%" stop-color="#0891b2"/><stop offset="42%" stop-color="#22d3ee"/>
+            <stop offset="62%" stop-color="#fde047"/><stop offset="82%" stop-color="#fb923c"/><stop offset="100%" stop-color="#ef4444"/>
+          </linearGradient>
+          <linearGradient id="die" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#13203b"/><stop offset="100%" stop-color="#0c1426"/>
+          </linearGradient>
+        </defs>
+
+        <!-- interposer substrate -->
+        <rect x="20" y="20" width="430" height="320" rx="12" fill="url(#die)" stroke="rgba(148,163,184,.25)"/>
+        <text x="34" y="42" font-family="ui-monospace,monospace" font-size="11" fill="#6f829f">interposer</text>
+
+        <!-- heat fields -->
+        <ellipse class="hotspot" cx="150" cy="150" rx="120" ry="105" fill="url(#hsHot)"/>
+        <ellipse class="hotspot b" cx="330" cy="120" rx="86" ry="74" fill="url(#hsWarm)"/>
+        <ellipse class="hotspot c" cx="330" cy="265" rx="92" ry="78" fill="url(#hsCool)"/>
+
+        <!-- chiplet dies -->
+        <g font-family="ui-monospace,monospace" font-size="12.5" fill="#eaf1fb">
+          <rect x="62" y="92" width="170" height="150" rx="9" fill="rgba(127,29,29,.28)" stroke="#ef4444" stroke-opacity=".7"/>
+          <text x="78" y="116">GPU die</text><text x="78" y="134" font-size="11" fill="#fca5a5">94 °C</text>
+
+          <rect x="266" y="70" width="150" height="100" rx="9" fill="rgba(180,83,9,.22)" stroke="#fb923c" stroke-opacity=".7"/>
+          <text x="282" y="94">CPU die</text><text x="282" y="112" font-size="11" fill="#fdba74">71 °C</text>
+
+          <rect x="266" y="210" width="150" height="98" rx="9" fill="rgba(8,145,178,.2)" stroke="#22d3ee" stroke-opacity=".7"/>
+          <text x="282" y="234">I/O + HBM</text><text x="282" y="252" font-size="11" fill="#67e8f9">48 °C</text>
+        </g>
+
+        <!-- contour rings on hotspot -->
+        <g fill="none" stroke="#fff" stroke-opacity=".18">
+          <ellipse cx="150" cy="150" rx="46" ry="40"/><ellipse cx="150" cy="150" rx="76" ry="66"/>
+        </g>
+
+        <!-- scan line -->
+        <rect class="scan" x="20" y="20" width="430" height="3" fill="#22d3ee" opacity=".0"/>
+
+        <!-- colorbar -->
+        <rect x="472" y="40" width="20" height="280" rx="6" fill="url(#bar)"/>
+        <g font-family="ui-monospace,monospace" font-size="10.5" fill="#9aabc6">
+          <text x="468" y="44" text-anchor="end">100</text>
+          <text x="468" y="184" text-anchor="end">65</text>
+          <text x="468" y="322" text-anchor="end">30</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS ============ -->
+<div class="stats">
+  <div class="wrap stats-grid">
+    <div class="stat reveal"><div class="num c1">1400×</div><div class="lbl">faster than 3D FEM</div></div>
+    <div class="stat reveal"><div class="num c2">0.21 K</div><div class="lbl">mean RMSE vs 3D-FEM (static)</div></div>
+    <div class="stat reveal"><div class="num c3">0.02 s</div><div class="lbl">per steady-state solve</div></div>
+    <div class="stat reveal"><div class="num c4">30</div><div class="lbl">cases validated vs 3D-FEM</div></div>
+  </div>
+</div>
+
+<!-- ============ PROBLEM ============ -->
+<section id="why">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">The bottleneck</div>
+      <h2>3D integration broke the old thermal flow</h2>
+      <p>Vertical stacking of dies, interposers, and memory turns thermal behavior into a first-order design constraint — and with accelerators now pushing 700–1200 W, the tools accurate enough to trust are far too slow to keep in the loop.</p>
+    </div>
+    <div class="cards-3">
+      <div class="card reveal">
+        <div class="ic">🔥</div>
+        <h3>Hotspots hide in the stack</h3>
+        <p>Heterogeneous 2.5D/3D stacks raise thermal resistance and trap heat between layers. Logic chiplets next to stacked HBM create localized hotspots — and peak junction temperature decides whether a design ships.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ic">🐌</div>
+        <h3>3D FEM is too slow to iterate</h3>
+        <p>A full 3D finite-element solve discretizes the whole volume into millions of unknowns. That's fine for one sign-off, but impossible for the thousands of evaluations a design-space search — or a runtime control loop — demands.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ic">🔁</div>
+        <h3>Thermal must be in the loop</h3>
+        <p>Floorplanning, power delivery, packaging co-design, and runtime management all need temperature feedback per iteration. Without a fast, accurate model, thermal gets checked last — when it's most expensive to fix.</p>
+      </div>
+    </div>
+    <div class="toolflow reveal">
+      <div class="tf-head"><span class="loopdot"></span>The ChipletTherm flow — power in, thermal map out</div>
+      <div class="tf-row">
+        <div class="tf-stage">
+          <div class="tf-label">Inputs</div>
+          <div class="tf-item"><span class="tf-ic">⚡</span><span class="tf-tx"><b>Thermal power maps</b><span>from your EDA flow</span></span></div>
+          <div class="tf-item"><span class="tf-ic">🧱</span><span class="tf-tx"><b>Chiplet structure</b><span>2.5D / 3D stack-up &amp; layers</span></span></div>
+          <div class="tf-item"><span class="tf-ic">🧪</span><span class="tf-tx"><b>Material properties</b><span>per-layer conductivity &amp; more</span></span></div>
+        </div>
+        <div class="tf-arrow">→</div>
+        <div class="tf-stage engine">
+          <div class="tf-label">ChipletTherm · pick the solver</div>
+          <div class="tf-algo acc"><b>3D · ChipletTherm (TASTA)</b><span>thickness-resolved — most accurate</span></div>
+          <div class="tf-algo fast"><b>2D · ChipletTherm-2D (TASTA-2D)</b><span>layer-averaged — fastest</span></div>
+        </div>
+        <div class="tf-arrow">→</div>
+        <div class="tf-stage">
+          <div class="tf-label">Thermal map</div>
+          <div class="tf-item"><span class="tf-swatch"></span><span class="tf-tx"><b>2D heat map</b><span>per-layer &amp; hotspot view</span></span></div>
+          <div class="tf-item"><span class="tf-swatch"></span><span class="tf-tx"><b>3D temperature field</b><span>resolved through the stack</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">What it does</div>
+      <h2>One engine, the whole thermal picture</h2>
+      <p>ChipletTherm pairs a fast spectral solver with a full 3D-FEM reference, covering both steady-state sign-off and time-dependent response on the very same chiplet model.</p>
+    </div>
+    <div class="features">
+      <div class="feat reveal">
+        <div class="tag">STATIC</div>
+        <h3><span class="emoji">🗺️</span> Resolved 3D heat maps</h3>
+        <p>Full-chip, full-stack temperature fields for 2.5D and 3D assemblies — every die, layer, and interposer resolved through-thickness in 3D from a single power and floorplan description.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="tag">TRANSIENT</div>
+        <h3><span class="emoji">📈</span> Time-domain response</h3>
+        <p>Drive the model with arbitrary power waveforms and get the full temperature history at every node — thermal transients, throttling, and workload bursts, step by step.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="tag">SPEED</div>
+        <h3><span class="emoji">⚡</span> Real-time fast</h3>
+        <p>Steady-state solves land in ~0.02 s and transients in well under a second — up to 1410× faster than 3D FEM (static) and a mean 1036× (transient). Fast enough for ~50 Hz runtime thermal management.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="tag">ACCURACY</div>
+        <h3><span class="emoji">🎯</span> Best-in-class fidelity</h3>
+        <p>ChipletTherm reaches 0.21 K mean RMSE against a consistent-mass 3D-FEM reference — more accurate than the SOV and GIT semi-analytical baselines — across 30 cases including measured Snapdragon and Coral-TPU power maps.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="tag">SCOPE</div>
+        <h3><span class="emoji">🧱</span> Real chiplet stacks</h3>
+        <p>Validated to 11 layers — 2.5D interposers, 3D logic stacks, HBM, CPU and RF packages — with per-layer anisotropic materials, interface thermal resistance, heat capacity, and convective surface cooling.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="tag">EXPLORE</div>
+        <h3><span class="emoji">🔭</span> Batched &amp; scriptable</h3>
+        <p>Lateral frequency modes solve independently, so workloads batch naturally across multi-core CPUs and GPUs — built to evaluate thousands of candidate designs or stream live temperature estimates.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AGENTIC FLOW ============ -->
+<section id="agentic">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Workflow · EMspice 3</div>
+      <h2>Built for agentic EDA flows</h2>
+      <p>ChipletTherm doesn't stop at thermal. Its companion sign-off engine <b>EMspice&nbsp;3</b> is fully agentic-flow-aware — a first-class CLI and a structured data interface let any agent-driven EDA flow invoke temperature-aware IR-drop and electromigration (EM) sign-off, consuming ChipletTherm's thermal maps and returning machine-readable results straight back into the loop.</p>
+    </div>
+    <div class="tech-grid">
+      <div class="reveal">
+        <ul class="flowpts">
+          <li><b>Fully agentic-flow aware</b> — built to be driven by autonomous EDA agents, and to plug into <i>any</i> agentic flow.</li>
+          <li><b>First-class CLI</b> — every analysis is scriptable from the command line; nothing in the loop needs a GUI.</li>
+          <li><b>Structured data interface</b> — machine-readable (JSON) inputs and results for true closed-loop automation.</li>
+          <li><b>IR &amp; EM sign-off</b> — temperature-aware IR-drop and electromigration sign-off via EMspice&nbsp;3, alongside ChipletTherm's thermal analysis.</li>
+        </ul>
+        <div class="chips" style="margin-top:24px">
+          <span class="chip">agentic-flow aware</span>
+          <span class="chip">CLI-first</span>
+          <span class="chip">JSON data interface</span>
+          <span class="chip">IR-drop sign-off</span>
+          <span class="chip">EM sign-off</span>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="floloop">
+          <div class="floloop-head"><span class="loopdot"></span>Closed-loop automation</div>
+          <div class="flonode agent">
+            <div class="ft">◆ Agentic EDA flow</div>
+            <div class="fd">An autonomous agent drives floorplan, power, and routing decisions.</div>
+          </div>
+          <div class="floarrow"><span class="ax">↓</span> invokes sign-off — CLI + structured data interface</div>
+          <div class="flonode engine">
+            <div class="ft">▣ Sign-off engines</div>
+            <div class="fd">ChipletTherm (thermal) and EMspice&nbsp;3 (IR-drop &amp; EM) run headless — no GUI in the loop.</div>
+          </div>
+          <div class="floarrow"><span class="ax">↓</span> returns structured, machine-readable results</div>
+          <div class="flonode agent">
+            <div class="ft">↻ Fed back to the agent</div>
+            <div class="fd">Temperature margins and IR/EM violations steer the next iteration — automatically, no manual steps.</div>
+          </div>
+        </div>
+        <p class="note">Sign-off becomes a callable step inside your agentic flow, not a hand-run GUI tool.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TECHNOLOGY ============ -->
+<section id="technology">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Under the hood</div>
+      <h2>Spectral in the plane, thickness-aware through the stack</h2>
+      <p>The speed comes from analyzing the chip in a form where the physics nearly separates. ChipletTherm breaks the in-plane temperature field into independent spectral (cosine) modes, resolves each one down through the layer stack, and reassembles the full 3D map. It ships in two solver modes that span the speed–accuracy tradeoff: <b>ChipletTherm&nbsp;(TASTA)</b>, the thickness-resolved, most-accurate solver, and <b>ChipletTherm-2D&nbsp;(TASTA-2D)</b>, the fast, layer-averaged one. <span class="muted-tag">TASTA / TASTA-2D are the names used in our paper and figures.</span></p>
+    </div>
+    <div class="tech-grid">
+      <div class="pipe reveal">
+        <div class="pipe-step">
+          <span class="n">1</span>
+          <div><h4>Spectral decomposition</h4><p>The in-plane temperature pattern is broken into a set of simple, wave-like spatial modes using a spectral transform. This is the key move: it turns one large, tightly-coupled 3D problem into many small, completely independent ones.</p></div>
+        </div>
+        <div class="pipe-step">
+          <span class="n">2</span>
+          <div><h4>Layer-aware vertical model</h4><p>Each mode is resolved straight down through the physical stack — every die, bonding layer, and interposer — using their real per-layer materials, directional conductivity, and interface resistances.</p></div>
+        </div>
+        <div class="pipe-step">
+          <span class="n">3</span>
+          <div><h4>Massively parallel solve</h4><p>Because the modes are completely independent, they are all solved at once — directly, in a single pass — which is exactly what makes the analysis fast and a natural fit for multi-core CPU and GPU hardware.</p></div>
+        </div>
+        <div class="pipe-step">
+          <span class="n">4</span>
+          <div><h4>Reassemble the temperature map</h4><p>The solved modes recombine into the complete temperature field — the steady-state map directly, or advanced step-by-step through time for transient analysis.</p></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="twocard reveal">
+          <div class="solver fast">
+            <div class="nm">ChipletTherm-2D <span class="paren">(TASTA-2D)</span></div>
+            <div class="role">fastest</div>
+            <p>Layer-averaged: one in-plane field per physical layer, coupled by effective interface resistances. The lowest-cost thermal estimate.</p>
+            <div class="kv"><span><b>0.016 s</b><br>per case</span><span><b>0.44 K</b><br>avg RMSE</span></div>
+          </div>
+          <div class="solver acc">
+            <div class="nm">ChipletTherm <span class="paren">(TASTA)</span></div>
+            <div class="role">most accurate</div>
+            <p>Thickness-resolved: a layer-aware 1D finite-difference scheme recovers the full 3D field. Best accuracy of every method tested.</p>
+            <div class="kv"><span><b>0.020 s</b><br>per case</span><span><b>0.21 K</b><br>avg RMSE</span></div>
+          </div>
+        </div>
+
+        <div class="eqbox reveal">
+          <div class="label">Why it's fast</div>
+          <p class="why">Full 3D FEM grinds through one giant system with millions of unknowns. The spectral approach instead splits the chip into hundreds of simple, independent thermal patterns — each tiny and solvable on its own, all at the same time. Replacing one enormous problem with hundreds of trivial ones, solved in parallel, is where the 100–1000× speedup comes from — with no loss of accuracy versus FEM.</p>
+          <div class="chips">
+            <span class="chip">spectral method</span>
+            <span class="chip">fully decoupled modes</span>
+            <span class="chip">solved in parallel</span>
+            <span class="chip">CPU &amp; GPU ready</span>
+            <span class="chip">anisotropic materials</span>
+            <span class="chip">interface resistance</span>
+            <span class="chip">FEM-grade accuracy</span>
+          </div>
+        </div>
+        <p class="note">A full 3D finite-element solver ships alongside as the ground-truth reference, and every ChipletTherm result is validated against it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section id="results">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Validation</div>
+      <h2>Measured against full 3D FEM</h2>
+      <p>Every number below is benchmarked against a consistent-mass 3D-FEM reference: 18 static cases (6 real designs × 3 power inputs, up to 11 layers) and 12 transient cases (100 time steps each), spanning CPU, GPU, TPU, HBM, and RF power profiles.</p>
+    </div>
+
+    <!-- STATIC -->
+    <div class="res-group">
+      <div class="res-label reveal">Static — steady-state sign-off</div>
+      <div class="res-grid">
+        <!-- method comparison -->
+        <div class="panel reveal">
+          <div class="phead">
+            <div><h3>Accuracy &amp; speed vs. baselines</h3><div class="psub">Avg over 18 cases, RMSE vs FEM-3D reference</div></div>
+            <span class="badge">most accurate</span>
+          </div>
+          <table class="data">
+            <thead><tr><th>Method</th><th>Avg RMSE</th><th>Runtime</th></tr></thead>
+            <tbody>
+              <tr><td>FEM-3D <span class="muted-tag">reference</span></td><td class="mono">—</td><td class="mono">12.7 s</td></tr>
+              <tr><td>SOV <span class="muted-tag">baseline</span></td><td class="mono">0.225 K</td><td class="mono">0.047 s</td></tr>
+              <tr><td>GIT <span class="muted-tag">baseline</span></td><td class="mono">0.219 K</td><td class="mono">0.348 s</td></tr>
+              <tr><td>ChipletTherm-2D <span class="muted-tag">TASTA-2D · fastest</span></td><td class="mono">0.444 K</td><td class="mono">0.016 s</td></tr>
+              <tr class="win"><td>ChipletTherm <span class="muted-tag">TASTA · most accurate</span></td><td class="mono">0.214 K</td><td class="mono">0.020 s</td></tr>
+            </tbody>
+          </table>
+          <div class="note"><b style="color:#67e8f9">ChipletTherm (TASTA)</b> is more accurate than every baseline while running <b>2.42× / 21.4× / 637×</b> faster than SOV / GIT / FEM-3D. <b style="color:#22d3ee">ChipletTherm-2D (TASTA-2D)</b> is the single fastest method of all, at 0.016 s/case.</div>
+        </div>
+
+        <!-- per-design speedup -->
+        <div class="panel reveal">
+          <div class="phead">
+            <div><h3>ChipletTherm speedup over 3D FEM</h3><div class="psub">By benchmark design (#layers)</div></div>
+            <span class="badge">avg 637×</span>
+          </div>
+          <div class="bars" id="staticbars">
+            <div class="bar-row"><span class="blab">11-layer 3D IC</span><div class="bar-track"><div class="bar-fill" data-w="100"></div></div><span class="bval">1410×</span></div>
+            <div class="bar-row"><span class="blab">2.5D chiplet</span><div class="bar-track"><div class="bar-fill" data-w="62"></div></div><span class="bval">872×</span></div>
+            <div class="bar-row"><span class="blab">HBM3 stack</span><div class="bar-track"><div class="bar-fill" data-w="42"></div></div><span class="bval">586×</span></div>
+            <div class="bar-row"><span class="blab">5 nm CPU</span><div class="bar-track"><div class="bar-fill" data-w="40"></div></div><span class="bval">563×</span></div>
+            <div class="bar-row"><span class="blab">GaAs RFPA</span><div class="bar-track"><div class="bar-fill" data-w="22"></div></div><span class="bval">304×</span></div>
+            <div class="bar-row"><span class="blab">3-layer stack</span><div class="bar-track"><div class="bar-fill" data-w="6"></div></div><span class="bval">89×</span></div>
+          </div>
+          <div class="note">FEM-3D takes 1–34 s per design; ChipletTherm returns all of them in 0.014–0.027 s — at 0.094–1.35 K RMSE.</div>
+        </div>
+      </div>
+
+      <figure class="fig reveal">
+        <img src="assets/figs/figure_array_tpu_0_pd_new.png" alt="ChipletTherm-2D vs FEM-3D temperature fields across all six benchmark designs, with error maps" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
+        <div class="ph">assets/figs/figure_array_tpu_0_pd_new.png — add figures to assets/figs/ (see README)</div>
+        <figcaption><b>ChipletTherm-2D (TASTA-2D) vs. FEM-3D across all six benchmark designs</b> (Google Coral M.2 TPU power input). Top row: ChipletTherm-2D. Middle: the 3D-FEM reference. Bottom: the error field — near-zero everywhere. <span class="muted-tag">The figure labels this solver “Fast2D-FD” (TASTA-2D) — it is ChipletTherm-2D.</span></figcaption>
+      </figure>
+
+      <div class="fig-2">
+        <figure class="fig reveal">
+          <img src="assets/figs/fast2d_fd_results_3d_temperature_qual_hbm3.png" alt="ChipletTherm-2D 3D temperature field, HBM3 stack" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
+          <div class="ph">assets/figs/fast2d_fd_results_3d_temperature_qual_hbm3.png</div>
+          <figcaption><b>ChipletTherm-2D (TASTA-2D)</b> — HBM3 stack, Qualcomm Snapdragon 680 power input. <span class="muted-tag">Figure label: “Fast2D-FD”.</span></figcaption>
+        </figure>
+        <figure class="fig reveal">
+          <img src="assets/figs/fem3d_results_3d_temperature_qual_hbm3.png" alt="FEM-3D reference 3D temperature field, HBM3 stack" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
+          <div class="ph">assets/figs/fem3d_results_3d_temperature_qual_hbm3.png</div>
+          <figcaption><b>FEM-3D reference</b> — same case. Visually indistinguishable, at ≈0.04 K RMSE.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- TRANSIENT -->
+    <div class="res-group">
+      <div class="res-label warm reveal">Transient — time-domain response</div>
+      <div class="res-grid">
+        <!-- speedup bar chart -->
+        <div class="panel reveal">
+          <div class="phead">
+            <div><h3>Solve-time speedup</h3><div class="psub">ChipletTherm-2D vs FEM-3D, per design family</div></div>
+            <span class="badge">mean 1036×</span>
+          </div>
+          <div class="bars" id="transbars">
+            <div class="bar-row"><span class="blab">Chiplet 2.5D</span><div class="bar-track"><div class="bar-fill" data-w="100"></div></div><span class="bval">≈1585×</span></div>
+            <div class="bar-row"><span class="blab">CPU 5nm</span><div class="bar-track"><div class="bar-fill" data-w="76"></div></div><span class="bval">≈1212×</span></div>
+            <div class="bar-row"><span class="blab">3-layer 3D</span><div class="bar-track"><div class="bar-fill" data-w="16"></div></div><span class="bval">≈252×</span></div>
+          </div>
+          <div class="note">Peak observed speedup <b style="color:#ff7a52">1875×</b> (Chiplet 2.5D, Edge-TPU trace). ChipletTherm-2D solves in <b>0.12–0.45 s</b> across 100 time steps; the FEM-3D reference takes <b>30–733 s</b>.</div>
+        </div>
+
+        <!-- accuracy table -->
+        <div class="panel reveal">
+          <div class="phead">
+            <div><h3>Accuracy</h3><div class="psub">Temperature error vs FEM-3D reference</div></div>
+            <span class="badge warn">0.18% mean</span>
+          </div>
+          <table class="data">
+            <thead><tr><th>Design family</th><th>RMSE</th><th>Mean error</th></tr></thead>
+            <tbody>
+              <tr><td>Chiplet 2.5D</td><td class="mono">0.72 K</td><td class="mono">0.12%</td></tr>
+              <tr><td>CPU 5nm</td><td class="mono">1.42 K</td><td class="mono">0.24%</td></tr>
+              <tr><td>3-layer 3D</td><td class="mono">1.52 K</td><td class="mono">0.23%</td></tr>
+              <tr class="total"><td>All 12 cases</td><td class="mono">1.22 K</td><td class="mono">0.18%</td></tr>
+            </tbody>
+          </table>
+          <div class="note">Best case 0.57 K RMSE · worst case 2.09 K · peak temperatures matched within tenths of a kelvin across the 308–510 K range spanned by the benchmark.</div>
+        </div>
+
+        <!-- transient curve -->
+        <div class="panel full reveal">
+          <div class="phead">
+            <div><h3>Transient response — the two solvers overlap</h3><div class="psub">Representative junction-temperature rise under a stepped power waveform (schematic of the &lt;1.2 K agreement)</div></div>
+          </div>
+          <svg viewBox="0 0 900 270" width="100%" height="auto" role="img" aria-label="Temperature versus time, ChipletTherm-2D overlapping FEM-3D reference">
+            <defs>
+              <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#fb923c" stop-opacity=".28"/><stop offset="100%" stop-color="#fb923c" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <g stroke="rgba(148,163,184,.18)" stroke-width="1">
+              <line x1="60" y1="20" x2="60" y2="230"/><line x1="60" y1="230" x2="860" y2="230"/>
+              <line x1="60" y1="178" x2="860" y2="178" stroke-dasharray="4 6"/>
+              <line x1="60" y1="126" x2="860" y2="126" stroke-dasharray="4 6"/>
+              <line x1="60" y1="74" x2="860" y2="74" stroke-dasharray="4 6"/>
+            </g>
+            <g font-family="ui-monospace,monospace" font-size="11" fill="#6f829f">
+              <text x="52" y="234" text-anchor="end">30</text>
+              <text x="52" y="182" text-anchor="end">50</text>
+              <text x="52" y="130" text-anchor="end">70</text>
+              <text x="52" y="78" text-anchor="end">90</text>
+              <text x="22" y="120" transform="rotate(-90 22 120)" fill="#9aabc6">Temp (°C)</text>
+              <text x="450" y="256" text-anchor="middle" fill="#9aabc6">time (100 steps)</text>
+            </g>
+            <path d="M60,222 C190,222 250,120 360,96 C470,72 520,66 620,62 C720,58 800,57 860,56"
+                  fill="none" stroke="#60a5fa" stroke-width="6" stroke-opacity=".45" stroke-linecap="round"/>
+            <path class="rise" d="M60,222 C190,222 250,122 360,98 C470,74 520,68 620,63 C720,59 800,58 860,57"
+                  fill="none" stroke="#ff7a52" stroke-width="2.6" stroke-linecap="round"/>
+            <circle cx="860" cy="57" r="4.5" fill="#ff7a52"/>
+          </svg>
+          <div class="legend-row">
+            <span><i class="swatch" style="background:#60a5fa;height:6px"></i> FEM-3D reference</span>
+            <span><i class="swatch" style="background:#ff7a52"></i> ChipletTherm-2D (TASTA-2D)</span>
+            <span style="color:var(--muted-2)">Curves overlap to within the benchmark RMSE; shape is illustrative, errors are measured.</span>
+          </div>
+        </div>
+
+        <!-- transient 3D videos: Chiplet 2.5D · i5 (FLAC) -->
+        <div class="panel full reveal">
+          <div class="phead">
+            <div><h3>3D transient — Chiplet 2.5D · Intel Core i5 (FLAC)</h3><div class="psub">Power inputs → ChipletTherm (TASTA) 3D temperature field, over time</div></div>
+            <span class="badge">3D · animated</span>
+          </div>
+          <div class="vid-3">
+            <figure class="vid">
+              <video src="assets/figs/videos/fast2d_fd_chiplet_i5_flac_volume3d.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
+              <div class="ph">assets/figs/videos/fast2d_fd_chiplet_i5_flac_volume3d.mp4 — copy videos to assets/figs/videos/ (see README)</div>
+              <figcaption><span class="vlab">ChipletTherm (TASTA) · output</span><b>3D temperature field.</b> The resolved, through-stack thermal response evolving over time.</figcaption>
+            </figure>
+            <figure class="vid">
+              <video src="assets/figs/videos/CPU_i5_flac_power_density_3d.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
+              <div class="ph">assets/figs/videos/CPU_i5_flac_power_density_3d.mp4 — copy videos to assets/figs/videos/ (see README)</div>
+              <figcaption><span class="vlab">Input · 3D</span><b>Power density, 3D.</b> The time-varying volumetric power that drives the analysis.</figcaption>
+            </figure>
+            <figure class="vid">
+              <video src="assets/figs/videos/CPU_i5_flac_power_density.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
+              <div class="ph">assets/figs/videos/CPU_i5_flac_power_density.mp4 — copy videos to assets/figs/videos/ (see README)</div>
+              <figcaption><span class="vlab">Input · 2D</span><b>Power density, 2D map.</b> The per-layer input power over time.</figcaption>
+            </figure>
+          </div>
+          <div class="note">A <b>Chiplet 2.5D</b> design driven by a measured <b>Intel Core i5 (FLAC workload)</b> power trace. As the workload's power density evolves in time (center &amp; right), ChipletTherm resolves the full <b>3D transient temperature field</b> (left) — the hotspot forming and spreading through the stack, step by step. <span class="muted-tag">From <b>results_chiplet_i5_flac</b>.</span></div>
+        </div>
+
+        <!-- transient 3D videos: Chiplet 2.5D · i7 (GIMP) -->
+        <div class="panel full reveal">
+          <div class="phead">
+            <div><h3>3D transient — Chiplet 2.5D · Intel Core i7 (GIMP)</h3><div class="psub">Power inputs → ChipletTherm (TASTA) 3D temperature field, over time</div></div>
+            <span class="badge">3D · animated</span>
+          </div>
+          <div class="vid-3">
+            <figure class="vid">
+              <video src="assets/figs/videos/fast2d_fd_chiplet_i7_gimp_volume3d.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
+              <div class="ph">assets/figs/videos/fast2d_fd_chiplet_i7_gimp_volume3d.mp4 — copy videos to assets/figs/videos/ (see README)</div>
+              <figcaption><span class="vlab">ChipletTherm (TASTA) · output</span><b>3D temperature field.</b> The resolved, through-stack thermal response evolving over time.</figcaption>
+            </figure>
+            <figure class="vid">
+              <video src="assets/figs/videos/CPU_i7_gimp_power_density_3d.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
+              <div class="ph">assets/figs/videos/CPU_i7_gimp_power_density_3d.mp4 — copy videos to assets/figs/videos/ (see README)</div>
+              <figcaption><span class="vlab">Input · 3D</span><b>Power density, 3D.</b> The time-varying volumetric power that drives the analysis.</figcaption>
+            </figure>
+            <figure class="vid">
+              <video src="assets/figs/videos/CPU_i7_gimp_power_density.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
+              <div class="ph">assets/figs/videos/CPU_i7_gimp_power_density.mp4 — copy videos to assets/figs/videos/ (see README)</div>
+              <figcaption><span class="vlab">Input · 2D</span><b>Power density, 2D map.</b> The per-layer input power over time.</figcaption>
+            </figure>
+          </div>
+          <div class="note">The same <b>Chiplet 2.5D</b> design under a measured <b>Intel Core i7 (GIMP workload)</b> power trace. The image-processing load spreads power differently than the i5/FLAC run above — ChipletTherm resolves the matching <b>3D transient temperature field</b> (left) straight from it. <span class="muted-tag">From <b>results_chiplet_i7_gimp</b>.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA / CONTACT ============ -->
+<section id="contact">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <h2>Put thermal back in the loop.</h2>
+      <p>ChipletTherm is in active development. Request access or a walkthrough on your own 2.5D/3D chiplet designs, and we'll get you set up.</p>
+      <div class="cta-btns">
+        <a class="btn btn-primary btn-lg" href="mailto:stan@ece.ucr.edu?subject=ChipletTherm%20access%20request&amp;body=Hi%2C%20I'd%20like%20to%20request%20access%20to%20ChipletTherm.%0A%0AOrganization%3A%0AUse%20case%20(2.5D%2F3D%2C%20static%2Ftransient)%3A%0ADesign%20scale%20(dies%2Flayers)%3A%0A">Request access</a>
+        <a class="btn btn-ghost btn-lg" href="mailto:stan@ece.ucr.edu?subject=ChipletTherm%20demo%20request">Request a demo</a>
+      </div>
+      <div class="cta-meta">stan@ece.ucr.edu</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#top"><span class="dot"></span>ChipletTherm</a>
+        <p>Fast, FEM-grade static and transient thermal analysis for 2.5D and 3D chiplet designs — powered by a fast spectral engine.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h5>Product</h5>
+          <a href="#features">Features</a>
+          <a href="#agentic">Agentic flow</a>
+          <a href="#technology">Technology</a>
+          <a href="#results">Results</a>
+        </div>
+        <div class="foot-col">
+          <h5>Capabilities</h5>
+          <span>Resolved 3D heat maps</span>
+          <span>Transient response</span>
+          <span>IR &amp; EM sign-off (EMspice 3)</span>
+          <span>2.5D / 3D · up to 11 layers</span>
+        </div>
+        <div class="foot-col">
+          <h5>Contact</h5>
+          <a href="mailto:stan@ece.ucr.edu">stan@ece.ucr.edu</a>
+          <a href="#contact">Request access</a>
+        </div>
+      </div>
+    </div>
+    <div class="cite">
+      Method &amp; validation: J. Lu, S. Racha, and S. X.-D. Tan, <b>“TASTA: Fast Spectral Thermal Solvers for Multilayer 3D IC Packages via DCT Decomposition and Layer-Aware Thickness Modeling,”</b> University of California, Riverside.
+      Benchmarks: static — ChipletTherm (TASTA) vs FEM-3D, 18 cases, 0.214 K avg RMSE / 637× avg speedup; transient — ChipletTherm-2D (TASTA-2D) vs FEM-3D, 12 cases, 1.22 K RMSE / 1036× mean speedup.
+    </div>
+    <div class="copyright">© 2026 ChipletTherm · Developed at UC Riverside. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  // mobile nav
+  var t=document.getElementById('navtoggle'), l=document.getElementById('navlinks');
+  t&&t.addEventListener('click',function(){l.classList.toggle('open')});
+  l&&l.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){l.classList.remove('open')})});
+
+  // scroll reveal
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.14});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+
+  // animate every bar group when it scrolls into view
+  document.querySelectorAll('.bars').forEach(function(group){
+    var bo=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){
+          group.querySelectorAll('.bar-fill').forEach(function(f){ f.style.transform='scaleX('+(f.dataset.w/100)+')'; });
+          bo.disconnect();
+        }
+      });
+    },{threshold:.35});
+    bo.observe(group);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+RES="/Users/stan/joule/thermalcode/chipletTherm/tests_trans/results_chiplet_i5_flac"
+#RES="/Users/stan/joule/thermalcode/chipletTherm/tests_trans/results_chiplet_i7_gimp"
+DSTV="/Users/stan/joule/thermalcode/chipletTherm_io/assets/figs/videos"
+mkdir -p "$DSTV"
+cp "$RES"/videos/*volume3d.mp4                 "$DSTV/fast2d_fd_chiplet_i5_flac_volume3d.mp4"
+cp "$RES"/power_pipeline/*power_density_3d.mp4 "$DSTV/"
+cp "$RES"/power_pipeline/*power_density.mp4    "$DSTV/"
+ls -1 "$DSTV"
