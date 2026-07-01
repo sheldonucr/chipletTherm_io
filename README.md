@@ -172,19 +172,8 @@ Sign-off becomes a callable step inside the agentic flow — not a hand-run GUI 
 
 The site embeds real **TASTA-vs-FEM-3D** figures from the paper. They live in `assets/figs/` and are
 referenced by relative path; if a file is missing, the page falls back to a tasteful placeholder
-instead of a broken image, so it always renders. To populate `assets/figs/` from the paper's figure
-directory, run this in a normal terminal:
-
-```bash
-SRC="/Users/stan/stan/mscad/tex/draft/j_thermal_model26/figs"
-DST="/Users/stan/joule/thermalcode/chipletTherm_io/assets/figs"
-mkdir -p "$DST"
-cp "$SRC/figure_array_tpu_0_pd_new.png" \
-   "$SRC/fast2d_fd_results_3d_temperature_qual_hbm3.png" \
-   "$SRC/fem3d_results_3d_temperature_qual_hbm3.png" \
-   "$DST/"
-ls -la "$DST"   # should list the 4 PNGs
-```
+instead of a broken image, so it always renders. Copy the paper's PNGs into `assets/figs/` before
+publishing:
 
 | File | Where it appears on the page |
 | --- | --- |
@@ -199,28 +188,14 @@ PNGs first — the comparison array is fairly large.)
 
 The transient section embeds two rows of result **videos** (`.mp4`), one per run — **Chiplet 2.5D ·
 Intel Core i5 (FLAC)** and **Chiplet 2.5D · Intel Core i7 (GIMP)** — in `assets/figs/videos/`. Each run
-contributes three clips (3D temperature field, 3D power density, 2D power density). Note that `videos/`
-and `power_pipeline/` are **sibling** folders under each `results_*` directory. The copy renames each
-clip to a unique, combination-prefixed name so runs never collide:
+contributes three clips (3D temperature field, 3D power density, 2D power density), copied in with a
+unique, combination-prefixed name so runs never collide:
 
-```bash
-DSTV="/Users/stan/joule/thermalcode/chipletTherm_io/assets/figs/videos"
-mkdir -p "$DSTV"
-
-# Chiplet 2.5D · Intel Core i5 (FLAC)
-R1="/Users/stan/joule/thermalcode/chipletTherm/tests_trans/results_chiplet_i5_flac"
-cp "$R1"/videos/*volume3d.mp4                 "$DSTV/chiplet_i5_flac_3D_volume3d.mp4"
-cp "$R1"/power_pipeline/*power_density_3d.mp4 "$DSTV/chiplet_i5_flac_power_density_3d.mp4"
-cp "$R1"/power_pipeline/*power_density.mp4    "$DSTV/chiplet_i5_flac_power_density.mp4"
-
-# Chiplet 2.5D · Intel Core i7 (GIMP)
-R2="/Users/stan/joule/thermalcode/chipletTherm/tests_trans/results_chiplet_i7_gimp"
-cp "$R2"/videos/*volume3d.mp4                 "$DSTV/chiplet_i7_gimp_3D_volume3d.mp4"
-cp "$R2"/power_pipeline/*power_density_3d.mp4 "$DSTV/chiplet_i7_gimp_power_density_3d.mp4"
-cp "$R2"/power_pipeline/*power_density.mp4    "$DSTV/chiplet_i7_gimp_power_density.mp4"
-
-ls -1 "$DSTV"
-```
+| Clip | File name in `assets/figs/videos/` |
+| --- | --- |
+| 3D temperature field | `chiplet_i5_flac_3D_volume3d.mp4`, `chiplet_i7_gimp_3D_volume3d.mp4` |
+| 3D power density | `chiplet_i5_flac_power_density_3d.mp4`, `chiplet_i7_gimp_power_density_3d.mp4` |
+| 2D power density | `chiplet_i5_flac_power_density.mp4`, `chiplet_i7_gimp_power_density.mp4` |
 
 The `<video src>` paths in `index.html` reference exactly these names. To add another run, copy its
 three clips with a new `<design>_<cpu>_<workload>` prefix and add a matching row. The videos autoplay
