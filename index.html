@@ -569,24 +569,24 @@
 <section id="agentic">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="kicker">Workflow · EMspice 3</div>
+      <div class="kicker">Workflow · ChipletTherm integration</div>
       <h2>Built for agentic EDA flows</h2>
-      <p>ChipletTherm doesn't stop at thermal. Its companion sign-off engine <b>EMspice&nbsp;3</b> is fully agentic-flow-aware — a first-class CLI and a structured data interface let any agent-driven EDA flow invoke temperature-aware IR-drop and electromigration (EM) sign-off, consuming ChipletTherm's thermal maps and returning machine-readable results straight back into the loop.</p>
+      <p>ChipletTherm is designed to plug directly into agentic EDA workflows. A first-class CLI and structured data interface let autonomous design agents invoke fast static or transient thermal analysis, consume machine-readable temperature maps and margins, and feed those results back into floorplanning, stack planning, power budgeting, and optimization loops.</p>
     </div>
     <div class="tech-grid">
       <div class="reveal">
         <ul class="flowpts">
           <li><b>Fully agentic-flow aware</b> — built to be driven by autonomous EDA agents, and to plug into <i>any</i> agentic flow.</li>
           <li><b>First-class CLI</b> — every analysis is scriptable from the command line; nothing in the loop needs a GUI.</li>
-          <li><b>Structured data interface</b> — machine-readable (JSON) inputs and results for true closed-loop automation.</li>
-          <li><b>IR &amp; EM sign-off</b> — temperature-aware IR-drop and electromigration sign-off via EMspice&nbsp;3, alongside ChipletTherm's thermal analysis.</li>
+          <li><b>Structured data interface</b> — machine-readable inputs, temperature fields, hotspot locations, and thermal margins for closed-loop automation.</li>
+          <li><b>Thermal-aware design iteration</b> — agents can sweep floorplans, stack-ups, power maps, and cooling assumptions, then use ChipletTherm results to steer the next candidate.</li>
         </ul>
         <div class="chips" style="margin-top:24px">
           <span class="chip">agentic-flow aware</span>
           <span class="chip">CLI-first</span>
-          <span class="chip">JSON data interface</span>
-          <span class="chip">IR-drop sign-off</span>
-          <span class="chip">EM sign-off</span>
+          <span class="chip">structured data interface</span>
+          <span class="chip">thermal maps</span>
+          <span class="chip">closed-loop optimization</span>
         </div>
       </div>
       <div class="reveal">
@@ -596,18 +596,18 @@
             <div class="ft">◆ Agentic EDA flow</div>
             <div class="fd">An autonomous agent drives floorplan, power, and routing decisions.</div>
           </div>
-          <div class="floarrow"><span class="ax">↓</span> invokes sign-off — CLI + structured data interface</div>
+          <div class="floarrow"><span class="ax">↓</span> invokes ChipletTherm — CLI + structured data interface</div>
           <div class="flonode engine">
-            <div class="ft">▣ Sign-off engines</div>
-            <div class="fd">ChipletTherm (thermal) and EMspice&nbsp;3 (IR-drop &amp; EM) run headless — no GUI in the loop.</div>
+            <div class="ft">▣ ChipletTherm thermal analysis</div>
+            <div class="fd">Static and transient solvers run headless, producing temperature maps and thermal margins directly for automation.</div>
           </div>
           <div class="floarrow"><span class="ax">↓</span> returns structured, machine-readable results</div>
           <div class="flonode agent">
             <div class="ft">↻ Fed back to the agent</div>
-            <div class="fd">Temperature margins and IR/EM violations steer the next iteration — automatically, no manual steps.</div>
+            <div class="fd">Hotspots, gradients, and thermal margins steer the next floorplan, stack, or power-budget iteration automatically.</div>
           </div>
         </div>
-        <p class="note">Sign-off becomes a callable step inside your agentic flow, not a hand-run GUI tool.</p>
+        <p class="note">Thermal analysis becomes a callable step inside your agentic EDA flow, not a hand-run GUI task.</p>
       </div>
     </div>
   </div>
@@ -911,7 +911,7 @@
           <h5>Capabilities</h5>
           <span>Resolved 3D heat maps</span>
           <span>Transient response</span>
-          <span>IR &amp; EM sign-off (EMspice 3)</span>
+          <span>Agentic EDA flow integration</span>
           <span>2.5D / 3D · up to 11 layers</span>
         </div>
         <div class="foot-col">

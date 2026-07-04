@@ -108,9 +108,9 @@ and TPU power traces, 100 time steps each:
   packages, with per-layer **anisotropic** materials, **interface thermal resistance**, volumetric heat
   capacity, and **Robin** boundary conditions.
 - **Batched & scriptable** — independent lateral modes batch naturally across multi-core CPUs and GPUs.
-- **Agentic EDA flow ready** — the companion **EMspice 3** engine is fully agentic-flow-aware: a
-  first-class CLI and a structured (JSON) data interface let any agent-driven EDA flow invoke
-  temperature-aware **IR-drop** and **electromigration (EM)** sign-off, consuming ChipletTherm's thermal maps.
+- **Agentic EDA flow ready** — a first-class CLI and structured data interface let autonomous EDA
+  agents invoke ChipletTherm, consume machine-readable temperature maps and margins, and feed thermal
+  results back into floorplanning, stack planning, power budgeting, and optimization loops.
 
 ---
 
@@ -141,29 +141,29 @@ result is validated against it.
 
 ---
 
-## Agentic flow & sign-off (EMspice 3)
+## Agentic flow integration
 
-ChipletTherm is built to run inside autonomous, agent-driven EDA flows. Its companion sign-off engine
-**EMspice 3** is fully agentic-flow-aware:
+ChipletTherm is built to run inside autonomous, agent-driven EDA flows:
 
 - **Fully agentic-flow aware** — designed to be driven by autonomous EDA agents, and to work with *any*
   agentic flow.
 - **First-class CLI** — every analysis is scriptable from the command line; no GUI in the loop.
-- **Structured data interface** — machine-readable (JSON) inputs and results for closed-loop automation.
-- **IR & EM sign-off** — temperature-aware IR-drop and electromigration (EM) sign-off, consuming
-  ChipletTherm's thermal maps.
+- **Structured data interface** — machine-readable inputs, temperature fields, hotspot locations, and
+  thermal margins for closed-loop automation.
+- **Thermal-aware design iteration** — agents can sweep floorplans, stack-ups, power maps, and cooling
+  assumptions, then use ChipletTherm results to steer the next candidate.
 
 ```text
 Agentic EDA flow
-   │  invokes sign-off  (CLI + structured data interface)
+   │  invokes ChipletTherm  (CLI + structured data interface)
    ▼
-Sign-off engines — ChipletTherm (thermal) · EMspice 3 (IR-drop & EM), headless
+ChipletTherm thermal analysis — static and transient solvers, headless
    │  structured, machine-readable results
    ▼
-Fed back to the agent → the loop repeats, no manual steps
+Fed back to the agent → floorplan, stack, or power-budget iteration repeats
 ```
 
-Sign-off becomes a callable step inside the agentic flow — not a hand-run GUI tool.
+Thermal analysis becomes a callable step inside the agentic flow — not a hand-run GUI task.
 
 ---
 
