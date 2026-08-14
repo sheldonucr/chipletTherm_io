@@ -518,7 +518,7 @@
           <div class="tf-algo acc"><b>3D · ChipletTherm</b><span>numerical, thickness-resolved — most accurate</span></div>
           <div class="tf-algo fast"><b>2D · ChipletTherm-2D</b><span>numerical, layer-averaged — fastest</span></div>
           <div class="tf-algo ai"><b>AI · ChipletTherm-PINN</b><span>physics-informed neural — parametric sweeps &amp; UQ</span></div>
-          <div class="tf-algo tr"><b>AI · ChipletTherm-TRSM</b><span>transformer — real-time maps from telemetry</span></div>
+          <div class="tf-algo tr"><b>AI · ChipletTherm-TNN</b><span>transformer — real-time maps from telemetry</span></div>
         </div>
         <div class="tf-arrow">→</div>
         <div class="tf-stage">
@@ -578,7 +578,7 @@
       <div class="feat reveal">
         <div class="tag">AI · REAL-TIME</div>
         <h3><span class="emoji">🤖</span> Thermal maps from telemetry</h3>
-        <p>ChipletTherm-TRSM, a GPT-style transformer, turns 100 frames of on-chip performance counters into the full-chip transient thermal image — no power map, no floorplan. 0.36 K average RMSE against infrared measurement on a commercial 8-core CPU, at 14 ms per inference.</p>
+        <p>ChipletTherm-TNN, a GPT-style transformer, turns 100 frames of on-chip performance counters into the full-chip transient thermal image — no power map, no floorplan. 0.36 K average RMSE against infrared measurement on a commercial 8-core CPU, at 14 ms per inference.</p>
       </div>
     </div>
   </div>
@@ -638,7 +638,7 @@
     <div class="sec-head reveal">
       <div class="kicker">Under the hood</div>
       <h2>A hybrid engine: numerical spectral solvers + AI acceleration</h2>
-      <p>ChipletTherm is built on two complementary solver families that share the same spectral DNA. The <b>numerical</b> family breaks the in-plane temperature field into independent spectral (cosine) modes, resolves each one down through the layer stack, and reassembles the full 3D map: <b>ChipletTherm</b>, thickness-resolved and most accurate, and <b>ChipletTherm-2D</b>, layer-averaged and fastest. The <b>AI-accelerated</b> family builds on that same foundation: <b>ChipletTherm-PINN</b> is a physics-informed neural network that learns the cosine-mode coefficients directly from the heat equation — no training database — and amortizes a whole parametric design space into one model, while <b>ChipletTherm-TRSM</b> is a transformer (foundation-model architecture) that estimates full-chip transient thermal maps in real time straight from runtime telemetry. <span class="muted-tag">ThermPINN / ThermTransformer are the names used in our papers and figures.</span></p>
+      <p>ChipletTherm is built on two complementary solver families that share the same spectral DNA. The <b>numerical</b> family breaks the in-plane temperature field into independent spectral (cosine) modes, resolves each one down through the layer stack, and reassembles the full 3D map: <b>ChipletTherm</b>, thickness-resolved and most accurate, and <b>ChipletTherm-2D</b>, layer-averaged and fastest. The <b>AI-accelerated</b> family builds on that same foundation: <b>ChipletTherm-PINN</b> is a physics-informed neural network that learns the cosine-mode coefficients directly from the heat equation — no training database — and amortizes a whole parametric design space into one model, while <b>ChipletTherm-TNN</b> is a transformer (foundation-model architecture) that estimates full-chip transient thermal maps in real time straight from runtime telemetry. <span class="muted-tag">ThermPINN / ThermTransformer are the names used in our papers and figures.</span></p>
     </div>
     <div class="tech-grid">
       <div class="pipe reveal">
@@ -684,7 +684,7 @@
             <div class="kv"><span><b>0.59 ms</b><br>per map</span><span><b>0.23 K</b><br>mean error</span></div>
           </div>
           <div class="solver tr">
-            <div class="nm">ChipletTherm-TRSM <span class="paren">(ThermTransformer)</span></div>
+            <div class="nm">ChipletTherm-TNN <span class="paren">(ThermTransformer)</span></div>
             <div class="role">AI · real-time transient</div>
             <p>Decoder-only transformer (GPT-style foundation-model architecture): 100 frames of performance-counter telemetry in, the full-chip transient thermal image out — no power map, no floorplan, validated against infrared measurement.</p>
             <div class="kv"><span><b>14 ms</b><br>per map</span><span><b>0.36 K</b><br>avg RMSE</span></div>
@@ -718,7 +718,7 @@
     <div class="sec-head reveal">
       <div class="kicker">Validation</div>
       <h2>Measured against full 3D FEM — and real silicon</h2>
-      <p>Every number below is benchmarked against hard references. Numerical solvers: a consistent-mass 3D-FEM reference over 18 static cases (6 real designs × 3 power inputs, up to 11 layers) and 12 transient cases (100 time steps each), spanning CPU, GPU, TPU, HBM, and RF power profiles. AI solvers: commercial FEM (COMSOL) ground truth for ChipletTherm-PINN, and direct infrared thermal-camera measurement of a live 8-core CPU for ChipletTherm-TRSM.</p>
+      <p>Every number below is benchmarked against hard references. Numerical solvers: a consistent-mass 3D-FEM reference over 18 static cases (6 real designs × 3 power inputs, up to 11 layers) and 12 transient cases (100 time steps each), spanning CPU, GPU, TPU, HBM, and RF power profiles. AI solvers: commercial FEM (COMSOL) ground truth for ChipletTherm-PINN, and direct infrared thermal-camera measurement of a live 8-core CPU for ChipletTherm-TNN.</p>
     </div>
 
     <!-- STATIC -->
@@ -932,10 +932,10 @@
           <div class="note">Trained by the physics alone — no simulation database — in 34 s, <b>150× faster than a conventional PINN</b>, and <b>~3× more accurate and 2× faster than VarSim</b>. One parametric model then covers a whole (ambient, cooling) design space: a <b>3,171-case sweep</b> runs 6× faster than COMSOL end-to-end, and <b>5,000-sample Monte-Carlo uncertainty quantification runs 113× faster</b> (199 s vs 6.3 h), predicting peak temperature within 0.59 K.</div>
         </div>
 
-        <!-- ChipletTherm-TRSM -->
+        <!-- ChipletTherm-TNN -->
         <div class="panel reveal">
           <div class="phead">
-            <div><h3>ChipletTherm-TRSM — real-time maps from telemetry</h3><div class="psub">Live 8-core AMD CPU · infrared-camera ground truth · 2,944 test maps</div></div>
+            <div><h3>ChipletTherm-TNN — real-time maps from telemetry</h3><div class="psub">Live 8-core AMD CPU · infrared-camera ground truth · 2,944 test maps</div></div>
             <span class="badge" style="color:#fbbf24;background:rgba(251,191,36,.07)">transformer</span>
           </div>
           <table class="data">
@@ -943,7 +943,7 @@
             <tbody>
               <tr><td>LSTM <span class="muted-tag">RealMaps</span></td><td class="mono">2.19 K</td><td class="mono">19.8 K</td><td class="mono">19 ms</td></tr>
               <tr><td>GAN <span class="muted-tag">ThermGAN</span></td><td class="mono">0.60 K</td><td class="mono">10.9 K</td><td class="mono">16 ms</td></tr>
-              <tr class="win"><td>ChipletTherm-TRSM</td><td class="mono">0.36 K</td><td class="mono">2.78 K</td><td class="mono">14 ms</td></tr>
+              <tr class="win"><td>ChipletTherm-TNN</td><td class="mono">0.36 K</td><td class="mono">2.78 K</td><td class="mono">14 ms</td></tr>
             </tbody>
           </table>
           <div class="note">A decoder-only transformer reads <b>100 frames of performance-counter telemetry</b> and outputs the full-chip <b>transient</b> thermal image (223×280) — no power map, no floorplan, no thermal-sensor grid. Against infrared measurement it lands at <b>0.36 K average RMSE (0.8% of full scale)</b> — <b>1.7× more accurate than the GAN baseline and 6.1× more accurate than the LSTM baseline</b> — with stable transient tracking and 14 ms inference, fast enough for runtime thermal management.</div>
@@ -1001,7 +1001,7 @@
     </div>
     <div class="cite">
       Benchmarks: static — ChipletTherm vs FEM-3D, 18 cases, 0.214 K avg RMSE / 637× avg speedup; transient — ChipletTherm-2D vs FEM-3D, 12 cases, 1.22 K RMSE / 1036× mean speedup.
-      AI — ChipletTherm-PINN vs commercial FEM, 0.23 K mean error / 0.59 ms per map / 113× faster 5,000-sample UQ; ChipletTherm-TRSM vs infrared measurement, 0.36 K avg RMSE / 14 ms per map, 2,944 test maps.
+      AI — ChipletTherm-PINN vs commercial FEM, 0.23 K mean error / 0.59 ms per map / 113× faster 5,000-sample UQ; ChipletTherm-TNN vs infrared measurement, 0.36 K avg RMSE / 14 ms per map, 2,944 test maps.
     </div>
     <div class="copyright">© 2026 NoveetyAI, Inc. All rights reserved.</div>
   </div>
