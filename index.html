@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ChipletTherm — Fast 3D Chiplet Thermal Analysis (Static &amp; Transient)</title>
-<meta name="description" content="ChipletTherm delivers FEM-grade static and transient thermal analysis for 2.5D/3D chiplet designs — up to 1400× faster than 3D FEM, with ~0.2 K accuracy and real-time solves. Powered by the ChipletTherm spectral engine." />
-<meta property="og:title" content="ChipletTherm — Fast 3D Chiplet Thermal Analysis" />
-<meta property="og:description" content="FEM-grade thermal sign-off for 2.5D/3D heterogeneous integration, up to 1400× faster. Static and transient analysis in real time, powered by ChipletTherm." />
+<title>ChipletTherm — Hybrid Numerical + AI Thermal Analysis for 3D Chiplets (Static &amp; Transient)</title>
+<meta name="description" content="ChipletTherm is a hybrid thermal engine for 2.5D/3D chiplet designs: fast spectral numerical solvers (up to 1400× faster than 3D FEM at ~0.2 K accuracy) plus AI-accelerated solvers — a physics-informed neural network for parametric sweeps and a transformer that estimates full-chip thermal maps in real time." />
+<meta property="og:title" content="ChipletTherm — Hybrid Numerical + AI Chiplet Thermal Analysis" />
+<meta property="og:description" content="FEM-grade thermal sign-off for 2.5D/3D heterogeneous integration, up to 1400× faster — hybrid numerical + AI-accelerated engines, static and transient, in real time." />
 <meta property="og:type" content="website" />
 <style>
   :root{
@@ -187,6 +187,7 @@
   .solver{border:1px solid var(--border); border-radius:var(--radius-sm); padding:18px; background:rgba(14,22,40,.6)}
   .solver .nm{font-family:var(--mono); font-weight:700; font-size:15px}
   .solver.fast .nm{color:#22d3ee}.solver.acc .nm{color:#ff7a52}
+  .solver.ai .nm{color:#a78bfa}.solver.tr .nm{color:#fbbf24}
   .solver .role{font-size:11.5px; color:var(--muted-2); font-family:var(--mono); letter-spacing:.05em; text-transform:uppercase; margin-top:3px}
   .solver p{color:var(--muted); font-size:13px; margin-top:10px}
   .solver .kv{margin-top:12px; display:flex; gap:16px; font-family:var(--mono); font-size:12.5px}
@@ -214,6 +215,7 @@
   .res-label{font-family:var(--mono); font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--cyan); display:flex; align-items:center; gap:14px; margin:0 0 18px}
   .res-label::after{content:""; flex:1; height:1px; background:var(--border)}
   .res-label.warm{color:var(--orange)}
+  .res-label.ai{color:#a78bfa}
   .res-grid{display:grid; grid-template-columns:1fr 1fr; gap:22px}
   .panel{
     border:1px solid var(--border); border-radius:var(--radius); padding:26px;
@@ -277,6 +279,10 @@
   .tf-algo b{font-size:12.5px; font-family:var(--mono)}
   .tf-algo.acc b{color:#ff7a52}
   .tf-algo.fast b{color:#22d3ee}
+  .tf-algo.ai{border-color:rgba(167,139,250,.4); background:rgba(167,139,250,.06)}
+  .tf-algo.tr{border-color:rgba(251,191,36,.4); background:rgba(251,191,36,.07)}
+  .tf-algo.ai b{color:#a78bfa}
+  .tf-algo.tr b{color:#fbbf24}
   .tf-algo span{font-size:11.5px; color:var(--muted)}
   .tf-arrow{display:flex; align-items:center; justify-content:center; color:var(--cyan); font-size:20px; font-family:var(--mono)}
   @media(max-width:760px){
@@ -377,9 +383,9 @@
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <span class="eyebrow"><span class="pulse"></span>Static &amp; transient thermal analysis</span>
+      <span class="eyebrow"><span class="pulse"></span>Hybrid numerical + AI thermal analysis</span>
       <h1>Thermal sign-off for <span class="grad-text">3D chiplet designs</span>, up to 1400× faster.</h1>
-      <p class="lead">ChipletTherm computes FEM-grade temperature maps for 2.5D and 3D heterogeneous-integration stacks in milliseconds — so you can sweep thousands of floorplans, power maps, and stack-ups, or run thermal management in real time, where a single 3D-FEM run used to be your whole budget.</p>
+      <p class="lead">ChipletTherm computes FEM-grade temperature maps for 2.5D and 3D heterogeneous-integration stacks in milliseconds — so you can sweep thousands of floorplans, power maps, and stack-ups, or run thermal management in real time, where a single 3D-FEM run used to be your whole budget. It's a true hybrid: fast spectral <b>numerical</b> solvers for sign-off-grade accuracy, plus <b>AI-accelerated</b> neural solvers — physics-informed and transformer-based — for parametric design-space sweeps and live thermal estimation.</p>
       <div class="hero-cta">
         <a class="btn btn-primary btn-lg" href="#contact">Request access</a>
         <a class="btn btn-ghost btn-lg" href="#results">See the results</a>
@@ -387,7 +393,7 @@
       <div class="hero-sub">
         <span><span class="check">✦</span> ~0.2 K agreement with 3D FEM</span>
         <span><span class="check">✦</span> Real-time solves</span>
-        <span><span class="check">✦</span> Powered by the ChipletTherm spectral engine</span>
+        <span><span class="check">✦</span> Hybrid engine — spectral numerical + AI-accelerated</span>
       </div>
     </div>
 
@@ -467,7 +473,7 @@
     <div class="stat reveal"><div class="num c1">1400×</div><div class="lbl">faster than 3D FEM</div></div>
     <div class="stat reveal"><div class="num c2">0.21 K</div><div class="lbl">mean RMSE vs 3D-FEM (static)</div></div>
     <div class="stat reveal"><div class="num c3">0.02 s</div><div class="lbl">per steady-state solve</div></div>
-    <div class="stat reveal"><div class="num c4">30</div><div class="lbl">cases validated vs 3D-FEM</div></div>
+    <div class="stat reveal"><div class="num c4">4</div><div class="lbl">solver engines — 2 numerical + 2 AI</div></div>
   </div>
 </div>
 
@@ -504,12 +510,15 @@
           <div class="tf-item"><span class="tf-ic">⚡</span><span class="tf-tx"><b>Thermal power maps</b><span>from your EDA flow</span></span></div>
           <div class="tf-item"><span class="tf-ic">🧱</span><span class="tf-tx"><b>Chiplet structure</b><span>2.5D / 3D stack-up &amp; layers</span></span></div>
           <div class="tf-item"><span class="tf-ic">🧪</span><span class="tf-tx"><b>Material properties</b><span>per-layer conductivity &amp; more</span></span></div>
+          <div class="tf-item"><span class="tf-ic">📟</span><span class="tf-tx"><b>Runtime telemetry</b><span>performance counters — AI real-time mode</span></span></div>
         </div>
         <div class="tf-arrow">→</div>
         <div class="tf-stage engine">
           <div class="tf-label">ChipletTherm · pick the solver</div>
-          <div class="tf-algo acc"><b>3D · ChipletTherm (TASTA)</b><span>thickness-resolved — most accurate</span></div>
-          <div class="tf-algo fast"><b>2D · ChipletTherm-2D (TASTA-2D)</b><span>layer-averaged — fastest</span></div>
+          <div class="tf-algo acc"><b>3D · ChipletTherm</b><span>numerical, thickness-resolved — most accurate</span></div>
+          <div class="tf-algo fast"><b>2D · ChipletTherm-2D</b><span>numerical, layer-averaged — fastest</span></div>
+          <div class="tf-algo ai"><b>AI · ChipletTherm-PINN</b><span>physics-informed neural — parametric sweeps &amp; UQ</span></div>
+          <div class="tf-algo tr"><b>AI · ChipletTherm-TRSM</b><span>transformer — real-time maps from telemetry</span></div>
         </div>
         <div class="tf-arrow">→</div>
         <div class="tf-stage">
@@ -527,8 +536,8 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">What it does</div>
-      <h2>One engine, the whole thermal picture</h2>
-      <p>ChipletTherm pairs a fast spectral solver with a full 3D-FEM reference, covering both steady-state sign-off and time-dependent response on the very same chiplet model.</p>
+      <h2>One hybrid engine, the whole thermal picture</h2>
+      <p>ChipletTherm combines fast spectral numerical solvers, AI-accelerated neural solvers, and a full 3D-FEM reference in one engine — covering steady-state sign-off, time-dependent response, parametric design-space exploration, and real-time thermal estimation on the very same chiplet model.</p>
     </div>
     <div class="features">
       <div class="feat reveal">
@@ -560,6 +569,16 @@
         <div class="tag">EXPLORE</div>
         <h3><span class="emoji">🔭</span> Batched &amp; scriptable</h3>
         <p>Lateral frequency modes solve independently, so workloads batch naturally across multi-core CPUs and GPUs — built to evaluate thousands of candidate designs or stream live temperature estimates.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="tag">AI · PARAMETRIC</div>
+        <h3><span class="emoji">🧠</span> Physics-informed neural solves</h3>
+        <p>ChipletTherm-PINN trains on the heat equation itself — no simulation database — and one trained model covers a whole (ambient, cooling) design space: 0.59 ms per full-chip map, 113× faster Monte-Carlo uncertainty quantification than commercial FEM, with nonlinear temperature-dependent conductivity and leakage built in.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="tag">AI · REAL-TIME</div>
+        <h3><span class="emoji">🤖</span> Thermal maps from telemetry</h3>
+        <p>ChipletTherm-TRSM, a GPT-style transformer, turns 100 frames of on-chip performance counters into the full-chip transient thermal image — no power map, no floorplan. 0.36 K average RMSE against infrared measurement on a commercial 8-core CPU, at 14 ms per inference.</p>
       </div>
     </div>
   </div>
@@ -618,8 +637,8 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Under the hood</div>
-      <h2>Spectral in the plane, thickness-aware through the stack</h2>
-      <p>The speed comes from analyzing the chip in a form where the physics nearly separates. ChipletTherm breaks the in-plane temperature field into independent spectral (cosine) modes, resolves each one down through the layer stack, and reassembles the full 3D map. It ships in two solver modes that span the speed–accuracy tradeoff: <b>ChipletTherm&nbsp;(TASTA)</b>, the thickness-resolved, most-accurate solver, and <b>ChipletTherm-2D&nbsp;(TASTA-2D)</b>, the fast, layer-averaged one. <span class="muted-tag">TASTA / TASTA-2D are the names used in our paper and figures.</span></p>
+      <h2>A hybrid engine: numerical spectral solvers + AI acceleration</h2>
+      <p>ChipletTherm is built on two complementary solver families that share the same spectral DNA. The <b>numerical</b> family breaks the in-plane temperature field into independent spectral (cosine) modes, resolves each one down through the layer stack, and reassembles the full 3D map: <b>ChipletTherm</b>, thickness-resolved and most accurate, and <b>ChipletTherm-2D</b>, layer-averaged and fastest. The <b>AI-accelerated</b> family builds on that same foundation: <b>ChipletTherm-PINN</b> is a physics-informed neural network that learns the cosine-mode coefficients directly from the heat equation — no training database — and amortizes a whole parametric design space into one model, while <b>ChipletTherm-TRSM</b> is a transformer (foundation-model architecture) that estimates full-chip transient thermal maps in real time straight from runtime telemetry. <span class="muted-tag">ThermPINN / ThermTransformer are the names used in our papers and figures.</span></p>
     </div>
     <div class="tech-grid">
       <div class="pipe reveal">
@@ -644,16 +663,31 @@
       <div>
         <div class="twocard reveal">
           <div class="solver fast">
-            <div class="nm">ChipletTherm-2D <span class="paren">(TASTA-2D)</span></div>
+            <div class="nm">ChipletTherm-2D</div>
             <div class="role">fastest</div>
             <p>Layer-averaged: one in-plane field per physical layer, coupled by effective interface resistances. The lowest-cost thermal estimate.</p>
             <div class="kv"><span><b>0.016 s</b><br>per case</span><span><b>0.44 K</b><br>avg RMSE</span></div>
           </div>
           <div class="solver acc">
-            <div class="nm">ChipletTherm <span class="paren">(TASTA)</span></div>
-            <div class="role">most accurate</div>
+            <div class="nm">ChipletTherm</div>
+            <div class="role">numerical · most accurate</div>
             <p>Thickness-resolved: a layer-aware 1D finite-difference scheme recovers the full 3D field. Best accuracy of every method tested.</p>
             <div class="kv"><span><b>0.020 s</b><br>per case</span><span><b>0.21 K</b><br>avg RMSE</span></div>
+          </div>
+        </div>
+
+        <div class="twocard reveal" style="margin-top:14px">
+          <div class="solver ai">
+            <div class="nm">ChipletTherm-PINN <span class="paren">(ThermPINN)</span></div>
+            <div class="role">AI · parametric &amp; UQ</div>
+            <p>Physics-informed neural network over the same cosine-mode basis — trained by the heat equation alone, exactly satisfying the boundary conditions. One model spans a whole (ambient, cooling) parameter space, including nonlinear temperature-dependent conductivity and leakage.</p>
+            <div class="kv"><span><b>0.59 ms</b><br>per map</span><span><b>0.23 K</b><br>mean error</span></div>
+          </div>
+          <div class="solver tr">
+            <div class="nm">ChipletTherm-TRSM <span class="paren">(ThermTransformer)</span></div>
+            <div class="role">AI · real-time transient</div>
+            <p>Decoder-only transformer (GPT-style foundation-model architecture): 100 frames of performance-counter telemetry in, the full-chip transient thermal image out — no power map, no floorplan, validated against infrared measurement.</p>
+            <div class="kv"><span><b>14 ms</b><br>per map</span><span><b>0.36 K</b><br>avg RMSE</span></div>
           </div>
         </div>
 
@@ -668,9 +702,11 @@
             <span class="chip">anisotropic materials</span>
             <span class="chip">interface resistance</span>
             <span class="chip">FEM-grade accuracy</span>
+            <span class="chip">physics-informed neural nets</span>
+            <span class="chip">transformer engine</span>
           </div>
         </div>
-        <p class="note">A full 3D finite-element solver ships alongside as the ground-truth reference, and every ChipletTherm result is validated against it.</p>
+        <p class="note">A full 3D finite-element solver ships alongside as the ground-truth reference. The numerical solvers are validated against it; the AI solvers are validated against commercial FEM and direct infrared thermal measurement.</p>
       </div>
     </div>
   </div>
@@ -681,8 +717,8 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Validation</div>
-      <h2>Measured against full 3D FEM</h2>
-      <p>Every number below is benchmarked against a consistent-mass 3D-FEM reference: 18 static cases (6 real designs × 3 power inputs, up to 11 layers) and 12 transient cases (100 time steps each), spanning CPU, GPU, TPU, HBM, and RF power profiles.</p>
+      <h2>Measured against full 3D FEM — and real silicon</h2>
+      <p>Every number below is benchmarked against hard references. Numerical solvers: a consistent-mass 3D-FEM reference over 18 static cases (6 real designs × 3 power inputs, up to 11 layers) and 12 transient cases (100 time steps each), spanning CPU, GPU, TPU, HBM, and RF power profiles. AI solvers: commercial FEM (COMSOL) ground truth for ChipletTherm-PINN, and direct infrared thermal-camera measurement of a live 8-core CPU for ChipletTherm-TRSM.</p>
     </div>
 
     <!-- STATIC -->
@@ -701,11 +737,11 @@
               <tr><td>FEM-3D <span class="muted-tag">reference</span></td><td class="mono">—</td><td class="mono">12.7 s</td></tr>
               <tr><td>SOV <span class="muted-tag">baseline</span></td><td class="mono">0.225 K</td><td class="mono">0.047 s</td></tr>
               <tr><td>GIT <span class="muted-tag">baseline</span></td><td class="mono">0.219 K</td><td class="mono">0.348 s</td></tr>
-              <tr><td>ChipletTherm-2D <span class="muted-tag">TASTA-2D · fastest</span></td><td class="mono">0.444 K</td><td class="mono">0.016 s</td></tr>
-              <tr class="win"><td>ChipletTherm <span class="muted-tag">TASTA · most accurate</span></td><td class="mono">0.214 K</td><td class="mono">0.020 s</td></tr>
+              <tr><td>ChipletTherm-2D <span class="muted-tag">fastest</span></td><td class="mono">0.444 K</td><td class="mono">0.016 s</td></tr>
+              <tr class="win"><td>ChipletTherm <span class="muted-tag">most accurate</span></td><td class="mono">0.214 K</td><td class="mono">0.020 s</td></tr>
             </tbody>
           </table>
-          <div class="note"><b style="color:#67e8f9">ChipletTherm (TASTA)</b> is more accurate than every baseline while running <b>2.42× / 21.4× / 637×</b> faster than SOV / GIT / FEM-3D. <b style="color:#22d3ee">ChipletTherm-2D (TASTA-2D)</b> is the single fastest method of all, at 0.016 s/case.</div>
+          <div class="note"><b style="color:#67e8f9">ChipletTherm</b> is more accurate than every baseline while running <b>2.42× / 21.4× / 637×</b> faster than SOV / GIT / FEM-3D. <b style="color:#22d3ee">ChipletTherm-2D</b> is the single fastest method of all, at 0.016 s/case.</div>
         </div>
 
         <!-- per-design speedup -->
@@ -729,14 +765,14 @@
       <figure class="fig reveal">
         <img src="assets/figs/figure_array_tpu_0_pd_new.png" alt="ChipletTherm-2D vs FEM-3D temperature fields across all six benchmark designs, with error maps" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
         <div class="ph">assets/figs/figure_array_tpu_0_pd_new.png — add figures to assets/figs/ (see README)</div>
-        <figcaption><b>ChipletTherm-2D (TASTA-2D) vs. FEM-3D across all six benchmark designs</b> (Google Coral M.2 TPU power input). Top row: ChipletTherm-2D. Middle: the 3D-FEM reference. Bottom: the error field — near-zero everywhere. <span class="muted-tag">The figure labels this solver “Fast2D-FD” (TASTA-2D) — it is ChipletTherm-2D.</span></figcaption>
+        <figcaption><b>ChipletTherm-2D vs. FEM-3D across all six benchmark designs</b> (Google Coral M.2 TPU power input). Top row: ChipletTherm-2D. Middle: the 3D-FEM reference. Bottom: the error field — near-zero everywhere. <span class="muted-tag">The figure labels this solver “Fast2D-FD” — it is ChipletTherm-2D.</span></figcaption>
       </figure>
 
       <div class="fig-2">
         <figure class="fig reveal">
           <img src="assets/figs/fast2d_fd_results_3d_temperature_qual_hbm3.png" alt="ChipletTherm-2D 3D temperature field, HBM3 stack" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
           <div class="ph">assets/figs/fast2d_fd_results_3d_temperature_qual_hbm3.png</div>
-          <figcaption><b>ChipletTherm-2D (TASTA-2D)</b> — HBM3 stack, Qualcomm Snapdragon 680 power input. <span class="muted-tag">Figure label: “Fast2D-FD”.</span></figcaption>
+          <figcaption><b>ChipletTherm-2D</b> — HBM3 stack, Qualcomm Snapdragon 680 power input. <span class="muted-tag">Figure label: “Fast2D-FD”.</span></figcaption>
         </figure>
         <figure class="fig reveal">
           <img src="assets/figs/fem3d_results_3d_temperature_qual_hbm3.png" alt="FEM-3D reference 3D temperature field, HBM3 stack" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
@@ -815,7 +851,7 @@
           </svg>
           <div class="legend-row">
             <span><i class="swatch" style="background:#60a5fa;height:6px"></i> FEM-3D reference</span>
-            <span><i class="swatch" style="background:#ff7a52"></i> ChipletTherm-2D (TASTA-2D)</span>
+            <span><i class="swatch" style="background:#ff7a52"></i> ChipletTherm-2D</span>
             <span style="color:var(--muted-2)">Curves overlap to within the benchmark RMSE; shape is illustrative, errors are measured.</span>
           </div>
         </div>
@@ -823,14 +859,14 @@
         <!-- transient 3D videos: Chiplet 2.5D · i5 (FLAC) -->
         <div class="panel full reveal">
           <div class="phead">
-            <div><h3>3D transient — Chiplet 2.5D · Intel Core i5 (FLAC)</h3><div class="psub">Power inputs → ChipletTherm (TASTA) 3D temperature field, over time</div></div>
+            <div><h3>3D transient — Chiplet 2.5D · Intel Core i5 (FLAC)</h3><div class="psub">Power inputs → ChipletTherm 3D temperature field, over time</div></div>
             <span class="badge">3D · animated</span>
           </div>
           <div class="vid-3">
             <figure class="vid">
               <video src="assets/figs/videos/fast2d_fd_chiplet_i5_flac_volume3d.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
               <div class="ph">assets/figs/videos/fast2d_fd_chiplet_i5_flac_volume3d.mp4 — copy videos to assets/figs/videos/ (see README)</div>
-              <figcaption><span class="vlab">ChipletTherm (TASTA) · output</span><b>3D temperature field.</b> The resolved, through-stack thermal response evolving over time.</figcaption>
+              <figcaption><span class="vlab">ChipletTherm · output</span><b>3D temperature field.</b> The resolved, through-stack thermal response evolving over time.</figcaption>
             </figure>
             <figure class="vid">
               <video src="assets/figs/videos/CPU_i5_flac_power_density_3d.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
@@ -849,14 +885,14 @@
         <!-- transient 3D videos: Chiplet 2.5D · i7 (GIMP) -->
         <div class="panel full reveal">
           <div class="phead">
-            <div><h3>3D transient — Chiplet 2.5D · Intel Core i7 (GIMP)</h3><div class="psub">Power inputs → ChipletTherm (TASTA) 3D temperature field, over time</div></div>
+            <div><h3>3D transient — Chiplet 2.5D · Intel Core i7 (GIMP)</h3><div class="psub">Power inputs → ChipletTherm 3D temperature field, over time</div></div>
             <span class="badge">3D · animated</span>
           </div>
           <div class="vid-3">
             <figure class="vid">
               <video src="assets/figs/videos/fast2d_fd_chiplet_i7_gimp_volume3d.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
               <div class="ph">assets/figs/videos/fast2d_fd_chiplet_i7_gimp_volume3d.mp4 — copy videos to assets/figs/videos/ (see README)</div>
-              <figcaption><span class="vlab">ChipletTherm (TASTA) · output</span><b>3D temperature field.</b> The resolved, through-stack thermal response evolving over time.</figcaption>
+              <figcaption><span class="vlab">ChipletTherm · output</span><b>3D temperature field.</b> The resolved, through-stack thermal response evolving over time.</figcaption>
             </figure>
             <figure class="vid">
               <video src="assets/figs/videos/CPU_i7_gimp_power_density_3d.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
@@ -870,6 +906,47 @@
             </figure>
           </div>
           <div class="note">The same <b>Chiplet 2.5D</b> design under a measured <b>Intel Core i7 (GIMP workload)</b> power trace. The image-processing load spreads power differently than the i5/FLAC run above — ChipletTherm resolves the matching <b>3D transient temperature field</b> (left) straight from it. <span class="muted-tag">From <b>results_chiplet_i7_gimp</b>.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI-ACCELERATED -->
+    <div class="res-group">
+      <div class="res-label ai reveal">AI-accelerated — neural thermal engines</div>
+      <div class="res-grid">
+        <!-- ChipletTherm-PINN -->
+        <div class="panel reveal">
+          <div class="phead">
+            <div><h3>ChipletTherm-PINN — parametric full-chip thermal</h3><div class="psub">Quad-core full-chip benchmark · commercial FEM (COMSOL) ground truth</div></div>
+            <span class="badge" style="color:#a78bfa;background:rgba(167,139,250,.07)">physics-informed</span>
+          </div>
+          <table class="data">
+            <thead><tr><th>Method</th><th>Mean error</th><th>Per map</th></tr></thead>
+            <tbody>
+              <tr><td>COMSOL FEM <span class="muted-tag">reference</span></td><td class="mono">—</td><td class="mono">5 s</td></tr>
+              <tr><td>VarSim <span class="muted-tag">analytical baseline</span></td><td class="mono">0.61 K</td><td class="mono">1.3 ms</td></tr>
+              <tr><td>Plain PINN <span class="muted-tag">150× slower to train</span></td><td class="mono">0.05 K</td><td class="mono">1.04 ms</td></tr>
+              <tr class="win"><td>ChipletTherm-PINN</td><td class="mono">0.23 K</td><td class="mono">0.59 ms</td></tr>
+            </tbody>
+          </table>
+          <div class="note">Trained by the physics alone — no simulation database — in 34 s, <b>150× faster than a conventional PINN</b>, and <b>~3× more accurate and 2× faster than VarSim</b>. One parametric model then covers a whole (ambient, cooling) design space: a <b>3,171-case sweep</b> runs 6× faster than COMSOL end-to-end, and <b>5,000-sample Monte-Carlo uncertainty quantification runs 113× faster</b> (199 s vs 6.3 h), predicting peak temperature within 0.59 K.</div>
+        </div>
+
+        <!-- ChipletTherm-TRSM -->
+        <div class="panel reveal">
+          <div class="phead">
+            <div><h3>ChipletTherm-TRSM — real-time maps from telemetry</h3><div class="psub">Live 8-core AMD CPU · infrared-camera ground truth · 2,944 test maps</div></div>
+            <span class="badge" style="color:#fbbf24;background:rgba(251,191,36,.07)">transformer</span>
+          </div>
+          <table class="data">
+            <thead><tr><th>Method</th><th>Avg RMSE</th><th>Max RMSE</th><th>Per map</th></tr></thead>
+            <tbody>
+              <tr><td>LSTM <span class="muted-tag">RealMaps</span></td><td class="mono">2.19 K</td><td class="mono">19.8 K</td><td class="mono">19 ms</td></tr>
+              <tr><td>GAN <span class="muted-tag">ThermGAN</span></td><td class="mono">0.60 K</td><td class="mono">10.9 K</td><td class="mono">16 ms</td></tr>
+              <tr class="win"><td>ChipletTherm-TRSM</td><td class="mono">0.36 K</td><td class="mono">2.78 K</td><td class="mono">14 ms</td></tr>
+            </tbody>
+          </table>
+          <div class="note">A decoder-only transformer reads <b>100 frames of performance-counter telemetry</b> and outputs the full-chip <b>transient</b> thermal image (223×280) — no power map, no floorplan, no thermal-sensor grid. Against infrared measurement it lands at <b>0.36 K average RMSE (0.8% of full scale)</b> — <b>1.7× more accurate than the GAN baseline and 6.1× more accurate than the LSTM baseline</b> — with stable transient tracking and 14 ms inference, fast enough for runtime thermal management.</div>
         </div>
       </div>
     </div>
@@ -897,7 +974,7 @@
     <div class="foot-grid">
       <div class="foot-brand">
         <a class="brand" href="#top"><span class="dot"></span>ChipletTherm</a>
-        <p>Fast, FEM-grade static and transient thermal analysis for 2.5D and 3D chiplet designs — powered by a fast spectral engine.</p>
+        <p>Fast, FEM-grade static and transient thermal analysis for 2.5D and 3D chiplet designs — a hybrid engine of fast spectral numerical solvers and AI-accelerated neural solvers.</p>
       </div>
       <div class="foot-cols">
         <div class="foot-col">
@@ -911,6 +988,7 @@
           <h5>Capabilities</h5>
           <span>Resolved 3D heat maps</span>
           <span>Transient response</span>
+          <span>AI engines — PINN + transformer</span>
           <span>Agentic EDA flow integration</span>
           <span>2.5D / 3D · up to 11 layers</span>
         </div>
@@ -922,7 +1000,8 @@
       </div>
     </div>
     <div class="cite">
-      Benchmarks: static — ChipletTherm (TASTA) vs FEM-3D, 18 cases, 0.214 K avg RMSE / 637× avg speedup; transient — ChipletTherm-2D (TASTA-2D) vs FEM-3D, 12 cases, 1.22 K RMSE / 1036× mean speedup.
+      Benchmarks: static — ChipletTherm vs FEM-3D, 18 cases, 0.214 K avg RMSE / 637× avg speedup; transient — ChipletTherm-2D vs FEM-3D, 12 cases, 1.22 K RMSE / 1036× mean speedup.
+      AI — ChipletTherm-PINN vs commercial FEM, 0.23 K mean error / 0.59 ms per map / 113× faster 5,000-sample UQ; ChipletTherm-TRSM vs infrared measurement, 0.36 K avg RMSE / 14 ms per map, 2,944 test maps.
     </div>
     <div class="copyright">© 2026 NoveetyAI, Inc. All rights reserved.</div>
   </div>

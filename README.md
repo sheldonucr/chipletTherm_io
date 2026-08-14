@@ -11,11 +11,10 @@ in milliseconds and transients in well under a second — validated throughout a
 
 This repository hosts the **ChipletTherm** promotion site live at **<https://sheldonucr.github.io/chipletTherm_io/>**.
 
-> **Naming.** The tool is **ChipletTherm**, and it ships in two solver modes:
-> **ChipletTherm (TASTA)** — the thickness-resolved, most-accurate solver — and **ChipletTherm-2D
-> (TASTA-2D)** — the fast, layer-averaged solver. *TASTA* / *TASTA-2D* are the names used in our paper
-> and figures (*Fast2D-FD* is an earlier internal name for ChipletTherm-2D). This README and the site
-> use the **ChipletTherm** names, with the paper names in parentheses where figures reference them.
+> **Naming.** The tool is **ChipletTherm**, and it ships in two numerical solver modes:
+> **ChipletTherm** — the thickness-resolved, most-accurate solver — and **ChipletTherm-2D** — the
+> fast, layer-averaged solver. (*Fast2D-FD* is an earlier internal name for ChipletTherm-2D that
+> still appears in some figure labels.)
 
 ---
 
@@ -40,17 +39,17 @@ ChipletTherm closes that gap: **best-in-class accuracy at hundreds-to-thousands�
 
 ### Static (steady-state) — 18 cases vs. 3D-FEM reference
 
-ChipletTherm (TASTA) is more accurate than every evaluated method while running orders of magnitude faster:
+ChipletTherm is more accurate than every evaluated method while running orders of magnitude faster:
 
 | Method | Avg RMSE | Avg runtime | Notes |
 | --- | --- | --- | --- |
 | FEM-3D | — (reference) | 12.7 s | ground truth |
 | SOV (baseline) | 0.225 K | 0.047 s | separation of variables |
 | GIT (baseline) | 0.219 K | 0.348 s | generalized integral transform |
-| **ChipletTherm-2D** (TASTA-2D) | 0.444 K | **0.016 s** | fastest of all methods |
-| **ChipletTherm** (TASTA) | **0.214 K** | 0.020 s | most accurate of all methods |
+| **ChipletTherm-2D** | 0.444 K | **0.016 s** | fastest of all methods |
+| **ChipletTherm** | **0.214 K** | 0.020 s | most accurate of all methods |
 
-- **ChipletTherm (TASTA) runs 2.42× / 21.4× / 637× faster** than SOV / GIT / FEM-3D (on average), while being more
+- **ChipletTherm runs 2.42× / 21.4× / 637× faster** than SOV / GIT / FEM-3D (on average), while being more
   accurate than both semi-analytical baselines.
 - **Up to 1410× faster** than FEM-3D on the 11-layer 3D-IC stack.
 - The thickness-resolved step cuts ChipletTherm-2D's error by ~52% (RMSE 0.444 K → 0.214 K) at essentially
@@ -73,7 +72,7 @@ Google Coral M.2 TPU).
 
 ### Transient — 12 cases vs. 3D-FEM reference
 
-ChipletTherm-2D (TASTA-2D) vs. a consistent-mass FEM-3D reference, three design families driven by real CPU, GPU,
+ChipletTherm-2D vs. a consistent-mass FEM-3D reference, three design families driven by real CPU, GPU,
 and TPU power traces, 100 time steps each:
 
 | Metric | Result |
@@ -130,8 +129,8 @@ system the way full FEM does, it analyzes the chip in a form where the physics n
 4. **Reassembly** — the solved modes recombine into the full temperature map: the steady-state field
    directly, or advanced step-by-step through time for transient analysis.
 
-Two solver modes span the speed–accuracy tradeoff: **ChipletTherm-2D** (TASTA-2D — layer-averaged, the
-fastest, lowest-cost estimate) and **ChipletTherm** (TASTA — thickness-resolved, the most accurate,
+Two solver modes span the speed–accuracy tradeoff: **ChipletTherm-2D** (layer-averaged, the
+fastest, lowest-cost estimate) and **ChipletTherm** (thickness-resolved, the most accurate,
 recovering the full 3D field). What makes the approach novel is the spectral decoupling: it replaces the expensive 3D solve of
 full FEM — and the costlier thickness treatments of prior spectral methods (SOV, GIT) — with hundreds of
 tiny, independent solves that run in parallel, delivering lower cost and higher accuracy at the same time.
@@ -169,7 +168,7 @@ Thermal analysis becomes a callable step inside the agentic flow — not a hand-
 
 ## Figures / assets
 
-The site embeds real **TASTA-vs-FEM-3D** figures from the paper. They live in `assets/figs/` and are
+The site embeds real **ChipletTherm-vs-FEM-3D** validation figures. They live in `assets/figs/` and are
 referenced by relative path; if a file is missing, the page falls back to a tasteful placeholder
 instead of a broken image, so it always renders. Copy the paper's PNGs into `assets/figs/` before
 publishing:
@@ -218,31 +217,10 @@ To publish with **GitHub Pages**: push this repo (including `assets/`), then ena
 ## Access
 
 ChipletTherm is in active development. To request access or a walkthrough on your own 2.5D/3D chiplet
-designs, contact **stan@ece.ucr.edu**.
-
----
-
-## Citation
-
-If you use ChipletTherm / TASTA in academic work, please cite:
-
-> J. Lu, S. Racha, and S. X.-D. Tan, "TASTA: Fast Spectral Thermal Solvers for Multilayer 3D IC
-> Packages via DCT Decomposition and Layer-Aware Thickness Modeling," University of California,
-> Riverside.
-
-```bibtex
-@article{lu_tasta_chiplettherm,
-  title   = {TASTA: Fast Spectral Thermal Solvers for Multilayer 3D IC Packages
-             via DCT Decomposition and Layer-Aware Thickness Modeling},
-  author  = {Lu, Jincong and Racha, Shanmukh and Tan, Sheldon X.-D.},
-  school  = {University of California, Riverside},
-  note    = {NSF CCF-2007135, CCF-2113928}
-}
-```
+designs, contact **noveetyai@noveetymanagement.com**.
 
 ---
 
 ## Contact
 
-**stan@ece.ucr.edu** · Developed in the Department of Electrical and Computer Engineering,
-University of California, Riverside.
+**noveetyai@noveetymanagement.com** · © 2026 NoveetyAI, Inc. All rights reserved.
