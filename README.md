@@ -216,7 +216,7 @@ To publish with **GitHub Pages**: push this repo (including `assets/`), then ena
 
 ## Access
 
-ChipletTherm is in active development. To request access or a walkthrough on your own 2.5D/3D chiplet
+ChipletTherm is in active development. To request a demo or a walkthrough on your own 2.5D/3D chiplet
 designs, contact **noveetyai@noveetymanagement.com**.
 
 ---
