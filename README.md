@@ -1,24 +1,24 @@
-# ChipletTherm
+# ThermStack (ChipletTherm)
 
 **Fast, FEM-grade static & transient thermal analysis for 2.5D / 3D chiplet designs.**
 
-ChipletTherm computes full-chip, full-stack temperature fields for heterogeneous-integration
+ThermStack (formerly ChipletTherm) computes full-chip, full-stack temperature fields for heterogeneous-integration
 designs — every die, bonding layer, and interposer resolved in 3D — at a fraction of the cost of a
 full 3D finite-element (FEM) solve. It is powered by a fast **spectral** engine: the heat equation is decoupled laterally with a spectral transform
 and resolved through the stack with a layer-aware thickness model, so steady-state maps come back
 in milliseconds and transients in well under a second — validated throughout against a consistent-mass
 3D-FEM reference.
 
-This repository hosts the **ChipletTherm** promotion site live at **<https://sheldonucr.github.io/chipletTherm_io/>**.
+This repository hosts the **ThermStack** promotion site live at **<https://sheldonucr.github.io/chipletTherm_io/>**.
 
-> **Naming.** The tool is **ChipletTherm**, and it ships in two numerical solver modes:
-> **ChipletTherm** — the thickness-resolved, most-accurate solver — and **ChipletTherm-2D** — the
-> fast, layer-averaged solver. (*Fast2D-FD* is an earlier internal name for ChipletTherm-2D that
+> **Naming.** The tool is **ThermStack** (previously named **ChipletTherm**), and it ships in two numerical solver modes:
+> **ThermStack** — the thickness-resolved, most-accurate solver — and **ThermStack-2D** — the
+> fast, layer-averaged solver. (*Fast2D-FD* is an earlier internal name for ThermStack-2D that
 > still appears in some figure labels.)
 
 ---
 
-## Why ChipletTherm
+## Why ThermStack
 
 3D/2.5D integration makes thermal behavior a first-order design constraint — and with accelerators now
 pushing 700–1200 W, the tools accurate enough to trust are too slow to keep in the design loop:
@@ -31,7 +31,7 @@ pushing 700–1200 W, the tools accurate enough to trust are too slow to keep in
 - **Thermal must be in the loop.** Floorplanning, power delivery, packaging co-design, and runtime
   management all need temperature feedback *per iteration*.
 
-ChipletTherm closes that gap: **best-in-class accuracy at hundreds-to-thousands× the speed.**
+ThermStack closes that gap: **best-in-class accuracy at hundreds-to-thousands× the speed.**
 
 ---
 
@@ -39,26 +39,26 @@ ChipletTherm closes that gap: **best-in-class accuracy at hundreds-to-thousands�
 
 ### Static (steady-state) — 18 cases vs. 3D-FEM reference
 
-ChipletTherm is more accurate than every evaluated method while running orders of magnitude faster:
+ThermStack is more accurate than every evaluated method while running orders of magnitude faster:
 
 | Method | Avg RMSE | Avg runtime | Notes |
 | --- | --- | --- | --- |
 | FEM-3D | — (reference) | 12.7 s | ground truth |
 | SOV (baseline) | 0.225 K | 0.047 s | separation of variables |
 | GIT (baseline) | 0.219 K | 0.348 s | generalized integral transform |
-| **ChipletTherm-2D** | 0.444 K | **0.016 s** | fastest of all methods |
-| **ChipletTherm** | **0.214 K** | 0.020 s | most accurate of all methods |
+| **ThermStack-2D** | 0.444 K | **0.016 s** | fastest of all methods |
+| **ThermStack** | **0.214 K** | 0.020 s | most accurate of all methods |
 
-- **ChipletTherm runs 2.42× / 21.4× / 637× faster** than SOV / GIT / FEM-3D (on average), while being more
+- **ThermStack runs 2.42× / 21.4× / 637× faster** than SOV / GIT / FEM-3D (on average), while being more
   accurate than both semi-analytical baselines.
 - **Up to 1410× faster** than FEM-3D on the 11-layer 3D-IC stack.
-- The thickness-resolved step cuts ChipletTherm-2D's error by ~52% (RMSE 0.444 K → 0.214 K) at essentially
+- The thickness-resolved step cuts ThermStack-2D's error by ~52% (RMSE 0.444 K → 0.214 K) at essentially
   the same runtime.
 - **Real-time capable:** 0.020 s/evaluation → up to ~50 Hz, vs. 1–10 Hz control loops.
 
-**ChipletTherm speedup over FEM-3D, by design:**
+**ThermStack speedup over FEM-3D, by design:**
 
-| Design | Layers | ChipletTherm RMSE | FEM-3D time | ChipletTherm time | Speedup |
+| Design | Layers | ThermStack RMSE | FEM-3D time | ThermStack time | Speedup |
 | --- | --- | --- | --- | --- | --- |
 | 11-layer 3D IC | 11 | 0.145 K | 33.6 s | 0.027 s | **1410×** |
 | 2.5D chiplet package | 9 | 0.099 K | 18.7 s | 0.024 s | 872× |
@@ -72,14 +72,14 @@ Google Coral M.2 TPU).
 
 ### Transient — 12 cases vs. 3D-FEM reference
 
-ChipletTherm-2D vs. a consistent-mass FEM-3D reference, three design families driven by real CPU, GPU,
+ThermStack-2D vs. a consistent-mass FEM-3D reference, three design families driven by real CPU, GPU,
 and TPU power traces, 100 time steps each:
 
 | Metric | Result |
 | --- | --- |
 | Mean solve-time speedup | **1036×** (range 252× – 1875×) |
 | Peak speedup | **1875×** (Chiplet 2.5D, Edge-TPU trace) |
-| ChipletTherm-2D solve time | **0.12 – 0.45 s** |
+| ThermStack-2D solve time | **0.12 – 0.45 s** |
 | FEM-3D reference solve time | 30 – 733 s |
 | Mean RMSE vs FEM-3D | **1.22 K** (best 0.57 K, worst 2.09 K) |
 | Mean temperature error | **0.18%** (range 0.108% – 0.287%) |
@@ -106,16 +106,19 @@ and TPU power traces, 100 time steps each:
 - **Real chiplet stacks** — validated to 11 layers; 2.5D interposers, 3D logic stacks, HBM, CPU and RF
   packages, with per-layer **anisotropic** materials, **interface thermal resistance**, volumetric heat
   capacity, and **Robin** boundary conditions.
+- **IEEE 3Dblox input** — accepts the IEEE 3Dblox format, the IEEE-standard modular description
+  language for defining physical stacking, dimensions, and logical connectivity in 2.5D and 3D-IC
+  designs, so existing stack descriptions drop straight into the thermal flow.
 - **Batched & scriptable** — independent lateral modes batch naturally across multi-core CPUs and GPUs.
 - **Agentic EDA flow ready** — a first-class CLI and structured data interface let autonomous EDA
-  agents invoke ChipletTherm, consume machine-readable temperature maps and margins, and feed thermal
+  agents invoke ThermStack, consume machine-readable temperature maps and margins, and feed thermal
   results back into floorplanning, stack planning, power budgeting, and optimization loops.
 
 ---
 
 ## How it works
 
-ChipletTherm is built on a **spectral fast-analysis** technique. Instead of solving one enormous 3D
+ThermStack is built on a **spectral fast-analysis** technique. Instead of solving one enormous 3D
 system the way full FEM does, it analyzes the chip in a form where the physics nearly separates:
 
 1. **Spectral decomposition** — the in-plane temperature field is broken into a set of simple,
@@ -129,20 +132,20 @@ system the way full FEM does, it analyzes the chip in a form where the physics n
 4. **Reassembly** — the solved modes recombine into the full temperature map: the steady-state field
    directly, or advanced step-by-step through time for transient analysis.
 
-Two solver modes span the speed–accuracy tradeoff: **ChipletTherm-2D** (layer-averaged, the
-fastest, lowest-cost estimate) and **ChipletTherm** (thickness-resolved, the most accurate,
+Two solver modes span the speed–accuracy tradeoff: **ThermStack-2D** (layer-averaged, the
+fastest, lowest-cost estimate) and **ThermStack** (thickness-resolved, the most accurate,
 recovering the full 3D field). What makes the approach novel is the spectral decoupling: it replaces the expensive 3D solve of
 full FEM — and the costlier thickness treatments of prior spectral methods (SOV, GIT) — with hundreds of
 tiny, independent solves that run in parallel, delivering lower cost and higher accuracy at the same time.
 
-A full 3D finite-element solver ships alongside as the ground-truth reference, and every ChipletTherm
+A full 3D finite-element solver ships alongside as the ground-truth reference, and every ThermStack
 result is validated against it.
 
 ---
 
 ## Agentic flow integration
 
-ChipletTherm is built to run inside autonomous, agent-driven EDA flows:
+ThermStack is built to run inside autonomous, agent-driven EDA flows:
 
 - **Fully agentic-flow aware** — designed to be driven by autonomous EDA agents, and to work with *any*
   agentic flow.
@@ -150,13 +153,13 @@ ChipletTherm is built to run inside autonomous, agent-driven EDA flows:
 - **Structured data interface** — machine-readable inputs, temperature fields, hotspot locations, and
   thermal margins for closed-loop automation.
 - **Thermal-aware design iteration** — agents can sweep floorplans, stack-ups, power maps, and cooling
-  assumptions, then use ChipletTherm results to steer the next candidate.
+  assumptions, then use ThermStack results to steer the next candidate.
 
 ```text
 Agentic EDA flow
-   │  invokes ChipletTherm  (CLI + structured data interface)
+   │  invokes ThermStack  (CLI + structured data interface)
    ▼
-ChipletTherm thermal analysis — static and transient solvers, headless
+ThermStack thermal analysis — static and transient solvers, headless
    │  structured, machine-readable results
    ▼
 Fed back to the agent → floorplan, stack, or power-budget iteration repeats
@@ -168,15 +171,15 @@ Thermal analysis becomes a callable step inside the agentic flow — not a hand-
 
 ## Figures / assets
 
-The site embeds real **ChipletTherm-vs-FEM-3D** validation figures. They live in `assets/figs/` and are
+The site embeds real **ThermStack-vs-FEM-3D** validation figures. They live in `assets/figs/` and are
 referenced by relative path; if a file is missing, the page falls back to a tasteful placeholder
 instead of a broken image, so it always renders. Copy the paper's PNGs into `assets/figs/` before
 publishing:
 
 | File | Where it appears on the page |
 | --- | --- |
-| `figure_array_tpu_0_pd_new.png` | Static results — all six designs, ChipletTherm-2D vs FEM-3D + error maps |
-| `fast2d_fd_results_3d_temperature_qual_hbm3.png` | Static results — HBM3 3D field (ChipletTherm-2D) |
+| `figure_array_tpu_0_pd_new.png` | Static results — all six designs, ThermStack-2D vs FEM-3D + error maps |
+| `fast2d_fd_results_3d_temperature_qual_hbm3.png` | Static results — HBM3 3D field (ThermStack-2D) |
 | `fem3d_results_3d_temperature_qual_hbm3.png` | Static results — HBM3 3D field (FEM-3D reference) |
 
 Commit the `assets/` folder so the figures are served on GitHub Pages too. (Optionally compress the
@@ -216,7 +219,7 @@ To publish with **GitHub Pages**: push this repo (including `assets/`), then ena
 
 ## Access
 
-ChipletTherm is in active development. To request a demo or a walkthrough on your own 2.5D/3D chiplet
+ThermStack is in active development. To request a demo or a walkthrough on your own 2.5D/3D chiplet
 designs, contact **noveetyai@noveetymanagement.com**.
 
 ---
