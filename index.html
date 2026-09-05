@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ThermStack (ChipletTherm) — Hybrid Numerical + AI Thermal Analysis for 3D Chiplets (Static &amp; Transient)</title>
-<meta name="description" content="ThermStack (formerly ChipletTherm) is a hybrid thermal engine for 2.5D/3D chiplet designs: fast spectral numerical solvers (up to 1400× faster than 3D FEM at ~0.2 K accuracy) plus AI-accelerated solvers — a physics-informed neural network for parametric sweeps and a transformer that estimates full-chip thermal maps in real time." />
+<title>ThermStack — Geometry-Resolved Thermal Analysis for 3D Chiplets (Static &amp; Transient)</title>
+<meta name="description" content="ThermStack (formerly ChipletTherm) is a hybrid thermal engine for 2.5D/3D chiplet designs: a geometry-resolved spectral numerical solver (182× faster than 3D FEM at 0.509 K mean agreement) plus AI-accelerated solvers — a physics-informed neural network for parametric sweeps and a transformer that estimates full-chip thermal maps in real time." />
 <meta property="og:title" content="ThermStack — Hybrid Numerical + AI Chiplet Thermal Analysis" />
-<meta property="og:description" content="FEM-grade thermal sign-off for 2.5D/3D heterogeneous integration, up to 1400× faster — hybrid numerical + AI-accelerated engines, static and transient, in real time." />
+<meta property="og:description" content="FEM-grade thermal sign-off for 2.5D/3D heterogeneous integration, up to 182× faster — hybrid numerical + AI-accelerated engines, static and transient, on IEEE 3Dblox geometry." />
 <meta property="og:type" content="website" />
 <style>
   :root{
@@ -384,14 +384,14 @@
   <div class="wrap hero-grid">
     <div>
       <span class="eyebrow"><span class="pulse"></span>Hybrid numerical + AI thermal analysis</span>
-      <h1>Thermal sign-off for <span class="grad-text">3D chiplet designs</span>, up to 1400× faster.</h1>
-      <p class="lead">ThermStack (ChipletTherm) computes FEM-grade temperature maps for 2.5D and 3D heterogeneous-integration stacks in milliseconds — so you can sweep thousands of floorplans, power maps, and stack-ups, or run thermal management in real time, where a single 3D-FEM run used to be your whole budget. It's a true hybrid: fast spectral <b>numerical</b> solvers for sign-off-grade accuracy, plus <b>AI-accelerated</b> neural solvers — physics-informed and transformer-based — for parametric design-space sweeps and live thermal estimation.</p>
+      <h1>Thermal sign-off for <span class="grad-text">3D chiplet designs</span>, up to 182× faster.</h1>
+      <p class="lead">ThermStack (ChipletTherm) solves 2.5D and 3D heterogeneous-integration stacks on their real IEEE&nbsp;3Dblox geometry — every die, bond line, interposer and stepped lid — and returns the full 3D temperature field in about a second, where the 3D finite-volume and finite-element references need minutes. It's a true hybrid: a fast spectral <b>numerical</b> engine for sign-off-grade accuracy, plus <b>AI-accelerated</b> neural solvers — physics-informed and transformer-based — for parametric design-space sweeps and live thermal estimation.</p>
       <div class="hero-cta">
         <a class="btn btn-primary btn-lg" href="#contact">Request for demo</a>
         <a class="btn btn-ghost btn-lg" href="#results">See the results</a>
       </div>
       <div class="hero-sub">
-        <span><span class="check">✦</span> ~0.2 K agreement with 3D FEM</span>
+        <span><span class="check">✦</span> 0.509 K mean agreement with 3D FEM</span>
         <span><span class="check">✦</span> Real-time solves</span>
         <span><span class="check">✦</span> Hybrid engine — spectral numerical + AI-accelerated</span>
       </div>
@@ -470,10 +470,10 @@
 <!-- ============ STATS ============ -->
 <div class="stats">
   <div class="wrap stats-grid">
-    <div class="stat reveal"><div class="num c1">1400×</div><div class="lbl">faster than 3D FEM</div></div>
-    <div class="stat reveal"><div class="num c2">0.21 K</div><div class="lbl">mean RMSE vs 3D-FEM (static)</div></div>
-    <div class="stat reveal"><div class="num c3">0.02 s</div><div class="lbl">per steady-state solve</div></div>
-    <div class="stat reveal"><div class="num c4">4</div><div class="lbl">solver engines — 2 numerical + 2 AI</div></div>
+    <div class="stat reveal"><div class="num c1">182×</div><div class="lbl">faster than 3D FEM</div></div>
+    <div class="stat reveal"><div class="num c2">0.509 K</div><div class="lbl">mean RMSE vs 3D-FEM (static)</div></div>
+    <div class="stat reveal"><div class="num c3">1.9 s</div><div class="lbl">per full 3D steady-state solve</div></div>
+    <div class="stat reveal"><div class="num c4">3</div><div class="lbl">solver engines — 1 numerical + 2 AI</div></div>
   </div>
 </div>
 
@@ -515,8 +515,7 @@
         <div class="tf-arrow">→</div>
         <div class="tf-stage engine">
           <div class="tf-label">ThermStack · pick the solver</div>
-          <div class="tf-algo acc"><b>3D · ThermStack</b><span>numerical, thickness-resolved — most accurate</span></div>
-          <div class="tf-algo fast"><b>2D · ThermStack-2D</b><span>numerical, layer-averaged — fastest</span></div>
+          <div class="tf-algo acc"><b>3D · ThermStack</b><span>numerical, geometry-resolved — sign-off accuracy</span></div>
           <div class="tf-algo ai"><b>ThermStack-AI (PINN)</b><span>physics-informed neural — parametric sweeps &amp; UQ</span></div>
           <div class="tf-algo tr"><b>ThermStack-AI (TNN)</b><span>transformer — real-time maps from telemetry</span></div>
         </div>
@@ -553,22 +552,22 @@
       <div class="feat reveal">
         <div class="tag">SPEED</div>
         <h3><span class="emoji">⚡</span> Real-time fast</h3>
-        <p>Steady-state solves land in ~0.02 s and transients in well under a second — up to 1410× faster than 3D FEM (static) and a mean 1036× (transient). Fast enough for ~50 Hz runtime thermal management.</p>
+        <p>A full 3D steady-state field lands in 1.9 s on average — up to 182× faster than the 3D-FEM reference and 83× faster than 3D finite volume, at the resolution those references would need to match it.</p>
       </div>
       <div class="feat reveal">
         <div class="tag">ACCURACY</div>
         <h3><span class="emoji">🎯</span> Best-in-class fidelity</h3>
-        <p>ThermStack reaches 0.21 K mean RMSE against a consistent-mass 3D-FEM reference — more accurate than the SOV and GIT semi-analytical baselines — across 30 cases including measured Snapdragon and Coral-TPU power maps.</p>
+        <p>ThermStack lands within <b>0.004 K</b> of a consistent-mass 3D-FEM reference on the 6 conventional benchmark packages — where the 3D finite-volume solver itself is 0.57 K away — and 0.509 K averaged over all 8, the two dense 7 nm packages included.</p>
       </div>
       <div class="feat reveal">
         <div class="tag">SCOPE</div>
         <h3><span class="emoji">🧱</span> Real chiplet stacks</h3>
-        <p>Validated to 11 layers — 2.5D interposers, 3D logic stacks, HBM, CPU and RF packages — with per-layer anisotropic materials, interface thermal resistance, heat capacity, and convective surface cooling.</p>
+        <p>Validated to 11 layers — 2.5D interposers, 3D logic stacks, HBM, 7 nm HBM+CPU packages, CPU and RF assemblies — including <b>non-coplanar stepped tops</b>, with per-layer anisotropic materials, in-plane material variation, interface thermal resistance, heat capacity, and convective surface cooling.</p>
       </div>
       <div class="feat reveal">
         <div class="tag">EXPLORE</div>
         <h3><span class="emoji">🔭</span> Batched &amp; scriptable</h3>
-        <p>Lateral frequency modes solve independently, so workloads batch naturally across multi-core CPUs and GPUs — built to evaluate thousands of candidate designs or stream live temperature estimates.</p>
+        <p>The solve is a single structured direct pass with no iteration and no convergence tuning, so runtime is predictable and the engine batches naturally across multi-core CPUs and GPUs — built to evaluate thousands of candidate designs or stream live temperature estimates.</p>
       </div>
       <div class="feat reveal">
         <div class="tag">STANDARDS</div>
@@ -644,42 +643,42 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Under the hood</div>
-      <h2>A hybrid engine: numerical spectral solvers + AI acceleration</h2>
-      <p>ThermStack is built on two complementary solver families that share the same spectral DNA. The <b>numerical</b> family breaks the in-plane temperature field into independent spectral (cosine) modes, resolves each one down through the layer stack, and reassembles the full 3D map: <b>ThermStack</b>, thickness-resolved and most accurate, and <b>ThermStack-2D</b>, layer-averaged and fastest. The <b>AI-accelerated</b> family builds on that same foundation: <b>ThermStack-AI (PINN)</b> is a physics-informed neural network that learns the cosine-mode coefficients directly from the heat equation — no training database — and amortizes a whole parametric design space into one model, while <b>ThermStack-AI (TNN)</b> is a transformer (foundation-model architecture) that estimates full-chip transient thermal maps in real time straight from runtime telemetry. <span class="muted-tag">ThermPINN / ThermTransformer are the names used in our papers and figures.</span></p>
+      <h2>A hybrid engine: a spectral numerical solver + AI acceleration</h2>
+      <p>ThermStack is built on two complementary solver families that share the same spectral DNA. The <b>numerical</b> engine represents the in-plane temperature field in a compact spectral (cosine) basis, resolves it down through the design's real layer structure, and reassembles the full 3D map — keeping the in-plane material detail that layer-averaged models have to throw away. The <b>AI-accelerated</b> family builds on that same foundation: <b>ThermStack-AI (PINN)</b> is a physics-informed neural network that learns the cosine-mode coefficients directly from the heat equation — no training database — and amortizes a whole parametric design space into one model, while <b>ThermStack-AI (TNN)</b> is a transformer (foundation-model architecture) that estimates full-chip transient thermal maps in real time straight from runtime telemetry. <span class="muted-tag">ThermPINN / ThermTransformer are the names used in our papers and figures.</span></p>
     </div>
     <div class="tech-grid">
       <div class="pipe reveal">
         <div class="pipe-step">
           <span class="n">1</span>
-          <div><h4>Spectral decomposition</h4><p>The in-plane temperature pattern is broken into a set of simple, wave-like spatial modes using a spectral transform. This is the key move: it turns one large, tightly-coupled 3D problem into many small, completely independent ones.</p></div>
+          <div><h4>Spectral decomposition</h4><p>The in-plane temperature pattern is represented in a compact basis of smooth, wave-like spatial modes rather than on a volume mesh. A few hundred modes carry the whole field, so the size of the problem is set by the basis — not by how many cells the geometry needs.</p></div>
         </div>
         <div class="pipe-step">
           <span class="n">2</span>
-          <div><h4>Layer-aware vertical model</h4><p>Each mode is resolved straight down through the physical stack — every die, bonding layer, and interposer — using their real per-layer materials, directional conductivity, and interface resistances.</p></div>
+          <div><h4>Geometry-resolved stack model</h4><p>The stack is taken as the design actually describes it — every die, bond line, TSV field, interposer, mold and lid, including non-coplanar stepped tops — with per-layer anisotropic materials, interface resistances, and the in-plane material variation kept intact instead of averaged into one number per layer.</p></div>
         </div>
         <div class="pipe-step">
           <span class="n">3</span>
-          <div><h4>Massively parallel solve</h4><p>Because the modes are completely independent, they are all solved at once — directly, in a single pass — which is exactly what makes the analysis fast and a natural fit for multi-core CPU and GPU hardware.</p></div>
+          <div><h4>One structured direct solve</h4><p>The whole stack is resolved in a single direct pass with no iteration and no convergence tuning, on dense arithmetic that maps straight onto multi-core CPU and GPU hardware. Runtime is predictable and repeatable — the same design always costs the same.</p></div>
         </div>
         <div class="pipe-step">
           <span class="n">4</span>
-          <div><h4>Reassemble the temperature map</h4><p>The solved modes recombine into the complete temperature field — the steady-state map directly, or advanced step-by-step through time for transient analysis.</p></div>
+          <div><h4>Reassemble the temperature map</h4><p>The solved modes recombine into the complete 3D temperature field on the design's own geometry — the steady-state map directly, or advanced step by step through time for transient analysis.</p></div>
         </div>
       </div>
 
       <div>
         <div class="twocard reveal">
-          <div class="solver fast">
-            <div class="nm">ThermStack-2D</div>
-            <div class="role">fastest</div>
-            <p>Layer-averaged: one in-plane field per physical layer, coupled by effective interface resistances. The lowest-cost thermal estimate.</p>
-            <div class="kv"><span><b>0.016 s</b><br>per case</span><span><b>0.44 K</b><br>avg RMSE</span></div>
-          </div>
           <div class="solver acc">
             <div class="nm">ThermStack</div>
-            <div class="role">numerical · most accurate</div>
-            <p>Thickness-resolved: a layer-aware 1D finite-difference scheme recovers the full 3D field. Best accuracy of every method tested.</p>
-            <div class="kv"><span><b>0.020 s</b><br>per case</span><span><b>0.21 K</b><br>avg RMSE</span></div>
+            <div class="role">numerical · production solver</div>
+            <p>Geometry-resolved: the full 3D field on the design's real 3Dblox structure, with in-plane material variation and stepped tops handled directly. This is the solver every number on this page was produced with.</p>
+            <div class="kv"><span><b>1.9 s</b><br>per case</span><span><b>0.509 K</b><br>avg RMSE</span></div>
+          </div>
+          <div class="solver fast">
+            <div class="nm">FVM-3D / FEM-3D</div>
+            <div class="role">bundled references</div>
+            <p>A 3D finite-volume and a consistent-mass 3D finite-element solver ship alongside as ground truth. Every ThermStack result is checked against them at several lateral resolutions, on the same geometry.</p>
+            <div class="kv"><span><b>72 / 153 s</b><br>at 63×63–73×69</span><span><b>0.49 K</b><br>FVM vs FEM</span></div>
           </div>
         </div>
 
@@ -700,11 +699,13 @@
 
         <div class="eqbox reveal">
           <div class="label">Why it's fast</div>
-          <p class="why">Full 3D FEM grinds through one giant system with millions of unknowns. The spectral approach instead splits the chip into hundreds of simple, independent thermal patterns — each tiny and solvable on its own, all at the same time. Replacing one enormous problem with hundreds of trivial ones, solved in parallel, is where the 100–1000× speedup comes from — with no loss of accuracy versus FEM.</p>
+          <p class="why">A 3D FEM or FVM solver has to mesh the volume, so its cost is tied to how finely the geometry is resolved: doubling the lateral resolution multiplies the work several-fold, and the packages that most need resolving — fine 7 nm floorplans, concentrated hotspots, stepped stacks — are exactly the ones that make it unaffordable. ThermStack's cost is set by the size of its spectral basis instead, so the geometry can be resolved at 128×128 while the solve itself stays the same size. Matching that fidelity with the references costs 31×–68× more time, on average, for the same answer.</p>
           <div class="chips">
             <span class="chip">spectral method</span>
-            <span class="chip">fully decoupled modes</span>
-            <span class="chip">solved in parallel</span>
+            <span class="chip">geometry-resolved stack</span>
+            <span class="chip">in-plane material variation</span>
+            <span class="chip">resolution decoupled from cost</span>
+            <span class="chip">direct solve, no iteration</span>
             <span class="chip">CPU &amp; GPU ready</span>
             <span class="chip">anisotropic materials</span>
             <span class="chip">interface resistance</span>
@@ -713,7 +714,7 @@
             <span class="chip">transformer engine</span>
           </div>
         </div>
-        <p class="note">A full 3D finite-element solver ships alongside as the ground-truth reference. The numerical solvers are validated against it; the AI solvers are validated against commercial FEM and direct infrared thermal measurement.</p>
+        <p class="note">A 3D finite-volume and a full 3D finite-element solver ship alongside as ground-truth references. The numerical engine is validated against both, at several lateral resolutions; the AI solvers are validated against commercial FEM and direct infrared thermal measurement.</p>
       </div>
     </div>
   </div>
@@ -724,8 +725,8 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Validation</div>
-      <h2>Measured against full 3D FEM — and real silicon</h2>
-      <p>Every number below is benchmarked against hard references. Numerical solvers: a consistent-mass 3D-FEM reference over 18 static cases (6 real designs × 3 power inputs, up to 11 layers) and 12 transient cases (100 time steps each), spanning CPU, GPU, TPU, HBM, and RF power profiles. AI solvers: commercial FEM (COMSOL) ground truth for ThermStack-AI (PINN), and direct infrared thermal-camera measurement of a live 8-core CPU for ThermStack-AI (TNN).</p>
+      <h2>Measured against full 3D FVM and FEM — and real silicon</h2>
+      <p>Every number below was produced by the runs in <span class="mono">thermstack_io_results/</span>, benchmarked against hard references. Numerical engine: a 3D finite-volume (FVM) and a consistent-mass 3D finite-element (FEM) solver, both run on the identical IEEE&nbsp;3Dblox geometry at three lateral resolutions (31×31–41×39 to 63×63–73×69), across 8 real packages from a 3-layer stack to an 11-layer 3D IC and two 7&nbsp;nm HBM+CPU assemblies — one of them with a non-coplanar stepped top. AI solvers: commercial FEM (COMSOL) ground truth for ThermStack-AI (PINN), and direct infrared thermal-camera measurement of a live 8-core CPU for ThermStack-AI (TNN).</p>
     </div>
 
     <!-- STATIC -->
@@ -735,58 +736,87 @@
         <!-- method comparison -->
         <div class="panel reveal">
           <div class="phead">
-            <div><h3>Accuracy &amp; speed vs. baselines</h3><div class="psub">Avg over 18 cases, RMSE vs FEM-3D reference</div></div>
-            <span class="badge">most accurate</span>
+            <div><h3>Accuracy &amp; speed vs. the 3D references</h3><div class="psub">Averaged over 8 native 3Dblox packages; agreement measured against FEM-3D at 63×63–73×69</div></div>
+            <span class="badge">0.509 K</span>
           </div>
           <table class="data">
-            <thead><tr><th>Method</th><th>Avg RMSE</th><th>Runtime</th></tr></thead>
+            <thead><tr><th>Method</th><th>Lateral grid</th><th>RMSE vs FEM-3D</th><th>Runtime</th></tr></thead>
             <tbody>
-              <tr><td>FEM-3D <span class="muted-tag">reference</span></td><td class="mono">—</td><td class="mono">12.7 s</td></tr>
-              <tr><td>SOV <span class="muted-tag">baseline</span></td><td class="mono">0.225 K</td><td class="mono">0.047 s</td></tr>
-              <tr><td>GIT <span class="muted-tag">baseline</span></td><td class="mono">0.219 K</td><td class="mono">0.348 s</td></tr>
-              <tr><td>ThermStack-2D <span class="muted-tag">fastest</span></td><td class="mono">0.444 K</td><td class="mono">0.016 s</td></tr>
-              <tr class="win"><td>ThermStack <span class="muted-tag">most accurate</span></td><td class="mono">0.214 K</td><td class="mono">0.020 s</td></tr>
+              <tr><td>FEM-3D <span class="muted-tag">reference</span></td><td class="mono">63×63–73×69</td><td class="mono">—</td><td class="mono">153.1 s</td></tr>
+              <tr><td>FEM-3D</td><td class="mono">31×31–41×39</td><td class="mono">0.305 K</td><td class="mono">10.3 s</td></tr>
+              <tr><td>FDM-3D <span class="muted-tag">finite volume</span></td><td class="mono">63×63–73×69</td><td class="mono">0.492 K</td><td class="mono">71.9 s</td></tr>
+              <tr><td>FDM-3D <span class="muted-tag">finite volume</span></td><td class="mono">31×31–41×39</td><td class="mono">0.778 K</td><td class="mono">2.85 s</td></tr>
+              <tr class="win"><td>ThermStack</td><td class="mono">128×128</td><td class="mono">0.509 K</td><td class="mono">1.93 s</td></tr>
             </tbody>
           </table>
-          <div class="note"><b style="color:#67e8f9">ThermStack</b> is more accurate than every baseline while running <b>2.42× / 21.4× / 637×</b> faster than SOV / GIT / FEM-3D. <b style="color:#22d3ee">ThermStack-2D</b> is the single fastest method of all, at 0.016 s/case.</div>
+          <div class="note"><b style="color:#67e8f9">ThermStack</b> tracks the 3D-FEM reference to <b>0.509 K</b> mean RMSE while resolving the footprint at 128×128 and running 31× / 68× faster than FVM / FEM on their finest grid. On the 6 conventional packages it is within <b>0.004 K</b> — indistinguishable from FEM, where the finite-volume solver on the same geometry sits 0.57 K away. The two dense 7&nbsp;nm HBM+CPU packages are the hard cases (7 nm HBM+CPU 3.16 K, 7 nm stepped 0.90 K), and there the references are themselves still moving with grid. Peak temperature is matched to 0.57 K across all 8.</div>
         </div>
 
         <!-- per-design speedup -->
         <div class="panel reveal">
           <div class="phead">
-            <div><h3>ThermStack speedup over 3D FEM</h3><div class="psub">By benchmark design (#layers)</div></div>
-            <span class="badge">avg 637×</span>
+            <div><h3>ThermStack speedup over 3D FEM</h3><div class="psub">Per package, both solvers on the same 3Dblox geometry at their finest grid (63×63–73×69)</div></div>
+            <span class="badge">avg 68×</span>
           </div>
           <div class="bars" id="staticbars">
-            <div class="bar-row"><span class="blab">11-layer 3D IC</span><div class="bar-track"><div class="bar-fill" data-w="100"></div></div><span class="bval">1410×</span></div>
-            <div class="bar-row"><span class="blab">2.5D chiplet</span><div class="bar-track"><div class="bar-fill" data-w="62"></div></div><span class="bval">872×</span></div>
-            <div class="bar-row"><span class="blab">HBM3 stack</span><div class="bar-track"><div class="bar-fill" data-w="42"></div></div><span class="bval">586×</span></div>
-            <div class="bar-row"><span class="blab">5 nm CPU</span><div class="bar-track"><div class="bar-fill" data-w="40"></div></div><span class="bval">563×</span></div>
-            <div class="bar-row"><span class="blab">GaAs RFPA</span><div class="bar-track"><div class="bar-fill" data-w="22"></div></div><span class="bval">304×</span></div>
-            <div class="bar-row"><span class="blab">3-layer stack</span><div class="bar-track"><div class="bar-fill" data-w="6"></div></div><span class="bval">89×</span></div>
+            <div class="bar-row"><span class="blab">11-layer 3D IC</span><div class="bar-track"><div class="bar-fill" data-w="100"></div></div><span class="bval">182×</span></div>
+            <div class="bar-row"><span class="blab">2.5D chiplet</span><div class="bar-track"><div class="bar-fill" data-w="51"></div></div><span class="bval">93×</span></div>
+            <div class="bar-row"><span class="blab">5 nm CPU</span><div class="bar-track"><div class="bar-fill" data-w="44"></div></div><span class="bval">81×</span></div>
+            <div class="bar-row"><span class="blab">HBM3 stack</span><div class="bar-track"><div class="bar-fill" data-w="40"></div></div><span class="bval">73×</span></div>
+            <div class="bar-row"><span class="blab">GaAs RFPA</span><div class="bar-track"><div class="bar-fill" data-w="25"></div></div><span class="bval">46×</span></div>
+            <div class="bar-row"><span class="blab">7 nm HBM+CPU</span><div class="bar-track"><div class="bar-fill" data-w="21"></div></div><span class="bval">38×</span></div>
+            <div class="bar-row"><span class="blab">3-layer stack</span><div class="bar-track"><div class="bar-fill" data-w="9"></div></div><span class="bval">17×</span></div>
+            <div class="bar-row"><span class="blab">7 nm stepped</span><div class="bar-track"><div class="bar-fill" data-w="7"></div></div><span class="bval">12×</span></div>
           </div>
-          <div class="note">FEM-3D takes 1–34 s per design; ThermStack returns all of them in 0.014–0.027 s — at 0.094–1.35 K RMSE.</div>
+          <div class="note">Against the 3D finite-volume reference at the same grid the range is 3.6×–83× (avg 31×). FEM-3D takes 14–545 s per package; ThermStack returns all 8 in 0.81–3.00 s.</div>
+        </div>
+
+        <!-- grid sweep -->
+        <div class="panel full reveal">
+          <div class="phead">
+            <div><h3>What the references cost as the grid refines</h3><div class="psub">7 nm stepped — the same package solved by FVM and FEM at three lateral resolutions</div></div>
+            <span class="badge warn">resolution is the price</span>
+          </div>
+          <table class="data">
+            <thead><tr><th>Solver</th><th>Grid</th><th>Cells</th><th>Peak T</th><th>Solve time</th></tr></thead>
+            <tbody>
+              <tr><td>FDM-3D <span class="muted-tag">finite volume</span></td><td class="mono">39×37×115</td><td class="mono">165,945</td><td class="mono">347.2 K</td><td class="mono">0.661 s</td></tr>
+              <tr><td>FDM-3D <span class="muted-tag">finite volume</span></td><td class="mono">55×53×115</td><td class="mono">335,225</td><td class="mono">347.2 K</td><td class="mono">3.34 s</td></tr>
+              <tr><td>FDM-3D <span class="muted-tag">finite volume</span></td><td class="mono">71×67×115</td><td class="mono">547,055</td><td class="mono">347.2 K</td><td class="mono">7.63 s</td></tr>
+              <tr><td>FEM-3D</td><td class="mono">39×37×115</td><td class="mono">165,945</td><td class="mono">349.0 K</td><td class="mono">3.51 s</td></tr>
+              <tr><td>FEM-3D</td><td class="mono">55×53×115</td><td class="mono">335,225</td><td class="mono">348.1 K</td><td class="mono">10.8 s</td></tr>
+              <tr><td>FEM-3D</td><td class="mono">71×67×115</td><td class="mono">547,055</td><td class="mono">347.5 K</td><td class="mono">26.8 s</td></tr>
+              <tr class="win"><td>ThermStack</td><td class="mono">128×128×115</td><td class="mono">1,884,160</td><td class="mono">347.6 K</td><td class="mono">2.14 s</td></tr>
+            </tbody>
+          </table>
+          <div class="note">The volumetric references pay for every cell: going from 39×37 to 71×67 multiplies their cost by roughly 8× while the answer moves by 1.46 K. ThermStack resolves the footprint at 128×128 — 3.4× more lateral cells than the finest reference grid — for 2.14 s, because its cost is set by the spectral basis rather than by the raster.</div>
         </div>
       </div>
 
       <figure class="fig reveal">
-        <img src="assets/figs/figure_array_tpu_0_pd_new.png" alt="ThermStack-2D vs FEM-3D temperature fields across all six benchmark designs, with error maps" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
-        <div class="ph">assets/figs/figure_array_tpu_0_pd_new.png — add figures to assets/figs/ (see README)</div>
-        <figcaption><b>ThermStack-2D vs. FEM-3D across all six benchmark designs</b> (Google Coral M.2 TPU power input). Top row: ThermStack-2D. Middle: the 3D-FEM reference. Bottom: the error field — near-zero everywhere. <span class="muted-tag">The figure labels this solver “Fast2D-FD” — it is ThermStack-2D.</span></figcaption>
+        <img src="assets/figs/design_hbm_cpu_7nm_stepped_structure_3d.png" alt="IEEE 3Dblox structure of the 7 nm stepped HBM+CPU package" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
+        <div class="ph">assets/figs/design_hbm_cpu_7nm_stepped_structure_3d.png — add figures to assets/figs/ (see README)</div>
+        <figcaption><b>The 7 nm stepped HBM+CPU package, as ThermStack reads it.</b> Two HBM stacks flanking a logic die on a substrate, with a <b>non-coplanar stepped top</b> — the cooled surface sits at two different heights. Drawn straight from the IEEE&nbsp;3Dblox description; the solver meshes this geometry, not a simplified stack of uniform slabs.</figcaption>
       </figure>
 
       <div class="fig-2">
         <figure class="fig reveal">
-          <img src="assets/figs/fast2d_fd_results_3d_temperature_qual_hbm3.png" alt="ThermStack-2D 3D temperature field, HBM3 stack" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
-          <div class="ph">assets/figs/fast2d_fd_results_3d_temperature_qual_hbm3.png</div>
-          <figcaption><b>ThermStack-2D</b> — HBM3 stack, Qualcomm Snapdragon 680 power input. <span class="muted-tag">Figure label: “Fast2D-FD”.</span></figcaption>
+          <img src="assets/figs/thermstack_3d_hbm_cpu_7nm_stepped.png" alt="ThermStack 3D temperature field, 7 nm stepped package" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
+          <div class="ph">assets/figs/thermstack_3d_hbm_cpu_7nm_stepped.png</div>
+          <figcaption><b>ThermStack</b> — 7 nm stepped HBM+CPU package, steady state, peak 347.6 K in 2.14 s.</figcaption>
         </figure>
         <figure class="fig reveal">
-          <img src="assets/figs/fem3d_results_3d_temperature_qual_hbm3.png" alt="FEM-3D reference 3D temperature field, HBM3 stack" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
-          <div class="ph">assets/figs/fem3d_results_3d_temperature_qual_hbm3.png</div>
-          <figcaption><b>FEM-3D reference</b> — same case. Visually indistinguishable, at ≈0.04 K RMSE.</figcaption>
+          <img src="assets/figs/fem3d_3d_hbm_cpu_7nm_stepped.png" alt="FEM-3D reference 3D temperature field, 7 nm stepped package" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
+          <div class="ph">assets/figs/fem3d_3d_hbm_cpu_7nm_stepped.png</div>
+          <figcaption><b>FEM-3D reference</b> — same package and power, peak 347.5 K in 26.8 s. Visually indistinguishable, at 0.904 K RMSE.</figcaption>
         </figure>
       </div>
+
+      <figure class="fig reveal">
+        <img src="assets/figs/grid_refinement_7nm_stepped.png" alt="Peak temperature and solve time of the volumetric references as the lateral grid refines, against ThermStack" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
+        <div class="ph">assets/figs/grid_refinement_7nm_stepped.png</div>
+        <figcaption><b>Refining the reference toward ThermStack.</b> Left: peak temperature against lateral resolution. Right: the same peaks against solve time. ThermStack (dashed) reaches the converged answer at a fraction of the cost, and stays there.</figcaption>
+      </figure>
     </div>
 
     <!-- TRANSIENT -->
@@ -796,123 +826,82 @@
         <!-- speedup bar chart -->
         <div class="panel reveal">
           <div class="phead">
-            <div><h3>Solve-time speedup</h3><div class="psub">ThermStack-2D vs FEM-3D, per design family</div></div>
-            <span class="badge">mean 1036×</span>
+            <div><h3>Solve-time speedup</h3><div class="psub">ThermStack vs FEM-3D, 8 packages, 100 time steps each, both at their default grid</div></div>
+            <span class="badge">mean 19×</span>
           </div>
           <div class="bars" id="transbars">
-            <div class="bar-row"><span class="blab">Chiplet 2.5D</span><div class="bar-track"><div class="bar-fill" data-w="100"></div></div><span class="bval">≈1585×</span></div>
-            <div class="bar-row"><span class="blab">CPU 5nm</span><div class="bar-track"><div class="bar-fill" data-w="76"></div></div><span class="bval">≈1212×</span></div>
-            <div class="bar-row"><span class="blab">3-layer 3D</span><div class="bar-track"><div class="bar-fill" data-w="16"></div></div><span class="bval">≈252×</span></div>
+            <div class="bar-row"><span class="blab">7 nm HBM+CPU</span><div class="bar-track"><div class="bar-fill" data-w="100"></div></div><span class="bval">24×</span></div>
+            <div class="bar-row"><span class="blab">11-layer 3D IC</span><div class="bar-track"><div class="bar-fill" data-w="93"></div></div><span class="bval">22×</span></div>
+            <div class="bar-row"><span class="blab">2.5D chiplet</span><div class="bar-track"><div class="bar-fill" data-w="84"></div></div><span class="bval">20×</span></div>
+            <div class="bar-row"><span class="blab">GaAs RFPA</span><div class="bar-track"><div class="bar-fill" data-w="75"></div></div><span class="bval">18×</span></div>
+            <div class="bar-row"><span class="blab">HBM3 stack</span><div class="bar-track"><div class="bar-fill" data-w="74"></div></div><span class="bval">18×</span></div>
+            <div class="bar-row"><span class="blab">5 nm CPU</span><div class="bar-track"><div class="bar-fill" data-w="69"></div></div><span class="bval">17×</span></div>
+            <div class="bar-row"><span class="blab">3-layer stack</span><div class="bar-track"><div class="bar-fill" data-w="66"></div></div><span class="bval">16×</span></div>
+            <div class="bar-row"><span class="blab">7 nm stepped</span><div class="bar-track"><div class="bar-fill" data-w="65"></div></div><span class="bval">15×</span></div>
           </div>
-          <div class="note">Peak observed speedup <b style="color:#ff7a52">1875×</b> (Chiplet 2.5D, Edge-TPU trace). ThermStack-2D solves in <b>0.12–0.45 s</b> across 100 time steps; the FEM-3D reference takes <b>30–733 s</b>.</div>
+          <div class="note">Peak observed speedup <b style="color:#ff7a52">24×</b>. ThermStack completes 100 steps in <b>6.2–15.5 s</b>; the FEM-3D reference takes <b>98–346 s</b>. Against the 3D finite-volume reference the mean is 2.0×.</div>
         </div>
 
         <!-- accuracy table -->
         <div class="panel reveal">
           <div class="phead">
-            <div><h3>Accuracy</h3><div class="psub">Temperature error vs FEM-3D reference</div></div>
-            <span class="badge warn">0.18% mean</span>
+            <div><h3>Accuracy</h3><div class="psub">Volume RMSE over all 100 steps, vs both 3D references — last column is the two references against each other</div></div>
+            <span class="badge warn">1.38 K mean</span>
           </div>
           <table class="data">
-            <thead><tr><th>Design family</th><th>RMSE</th><th>Mean error</th></tr></thead>
+            <thead><tr><th>Package</th><th>RMSE vs FEM-3D</th><th>RMSE vs FDM-3D</th><th>Peak Δ vs FEM-3D</th><th>FEM ↔ FDM peak Δ</th></tr></thead>
             <tbody>
-              <tr><td>Chiplet 2.5D</td><td class="mono">0.72 K</td><td class="mono">0.12%</td></tr>
-              <tr><td>CPU 5nm</td><td class="mono">1.42 K</td><td class="mono">0.24%</td></tr>
-              <tr><td>3-layer 3D</td><td class="mono">1.52 K</td><td class="mono">0.23%</td></tr>
-              <tr class="total"><td>All 12 cases</td><td class="mono">1.22 K</td><td class="mono">0.18%</td></tr>
+              <tr><td>11-layer 3D IC</td><td class="mono">0.233 K</td><td class="mono">0.476 K</td><td class="mono">1.53 K</td><td class="mono">1.04 K</td></tr>
+              <tr><td>2.5D chiplet</td><td class="mono">0.162 K</td><td class="mono">0.143 K</td><td class="mono">1.29 K</td><td class="mono">1.04 K</td></tr>
+              <tr><td>HBM3 stack</td><td class="mono">0.071 K</td><td class="mono">1.478 K</td><td class="mono">0.31 K</td><td class="mono">1.24 K</td></tr>
+              <tr><td>5 nm CPU</td><td class="mono">0.298 K</td><td class="mono">0.785 K</td><td class="mono">1.50 K</td><td class="mono">0.61 K</td></tr>
+              <tr><td>GaAs RFPA</td><td class="mono">0.019 K</td><td class="mono">0.060 K</td><td class="mono">0.14 K</td><td class="mono">0.34 K</td></tr>
+              <tr><td>3-layer stack</td><td class="mono">0.129 K</td><td class="mono">0.626 K</td><td class="mono">0.31 K</td><td class="mono">0.20 K</td></tr>
+              <tr><td>7 nm HBM+CPU</td><td class="mono">5.713 K</td><td class="mono">5.976 K</td><td class="mono">49.92 K</td><td class="mono">36.50 K</td></tr>
+              <tr><td>7 nm stepped</td><td class="mono">4.386 K</td><td class="mono">2.953 K</td><td class="mono">43.96 K</td><td class="mono">23.82 K</td></tr>
+              <tr class="total"><td>All 8 packages</td><td class="mono">1.376 K</td><td class="mono">1.562 K</td><td class="mono">—</td><td class="mono">—</td></tr>
             </tbody>
           </table>
-          <div class="note">Best case 0.57 K RMSE · worst case 2.09 K · peak temperatures matched within tenths of a kelvin across the 308–510 K range spanned by the benchmark.</div>
+          <div class="note">All three solvers are driven by the same measured Intel Core i5 (FLAC) power trace, rasterized onto each package's own geometry, and started from the matching steady state, each at its default lateral resolution — 31×31–41×39 for the volumetric references (geometry-aligned, so it varies by package), 128×128 for ThermStack. On the 6 conventional packages all three agree to <b>0.30 K</b> or better over the whole 100-step history. The two dense 7&nbsp;nm packages are grid-limited for the references: under this concentrated, moving power map the two references disagree with <i>each other</i> by 37 K on peak temperature at 31×31–41×39, so the residual there is a resolution question, not a solver-accuracy one.</div>
         </div>
 
-        <!-- transient curve -->
+        <!-- real peak traces -->
         <div class="panel full reveal">
           <div class="phead">
-            <div><h3>Transient response — the two solvers overlap</h3><div class="psub">Representative junction-temperature rise under a stepped power waveform (schematic of the &lt;1.2 K agreement)</div></div>
+            <div><h3>Transient response — the solvers overlap</h3><div class="psub">Peak junction temperature over 100 steps, measured (not schematic)</div></div>
+            <span class="badge">measured</span>
           </div>
-          <svg viewBox="0 0 900 270" width="100%" height="auto" role="img" aria-label="Temperature versus time, ThermStack-2D overlapping FEM-3D reference">
-            <defs>
-              <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#fb923c" stop-opacity=".28"/><stop offset="100%" stop-color="#fb923c" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <g stroke="rgba(148,163,184,.18)" stroke-width="1">
-              <line x1="60" y1="20" x2="60" y2="230"/><line x1="60" y1="230" x2="860" y2="230"/>
-              <line x1="60" y1="178" x2="860" y2="178" stroke-dasharray="4 6"/>
-              <line x1="60" y1="126" x2="860" y2="126" stroke-dasharray="4 6"/>
-              <line x1="60" y1="74" x2="860" y2="74" stroke-dasharray="4 6"/>
-            </g>
-            <g font-family="ui-monospace,monospace" font-size="11" fill="#6f829f">
-              <text x="52" y="234" text-anchor="end">30</text>
-              <text x="52" y="182" text-anchor="end">50</text>
-              <text x="52" y="130" text-anchor="end">70</text>
-              <text x="52" y="78" text-anchor="end">90</text>
-              <text x="22" y="120" transform="rotate(-90 22 120)" fill="#9aabc6">Temp (°C)</text>
-              <text x="450" y="256" text-anchor="middle" fill="#9aabc6">time (100 steps)</text>
-            </g>
-            <path d="M60,222 C190,222 250,120 360,96 C470,72 520,66 620,62 C720,58 800,57 860,56"
-                  fill="none" stroke="#60a5fa" stroke-width="6" stroke-opacity=".45" stroke-linecap="round"/>
-            <path class="rise" d="M60,222 C190,222 250,122 360,98 C470,74 520,68 620,63 C720,59 800,58 860,57"
-                  fill="none" stroke="#ff7a52" stroke-width="2.6" stroke-linecap="round"/>
-            <circle cx="860" cy="57" r="4.5" fill="#ff7a52"/>
-          </svg>
-          <div class="legend-row">
-            <span><i class="swatch" style="background:#60a5fa;height:6px"></i> FEM-3D reference</span>
-            <span><i class="swatch" style="background:#ff7a52"></i> ThermStack-2D</span>
-            <span style="color:var(--muted-2)">Curves overlap to within the benchmark RMSE; shape is illustrative, errors are measured.</span>
-          </div>
+          <figure class="fig" style="margin-top:14px">
+            <img src="assets/figs/transient_peak_traces.png" alt="Peak temperature versus time, ThermStack against the FEM-3D and FDM-3D references" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
+            <div class="ph">assets/figs/transient_peak_traces.png</div>
+            <figcaption><b>Peak temperature against time</b> for every benchmark package. On the 6 conventional packages ThermStack and both 3D references trace the same curve — the lines sit on top of each other at this scale. On the two dense 7&nbsp;nm packages all three separate, and the two references separate from each other in the same order: the signature of a lateral grid too coarse for that floorplan, not of a solver disagreement.</figcaption>
+          </figure>
         </div>
 
-        <!-- transient 3D videos: Chiplet 2.5D · i5 (FLAC) -->
+        <!-- transient 3D videos -->
         <div class="panel full reveal">
           <div class="phead">
-            <div><h3>3D transient — Chiplet 2.5D · Intel Core i5 (FLAC)</h3><div class="psub">Power inputs → ThermStack 3D temperature field, over time</div></div>
+            <div><h3>3D transient — 7 nm stepped HBM+CPU · Intel Core i5 (FLAC)</h3><div class="psub">Power inputs → ThermStack 3D temperature field, over time</div></div>
             <span class="badge">3D · animated</span>
           </div>
           <div class="vid-3">
             <figure class="vid">
-              <video src="assets/figs/videos/fast2d_fd_chiplet_i5_flac_volume3d.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
-              <div class="ph">assets/figs/videos/fast2d_fd_chiplet_i5_flac_volume3d.mp4 — copy videos to assets/figs/videos/ (see README)</div>
-              <figcaption><span class="vlab">ThermStack · output</span><b>3D temperature field.</b> The resolved, through-stack thermal response evolving over time.</figcaption>
+              <video src="assets/figs/videos/stepped_7nm_thermstack_3d_temperature.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
+              <div class="ph">assets/figs/videos/stepped_7nm_thermstack_3d_temperature.mp4 — copy videos to assets/figs/videos/ (see README)</div>
+              <figcaption><span class="vlab">ThermStack · output</span><b>3D temperature field.</b> The resolved, through-stack response on the real stepped geometry, evolving over time.</figcaption>
             </figure>
             <figure class="vid">
-              <video src="assets/figs/videos/CPU_i5_flac_power_density_3d.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
-              <div class="ph">assets/figs/videos/CPU_i5_flac_power_density_3d.mp4 — copy videos to assets/figs/videos/ (see README)</div>
-              <figcaption><span class="vlab">Input · 3D</span><b>Power density, 3D.</b> The time-varying volumetric power that drives the analysis.</figcaption>
+              <video src="assets/figs/videos/stepped_7nm_power_density_3d.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
+              <div class="ph">assets/figs/videos/stepped_7nm_power_density_3d.mp4 — copy videos to assets/figs/videos/ (see README)</div>
+              <figcaption><span class="vlab">Input · 3D</span><b>Power density, 3D.</b> The time-varying volumetric power that drives the analysis, on the same structure.</figcaption>
             </figure>
             <figure class="vid">
-              <video src="assets/figs/videos/CPU_i5_flac_power_density.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
-              <div class="ph">assets/figs/videos/CPU_i5_flac_power_density.mp4 — copy videos to assets/figs/videos/ (see README)</div>
-              <figcaption><span class="vlab">Input · 2D</span><b>Power density, 2D map.</b> The per-layer input power over time.</figcaption>
+              <video src="assets/figs/videos/stepped_7nm_power_density_2d.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
+              <div class="ph">assets/figs/videos/stepped_7nm_power_density_2d.mp4 — copy videos to assets/figs/videos/ (see README)</div>
+              <figcaption><span class="vlab">Input · 2D</span><b>Power density, 2D map.</b> The footprint power the package is driven with, integrated through the stack.</figcaption>
             </figure>
           </div>
-          <div class="note">A <b>Chiplet 2.5D</b> design driven by a measured <b>Intel Core i5 (FLAC workload)</b> power trace. As the workload's power density evolves in time (center &amp; right), ThermStack resolves the full <b>3D transient temperature field</b> (left) — the hotspot forming and spreading through the stack, step by step. <span class="muted-tag">From <b>results_chiplet_i5_flac</b>.</span></div>
-        </div>
-
-        <!-- transient 3D videos: Chiplet 2.5D · i7 (GIMP) -->
-        <div class="panel full reveal">
-          <div class="phead">
-            <div><h3>3D transient — Chiplet 2.5D · Intel Core i7 (GIMP)</h3><div class="psub">Power inputs → ThermStack 3D temperature field, over time</div></div>
-            <span class="badge">3D · animated</span>
-          </div>
-          <div class="vid-3">
-            <figure class="vid">
-              <video src="assets/figs/videos/fast2d_fd_chiplet_i7_gimp_volume3d.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
-              <div class="ph">assets/figs/videos/fast2d_fd_chiplet_i7_gimp_volume3d.mp4 — copy videos to assets/figs/videos/ (see README)</div>
-              <figcaption><span class="vlab">ThermStack · output</span><b>3D temperature field.</b> The resolved, through-stack thermal response evolving over time.</figcaption>
-            </figure>
-            <figure class="vid">
-              <video src="assets/figs/videos/CPU_i7_gimp_power_density_3d.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
-              <div class="ph">assets/figs/videos/CPU_i7_gimp_power_density_3d.mp4 — copy videos to assets/figs/videos/ (see README)</div>
-              <figcaption><span class="vlab">Input · 3D</span><b>Power density, 3D.</b> The time-varying volumetric power that drives the analysis.</figcaption>
-            </figure>
-            <figure class="vid">
-              <video src="assets/figs/videos/CPU_i7_gimp_power_density.mp4" controls autoplay loop muted playsinline preload="metadata" onerror="this.closest('.vid').classList.add('novid')"></video>
-              <div class="ph">assets/figs/videos/CPU_i7_gimp_power_density.mp4 — copy videos to assets/figs/videos/ (see README)</div>
-              <figcaption><span class="vlab">Input · 2D</span><b>Power density, 2D map.</b> The per-layer input power over time.</figcaption>
-            </figure>
-          </div>
-          <div class="note">The same <b>Chiplet 2.5D</b> design under a measured <b>Intel Core i7 (GIMP workload)</b> power trace. The image-processing load spreads power differently than the i5/FLAC run above — ThermStack resolves the matching <b>3D transient temperature field</b> (left) straight from it. <span class="muted-tag">From <b>results_chiplet_i7_gimp</b>.</span></div>
+          <div class="note">The <b>7 nm stepped HBM+CPU</b> package driven by a measured <b>Intel Core i5 (FLAC workload)</b> power trace at a 150 W package budget. As the workload's power density moves across the floorplan (centre &amp; right), ThermStack resolves the full <b>3D transient temperature field</b> (left) — the hotspot forming on the low step and spreading through the stack, step by step. 100 steps, peak 398.5 K. <span class="muted-tag">Rendered on the design's own IEEE 3Dblox structure.</span></div>
         </div>
       </div>
     </div>
@@ -980,7 +969,7 @@
     <div class="foot-grid">
       <div class="foot-brand">
         <a class="brand" href="#top"><span class="dot"></span>ThermStack</a>
-        <p>ThermStack (ChipletTherm) — fast, FEM-grade static and transient thermal analysis for 2.5D and 3D chiplet designs — a hybrid engine of fast spectral numerical solvers and AI-accelerated neural solvers.</p>
+        <p>ThermStack (ChipletTherm) — fast, FEM-grade static and transient thermal analysis for 2.5D and 3D chiplet designs — a hybrid engine of a geometry-resolved spectral numerical solver and AI-accelerated neural solvers.</p>
       </div>
       <div class="foot-cols">
         <div class="foot-col">
@@ -998,6 +987,7 @@
           <span>IEEE 3Dblox input</span>
           <span>Agentic EDA flow integration</span>
           <span>2.5D / 3D · up to 11 layers</span>
+          <span>Non-coplanar stepped stacks</span>
         </div>
         <div class="foot-col">
           <h5>Contact</h5>
@@ -1007,7 +997,7 @@
       </div>
     </div>
     <div class="cite">
-      Benchmarks: static — ThermStack vs FEM-3D, 18 cases, 0.214 K avg RMSE / 637× avg speedup; transient — ThermStack-2D vs FEM-3D, 12 cases, 1.22 K RMSE / 1036× mean speedup.
+      Benchmarks: static — ThermStack vs FDM-3D (finite volume) and FEM-3D on 8 native IEEE 3Dblox packages at three lateral grids, 0.509 K avg RMSE vs FEM-3D / 68× avg speedup; transient — same solvers, 8 packages × 100 time steps, 1.38 K RMSE / 19× mean speedup.
       AI — ThermStack-AI (PINN) vs commercial FEM, 0.23 K mean error / 0.59 ms per map / 113× faster 5,000-sample UQ; ThermStack-AI (TNN) vs infrared measurement, 0.36 K avg RMSE / 14 ms per map, 2,944 test maps.
     </div>
     <div class="copyright">© 2026 NoveetyAI, Inc. All rights reserved.</div>

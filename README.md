@@ -2,218 +2,164 @@
 
 **Fast, FEM-grade static & transient thermal analysis for 2.5D / 3D chiplet designs.**
 
-ThermStack (formerly ChipletTherm) computes full-chip, full-stack temperature fields for heterogeneous-integration
-designs — every die, bonding layer, and interposer resolved in 3D — at a fraction of the cost of a
-full 3D finite-element (FEM) solve. It is powered by a fast **spectral** engine: the heat equation is decoupled laterally with a spectral transform
-and resolved through the stack with a layer-aware thickness model, so steady-state maps come back
-in milliseconds and transients in well under a second — validated throughout against a consistent-mass
-3D-FEM reference.
+ThermStack (formerly ChipletTherm) computes full-chip, full-stack temperature fields for
+heterogeneous-integration designs — every die, bond line, TSV field, interposer and lid resolved in
+3D on the design's own **IEEE 3Dblox** geometry — at a fraction of the cost of a full 3D
+finite-element or finite-volume solve. It is powered by a fast **spectral** engine whose cost is set
+by the size of its spectral basis rather than by how finely the geometry is rasterized, so a package
+can be resolved at 128x128 laterally while the solve itself stays small.
 
-This repository hosts the **ThermStack** promotion site live at **<https://sheldonucr.github.io/chipletTherm_io/>**.
+This repository hosts the **ThermStack** promotion site live at
+**<https://sheldonucr.github.io/chipletTherm_io/>**.
 
-> **Naming.** The tool is **ThermStack** (previously named **ChipletTherm**), and it ships in two numerical solver modes:
-> **ThermStack** — the thickness-resolved, most-accurate solver — and **ThermStack-2D** — the
-> fast, layer-averaged solver. (*Fast2D-FD* is an earlier internal name for ThermStack-2D that
-> still appears in some figure labels.)
+> **Naming.** The tool is **ThermStack** (previously **ChipletTherm**). A 3D finite-volume solver
+> (**FDM-3D**) and a consistent-mass 3D finite-element solver (**FEM-3D**) ship alongside as
+> ground-truth references, and every result below is measured against both on identical geometry.
 
 ---
 
 ## Why ThermStack
 
-3D/2.5D integration makes thermal behavior a first-order design constraint — and with accelerators now
-pushing 700–1200 W, the tools accurate enough to trust are too slow to keep in the design loop:
+3D/2.5D integration makes thermal behavior a first-order design constraint — and with accelerators
+now pushing 700–1200 W, the tools accurate enough to trust are too slow to keep in the design loop:
 
 - **Hotspots hide in the stack.** Vertical stacking raises thermal resistance and traps heat between
-  layers; logic chiplets next to stacked HBM create localized hotspots that decide whether a design ships.
-- **3D FEM is too slow to iterate.** A single full FEM solve discretizes the whole volume into millions
-  of unknowns — fine for one sign-off, impossible for the thousands of evaluations a design-space search
-  (or a runtime control loop) demands.
+  layers; logic chiplets next to stacked HBM create localized hotspots that decide whether a design
+  ships.
+- **Volumetric solvers are too slow to iterate.** FEM and FVM must mesh the whole volume, so their
+  cost is tied to lateral resolution — and the packages that most need resolving are exactly the ones
+  that make them unaffordable.
 - **Thermal must be in the loop.** Floorplanning, power delivery, packaging co-design, and runtime
   management all need temperature feedback *per iteration*.
 
-ThermStack closes that gap: **best-in-class accuracy at hundreds-to-thousands× the speed.**
+ThermStack closes that gap: **reference-grade accuracy at a fraction of the cost.**
 
 ---
 
 ## Headline results
 
-### Static (steady-state) — 18 cases vs. 3D-FEM reference
+### Static (steady-state) — 8 native 3Dblox packages
 
-ThermStack is more accurate than every evaluated method while running orders of magnitude faster:
+Both references were run on the identical geometry at three lateral resolutions
+(31x31-41x39 through 63x63-73x69); agreement is measured against FEM-3D at 63x63-73x69.
 
-| Method | Avg RMSE | Avg runtime | Notes |
+| Method | Lateral grid | Avg RMSE vs FEM-3D | Avg runtime |
 | --- | --- | --- | --- |
-| FEM-3D | — (reference) | 12.7 s | ground truth |
-| SOV (baseline) | 0.225 K | 0.047 s | separation of variables |
-| GIT (baseline) | 0.219 K | 0.348 s | generalized integral transform |
-| **ThermStack-2D** | 0.444 K | **0.016 s** | fastest of all methods |
-| **ThermStack** | **0.214 K** | 0.020 s | most accurate of all methods |
+| FEM-3D <sub>reference</sub> | 63x63-73x69 | — | 153.1 s |
+| FDM-3D <sub>finite volume</sub> | 63x63-73x69 | 0.492 K | 71.9 s |
+| **ThermStack** | 128x128 | **0.509 K** | **1.93 s** |
 
-- **ThermStack runs 2.42× / 21.4× / 637× faster** than SOV / GIT / FEM-3D (on average), while being more
-  accurate than both semi-analytical baselines.
-- **Up to 1410× faster** than FEM-3D on the 11-layer 3D-IC stack.
-- The thickness-resolved step cuts ThermStack-2D's error by ~52% (RMSE 0.444 K → 0.214 K) at essentially
-  the same runtime.
-- **Real-time capable:** 0.020 s/evaluation → up to ~50 Hz, vs. 1–10 Hz control loops.
+- On the 6 conventional packages ThermStack is within **0.004 K** of FEM-3D, where
+  the finite-volume solver on the same geometry sits 0.569 K away. The 0.509 K
+  average above is carried entirely by the two dense 7 nm packages, where the references
+  are themselves still moving with grid.
+- Average speedup **68×** over FEM-3D and **31×** over FDM-3D at 63x63-73x69.
+- RMSE against the finite-volume reference: 0.967 K — the FVM/FEM scheme gap itself.
 
-**ThermStack speedup over FEM-3D, by design:**
+**Per design:**
 
-| Design | Layers | ThermStack RMSE | FEM-3D time | ThermStack time | Speedup |
+| Design | z bands | ThermStack RMSE | FEM-3D time | FDM-3D time | ThermStack time | Speedup |
+| --- | --- | --- | --- | --- | --- | --- |
+| 11-layer 3D IC | 55 | 0.003 K | 545.0 s | 248.1 s | 3.00 s | **182×** |
+| 2.5D chiplet package | 45 | 0.002 K | 227.1 s | 144.2 s | 2.45 s | **93×** |
+| 5 nm CPU package | 35 | 0.004 K | 146.5 s | 68.8 s | 1.81 s | **81×** |
+| HBM3 stack | 30 | 0.001 K | 117.6 s | 50.7 s | 1.62 s | **73×** |
+| GaAs RF PA | 25 | 0.000 K | 57.7 s | 23.0 s | 1.26 s | **46×** |
+| 7 nm HBM+CPU | 125 | 3.158 K | 89.6 s | 26.8 s | 2.34 s | **38×** |
+| 3-layer stack | 15 | 0.002 K | 14.1 s | 6.1 s | 0.81 s | **17×** |
+| 7 nm HBM+CPU, stepped | 115 | 0.904 K | 26.8 s | 7.6 s | 2.14 s | **12×** |
+
+**What the references cost as the grid refines** (7 nm HBM+CPU, stepped):
+
+| Grid | Cells | FDM-3D peak | FDM-3D time | FEM-3D peak | FEM-3D time |
 | --- | --- | --- | --- | --- | --- |
-| 11-layer 3D IC | 11 | 0.145 K | 33.6 s | 0.027 s | **1410×** |
-| 2.5D chiplet package | 9 | 0.099 K | 18.7 s | 0.024 s | 872× |
-| HBM3 stack | 6 | 0.041 K | 8.93 s | 0.019 s | 586× |
-| 5 nm CPU package | 7 | 0.909 K | 9.52 s | 0.020 s | 563× |
-| GaAs RF PA | 5 | 0.009 K | 4.25 s | 0.018 s | 304× |
-| 3-layer stack | 3 | 0.081 K | 1.01 s | 0.014 s | 89× |
+| 39x37x115 | 165,945 | 347.2 K | 0.7 s | 349.0 K | 3.5 s |
+| 55x53x115 | 335,225 | 347.2 K | 3.3 s | 348.1 K | 10.8 s |
+| 71x67x115 | 547,055 | 347.2 K | 7.6 s | 347.5 K | 26.8 s |
+| **128x128 (ThermStack)** | 1,884,160 | **347.6 K** | **2.14 s** | — | — |
 
-Validated under 3 power inputs including **measured commercial devices** (Qualcomm Snapdragon 680,
-Google Coral M.2 TPU).
+### Transient — 8 packages x 100 time steps
 
-### Transient — 12 cases vs. 3D-FEM reference
+Every package driven by the same measured Intel Core i5 (FLAC) power trace,
+rasterized onto its own 3Dblox geometry, started from the matching steady state.
 
-ThermStack-2D vs. a consistent-mass FEM-3D reference, three design families driven by real CPU, GPU,
-and TPU power traces, 100 time steps each:
+| Design | FEM-3D | FDM-3D | ThermStack | Speedup vs FEM-3D | RMSE vs FEM-3D | RMSE vs FDM-3D |
+| --- | --- | --- | --- | --- | --- | --- |
+| 7 nm HBM+CPU | 303.1 s | 28.9 s | 12.7 s | **24×** | 5.713 K | 5.976 K |
+| 11-layer 3D IC | 346.1 s | 40.8 s | 15.5 s | **22×** | 0.233 K | 0.476 K |
+| 2.5D chiplet package | 292.5 s | 35.8 s | 14.6 s | **20×** | 0.162 K | 0.143 K |
+| GaAs RF PA | 172.2 s | 17.3 s | 9.6 s | **18×** | 0.019 K | 0.060 K |
+| HBM3 stack | 206.9 s | 24.3 s | 11.7 s | **18×** | 0.071 K | 1.478 K |
+| 5 nm CPU package | 232.4 s | 25.3 s | 14.0 s | **17×** | 0.298 K | 0.785 K |
+| 3-layer stack | 98.3 s | 9.7 s | 6.2 s | **16×** | 0.129 K | 0.626 K |
+| 7 nm HBM+CPU, stepped | 182.7 s | 17.1 s | 11.8 s | **15×** | 4.386 K | 2.953 K |
 
-| Metric | Result |
-| --- | --- |
-| Mean solve-time speedup | **1036×** (range 252× – 1875×) |
-| Peak speedup | **1875×** (Chiplet 2.5D, Edge-TPU trace) |
-| ThermStack-2D solve time | **0.12 – 0.45 s** |
-| FEM-3D reference solve time | 30 – 733 s |
-| Mean RMSE vs FEM-3D | **1.22 K** (best 0.57 K, worst 2.09 K) |
-| Mean temperature error | **0.18%** (range 0.108% – 0.287%) |
-
-| Design family | RMSE | Mean error |
-| --- | --- | --- |
-| Chiplet 2.5D | 0.72 K | 0.12% |
-| CPU 5nm | 1.42 K | 0.24% |
-| 3-layer 3D | 1.52 K | 0.23% |
-| **All 12 cases** | **1.22 K** | **0.18%** |
+- Mean speedup **19×** vs FEM-3D, **2.0×** vs FDM-3D; best **24×**.
+- Mean volume RMSE over all steps: **1.376 K** vs FEM-3D, 1.562 K vs FDM-3D.
 
 ---
 
 ## Features
 
-- **Resolved 3D static heat maps** — full-chip, full-stack steady-state temperature fields for 2.5D and
-  3D assemblies, resolved through-thickness, from a single power + floorplan description.
+- **Resolved 3D static heat maps** — full-chip, full-stack steady-state temperature fields for 2.5D
+  and 3D assemblies, resolved through-thickness, from a single power + floorplan description.
 - **Transient response** — drive the model with arbitrary power waveforms and recover the complete
   temperature history at every node (throttling, workload bursts, thermal transients).
-- **Real-time fast** — ~0.02 s steady-state solves and sub-second transients; up to 1410× (static) /
-  1875× (transient) faster than 3D FEM; ~50 Hz runtime-management capable.
-- **Best-in-class fidelity** — 0.21 K mean RMSE vs a consistent-mass 3D-FEM reference, beating the SOV
-  and GIT baselines, across 30 cases including measured Snapdragon and Coral-TPU power maps.
-- **Real chiplet stacks** — validated to 11 layers; 2.5D interposers, 3D logic stacks, HBM, CPU and RF
-  packages, with per-layer **anisotropic** materials, **interface thermal resistance**, volumetric heat
-  capacity, and **Robin** boundary conditions.
-- **IEEE 3Dblox input** — accepts the IEEE 3Dblox format, the IEEE-standard modular description
-  language for defining physical stacking, dimensions, and logical connectivity in 2.5D and 3D-IC
-  designs, so existing stack descriptions drop straight into the thermal flow.
-- **Batched & scriptable** — independent lateral modes batch naturally across multi-core CPUs and GPUs.
+- **Geometry-resolved** — the design's real structure, including **non-coplanar stepped tops**, with
+  per-layer **anisotropic** materials, in-plane material variation, **interface thermal resistance**,
+  volumetric heat capacity, and **Robin** boundary conditions.
+- **Predictable cost** — one structured direct solve, no iteration and no convergence tuning; the
+  same design always costs the same.
+- **IEEE 3Dblox input** — accepts the IEEE-standard modular description language for physical
+  stacking, dimensions, and logical connectivity in 2.5D and 3D-IC designs.
+- **Bundled references** — FDM-3D (finite volume) and FEM-3D ship with the tool, so any result can be
+  re-checked against ground truth on the same geometry.
 - **Agentic EDA flow ready** — a first-class CLI and structured data interface let autonomous EDA
   agents invoke ThermStack, consume machine-readable temperature maps and margins, and feed thermal
   results back into floorplanning, stack planning, power budgeting, and optimization loops.
 
 ---
 
-## How it works
-
-ThermStack is built on a **spectral fast-analysis** technique. Instead of solving one enormous 3D
-system the way full FEM does, it analyzes the chip in a form where the physics nearly separates:
-
-1. **Spectral decomposition** — the in-plane temperature field is broken into a set of simple,
-   wave-like spatial modes via a spectral transform. This turns one large, tightly-coupled 3D
-   problem into many small, completely independent ones.
-2. **Layer-aware vertical model** — each mode is resolved down through the physical stack, capturing
-   every die, bonding layer, and interposer with their real per-layer materials, directional
-   conductivity, and interface resistances.
-3. **Massively parallel solve** — because the modes are independent, they are all solved at once, in a
-   single direct pass with no iteration — fast, and a natural fit for multi-core CPU and GPU hardware.
-4. **Reassembly** — the solved modes recombine into the full temperature map: the steady-state field
-   directly, or advanced step-by-step through time for transient analysis.
-
-Two solver modes span the speed–accuracy tradeoff: **ThermStack-2D** (layer-averaged, the
-fastest, lowest-cost estimate) and **ThermStack** (thickness-resolved, the most accurate,
-recovering the full 3D field). What makes the approach novel is the spectral decoupling: it replaces the expensive 3D solve of
-full FEM — and the costlier thickness treatments of prior spectral methods (SOV, GIT) — with hundreds of
-tiny, independent solves that run in parallel, delivering lower cost and higher accuracy at the same time.
-
-A full 3D finite-element solver ships alongside as the ground-truth reference, and every ThermStack
-result is validated against it.
-
----
-
-## Agentic flow integration
-
-ThermStack is built to run inside autonomous, agent-driven EDA flows:
-
-- **Fully agentic-flow aware** — designed to be driven by autonomous EDA agents, and to work with *any*
-  agentic flow.
-- **First-class CLI** — every analysis is scriptable from the command line; no GUI in the loop.
-- **Structured data interface** — machine-readable inputs, temperature fields, hotspot locations, and
-  thermal margins for closed-loop automation.
-- **Thermal-aware design iteration** — agents can sweep floorplans, stack-ups, power maps, and cooling
-  assumptions, then use ThermStack results to steer the next candidate.
-
-```text
-Agentic EDA flow
-   │  invokes ThermStack  (CLI + structured data interface)
-   ▼
-ThermStack thermal analysis — static and transient solvers, headless
-   │  structured, machine-readable results
-   ▼
-Fed back to the agent → floorplan, stack, or power-budget iteration repeats
-```
-
-Thermal analysis becomes a callable step inside the agentic flow — not a hand-run GUI task.
-
----
-
 ## Figures / assets
 
-The site embeds real **ThermStack-vs-FEM-3D** validation figures. They live in `assets/figs/` and are
-referenced by relative path; if a file is missing, the page falls back to a tasteful placeholder
-instead of a broken image, so it always renders. Copy the paper's PNGs into `assets/figs/` before
-publishing:
+The site embeds real **ThermStack-vs-reference** validation figures from `assets/figs/`; if a file is
+missing the page falls back to a placeholder instead of a broken image.
 
 | File | Where it appears on the page |
 | --- | --- |
-| `figure_array_tpu_0_pd_new.png` | Static results — all six designs, ThermStack-2D vs FEM-3D + error maps |
-| `fast2d_fd_results_3d_temperature_qual_hbm3.png` | Static results — HBM3 3D field (ThermStack-2D) |
-| `fem3d_results_3d_temperature_qual_hbm3.png` | Static results — HBM3 3D field (FEM-3D reference) |
-
-Commit the `assets/` folder so the figures are served on GitHub Pages too. (Optionally compress the
-PNGs first — the comparison array is fairly large.)
+| `design_hbm_cpu_7nm_stepped_structure_3d.png` | Static results — the 3Dblox structure of the stepped 7 nm package |
+| `thermstack_3d_hbm_cpu_7nm_stepped.png` | Static results — ThermStack 3D field |
+| `fem3d_3d_hbm_cpu_7nm_stepped.png` | Static results — FEM-3D reference, same case |
+| `grid_refinement_7nm_stepped.png` | Static results — reference cost vs lateral resolution |
+| `transient_peak_traces.png` | Transient — measured peak-temperature traces |
 
 ### Transient videos
 
-The transient section embeds two rows of result **videos** (`.mp4`), one per run — **Chiplet 2.5D ·
-Intel Core i5 (FLAC)** and **Chiplet 2.5D · Intel Core i7 (GIMP)** — in `assets/figs/videos/`. Each run
-contributes three clips (3D temperature field, 3D power density, 2D power density), copied in with a
-unique, combination-prefixed name so runs never collide:
+The transient section embeds three clips in `assets/figs/videos/`, all of the **7 nm stepped
+HBM+CPU** package under a measured Intel Core i5 (FLAC) trace at a 150 W package budget, 100 steps,
+peak 398.5 K:
 
 | Clip | File name in `assets/figs/videos/` |
 | --- | --- |
-| 3D temperature field | `chiplet_i5_flac_3D_volume3d.mp4`, `chiplet_i7_gimp_3D_volume3d.mp4` |
-| 3D power density | `chiplet_i5_flac_power_density_3d.mp4`, `chiplet_i7_gimp_power_density_3d.mp4` |
-| 2D power density | `chiplet_i5_flac_power_density.mp4`, `chiplet_i7_gimp_power_density.mp4` |
+| 3D temperature field (ThermStack output) | `stepped_7nm_thermstack_3d_temperature.mp4` |
+| 3D power density (input) | `stepped_7nm_power_density_3d.mp4` |
+| 2D power density (input) | `stepped_7nm_power_density_2d.mp4` |
 
-The `<video src>` paths in `index.html` reference exactly these names. To add another run, copy its
-three clips with a new `<design>_<cpu>_<workload>` prefix and add a matching row. The videos autoplay
-muted and loop; if any are missing, that row shows labeled placeholders instead.
+All three are rendered on the design's own 3Dblox structure by `3dblox/plot_3dblox_therm.py`
+(the 2D map is the through-stack areal power density). Regeneration scripts and the raw
+per-design tables live in `thermstack_io_results/`.
 
 ## The website
 
-`index.html` is a single, self-contained marketing page (no build step, no web fonts; the only
-external files are the figures in `assets/figs/`). To preview locally, open the file directly in a browser,
-or serve the folder:
+`index.html` is a single, self-contained page (no build step, no web fonts; the only external files
+are the figures in `assets/figs/`). To preview locally:
 
 ```bash
 python3 -m http.server 8000   # then open http://localhost:8000
 ```
 
 To publish with **GitHub Pages**: push this repo (including `assets/`), then enable Pages
-(Settings → Pages → Deploy from branch → `main` / root). The site is served from `index.html`.
+(Settings → Pages → Deploy from branch → `main` / root).
 
 ---
 
@@ -227,3 +173,6 @@ designs, contact **noveetyai@noveetymanagement.com**.
 ## Contact
 
 **noveetyai@noveetymanagement.com** · © 2026 NoveetyAI, Inc. All rights reserved.
+
+<sub>Benchmarks: static — 8 native IEEE 3Dblox packages, three lateral grids, 0.509 K avg
+RMSE vs FEM-3D / 68× avg speedup; transient — 8 packages x 100 steps, 1.376 K RMSE / 19× mean speedup.</sub>
