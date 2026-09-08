@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ThermStack — Geometry-Resolved Thermal Analysis for 3D Chiplets (Static &amp; Transient)</title>
-<meta name="description" content="ThermStack (formerly ChipletTherm) is a hybrid thermal engine for 2.5D/3D chiplet designs: a geometry-resolved spectral numerical solver (182× faster than 3D FEM at 0.509 K mean agreement) plus AI-accelerated solvers — a physics-informed neural network for parametric sweeps and a transformer that estimates full-chip thermal maps in real time." />
+<meta name="description" content="ThermStack (formerly ChipletTherm) is a hybrid thermal engine for 2.5D/3D chiplet designs: a geometry-resolved numerical solver (182× faster than 3D FEM at 0.509 K mean agreement) plus AI-accelerated solvers — a physics-informed neural network for parametric sweeps and a transformer that estimates full-chip thermal maps in real time." />
 <meta property="og:title" content="ThermStack — Hybrid Numerical + AI Chiplet Thermal Analysis" />
 <meta property="og:description" content="FEM-grade thermal sign-off for 2.5D/3D heterogeneous integration, up to 182× faster — hybrid numerical + AI-accelerated engines, static and transient, on IEEE 3Dblox geometry." />
 <meta property="og:type" content="website" />
@@ -385,7 +385,7 @@
     <div>
       <span class="eyebrow"><span class="pulse"></span>Hybrid numerical + AI thermal analysis</span>
       <h1>Thermal sign-off for <span class="grad-text">3D chiplet designs</span>, up to 182× faster.</h1>
-      <p class="lead">ThermStack (ChipletTherm) solves 2.5D and 3D heterogeneous-integration stacks on their real IEEE&nbsp;3Dblox geometry — every die, bond line, interposer and stepped lid — and returns the full 3D temperature field in about a second, where the 3D finite-volume and finite-element references need minutes. It's a true hybrid: a fast spectral <b>numerical</b> engine for sign-off-grade accuracy, plus <b>AI-accelerated</b> neural solvers — physics-informed and transformer-based — for parametric design-space sweeps and live thermal estimation.</p>
+      <p class="lead">ThermStack (ChipletTherm) solves 2.5D and 3D heterogeneous-integration stacks on their real IEEE&nbsp;3Dblox geometry — every die, bond line, interposer and stepped lid — and returns the full 3D temperature field in about a second, where the 3D finite-volume and finite-element references need minutes. It's a true hybrid: a fast proprietary <b>numerical</b> engine for sign-off-grade accuracy, plus <b>AI-accelerated</b> neural solvers — physics-informed and transformer-based — for parametric design-space sweeps and live thermal estimation.</p>
       <div class="hero-cta">
         <a class="btn btn-primary btn-lg" href="#contact">Request for demo</a>
         <a class="btn btn-ghost btn-lg" href="#results">See the results</a>
@@ -393,7 +393,7 @@
       <div class="hero-sub">
         <span><span class="check">✦</span> 0.509 K mean agreement with 3D FEM</span>
         <span><span class="check">✦</span> Real-time solves</span>
-        <span><span class="check">✦</span> Hybrid engine — spectral numerical + AI-accelerated</span>
+        <span><span class="check">✦</span> Hybrid engine — numerical + AI-accelerated</span>
       </div>
     </div>
 
@@ -536,7 +536,7 @@
     <div class="sec-head reveal">
       <div class="kicker">What it does</div>
       <h2>One hybrid engine, the whole thermal picture</h2>
-      <p>ThermStack combines fast spectral numerical solvers, AI-accelerated neural solvers, and a full 3D-FEM reference in one engine — covering steady-state sign-off, time-dependent response, parametric design-space exploration, and real-time thermal estimation on the very same chiplet model.</p>
+      <p>ThermStack combines a fast proprietary numerical engine, AI-accelerated neural solvers, and a full 3D-FEM reference in one tool — covering steady-state sign-off, time-dependent response, parametric design-space exploration, and real-time thermal estimation on the very same chiplet model.</p>
     </div>
     <div class="features">
       <div class="feat reveal">
@@ -567,7 +567,7 @@
       <div class="feat reveal">
         <div class="tag">EXPLORE</div>
         <h3><span class="emoji">🔭</span> Batched &amp; scriptable</h3>
-        <p>The solve is a single structured direct pass with no iteration and no convergence tuning, so runtime is predictable and the engine batches naturally across multi-core CPUs and GPUs — built to evaluate thousands of candidate designs or stream live temperature estimates.</p>
+        <p>No iteration, no convergence tuning, no meshing step — runtime is predictable and repeatable, and the engine batches naturally across multi-core CPUs and GPUs. Built to evaluate thousands of candidate designs or stream live temperature estimates.</p>
       </div>
       <div class="feat reveal">
         <div class="tag">STANDARDS</div>
@@ -582,7 +582,7 @@
       <div class="feat reveal">
         <div class="tag">AI · REAL-TIME</div>
         <h3><span class="emoji">🤖</span> Thermal maps from telemetry</h3>
-        <p>ThermStack-AI (TNN), a GPT-style transformer, turns 100 frames of on-chip performance counters into the full-chip transient thermal image — no power map, no floorplan. 0.36 K average RMSE against infrared measurement on a commercial 8-core CPU, at 14 ms per inference.</p>
+        <p>ThermStack-AI (TNN), a transformer-based AI engine, turns standard on-chip telemetry into the full-chip transient thermal image — no power map, no floorplan. 0.36 K average RMSE against infrared measurement on a commercial 8-core CPU, at 14 ms per inference.</p>
       </div>
     </div>
   </div>
@@ -643,14 +643,14 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Under the hood</div>
-      <h2>A hybrid engine: a spectral numerical solver + AI acceleration</h2>
-      <p>ThermStack is built on two complementary solver families that share the same spectral DNA. The <b>numerical</b> engine represents the in-plane temperature field in a compact spectral (cosine) basis, resolves it down through the design's real layer structure, and reassembles the full 3D map — keeping the in-plane material detail that layer-averaged models have to throw away. The <b>AI-accelerated</b> family builds on that same foundation: <b>ThermStack-AI (PINN)</b> is a physics-informed neural network that learns the cosine-mode coefficients directly from the heat equation — no training database — and amortizes a whole parametric design space into one model, while <b>ThermStack-AI (TNN)</b> is a transformer (foundation-model architecture) that estimates full-chip transient thermal maps in real time straight from runtime telemetry. <span class="muted-tag">ThermPINN / ThermTransformer are the names used in our papers and figures.</span></p>
+      <h2>A hybrid engine: fast numerical solve + AI acceleration</h2>
+      <p>ThermStack is built on two complementary solver families. The <b>numerical</b> engine solves the design's real layer structure in a compact proprietary formulation and returns the full 3D map — keeping the in-plane material detail that layer-averaged models have to throw away, at a cost that doesn't grow with how finely the geometry is resolved. The <b>AI-accelerated</b> family: <b>ThermStack-AI (PINN)</b>, a physics-informed neural solver that needs no simulation database and amortizes a whole parametric design space into one model, and <b>ThermStack-AI (TNN)</b>, a transformer-based engine that estimates full-chip transient thermal maps in real time straight from runtime telemetry. <span class="muted-tag">How the engines work inside is our core IP — the benchmarks below are the proof.</span></p>
     </div>
     <div class="tech-grid">
       <div class="pipe reveal">
         <div class="pipe-step">
           <span class="n">1</span>
-          <div><h4>Spectral decomposition</h4><p>The in-plane temperature pattern is represented in a compact basis of smooth, wave-like spatial modes rather than on a volume mesh. A few hundred modes carry the whole field, so the size of the problem is set by the basis — not by how many cells the geometry needs.</p></div>
+          <div><h4>Compact problem formulation</h4><p>The thermal problem is recast in a compact proprietary form whose size is set by the solution itself — not by how many cells the geometry needs. This is the step that makes everything downstream cheap, and it's the part we don't publish.</p></div>
         </div>
         <div class="pipe-step">
           <span class="n">2</span>
@@ -658,11 +658,11 @@
         </div>
         <div class="pipe-step">
           <span class="n">3</span>
-          <div><h4>One structured direct solve</h4><p>The whole stack is resolved in a single direct pass with no iteration and no convergence tuning, on dense arithmetic that maps straight onto multi-core CPU and GPU hardware. Runtime is predictable and repeatable — the same design always costs the same.</p></div>
+          <div><h4>One fast solve</h4><p>The whole stack is resolved in one pass — no iteration, no convergence tuning — on arithmetic that maps naturally onto multi-core CPU and GPU hardware. Runtime is predictable and repeatable: the same design always costs the same.</p></div>
         </div>
         <div class="pipe-step">
           <span class="n">4</span>
-          <div><h4>Reassemble the temperature map</h4><p>The solved modes recombine into the complete 3D temperature field on the design's own geometry — the steady-state map directly, or advanced step by step through time for transient analysis.</p></div>
+          <div><h4>The full 3D picture out</h4><p>The result comes back as the complete 3D temperature field on the design's own geometry — the steady-state map directly, or advanced step by step through time for transient analysis — with hotspots and thermal margins ready for automation.</p></div>
         </div>
       </div>
 
@@ -686,22 +686,22 @@
           <div class="solver ai">
             <div class="nm">ThermStack-AI (PINN)</div>
             <div class="role">AI · parametric &amp; UQ</div>
-            <p>Physics-informed neural network over the same cosine-mode basis — trained by the heat equation alone, exactly satisfying the boundary conditions. One model spans a whole (ambient, cooling) parameter space, including nonlinear temperature-dependent conductivity and leakage.</p>
+            <p>Physics-informed neural solver — trained on the physics, with no simulation database to build. One model spans a whole (ambient, cooling) parameter space, including nonlinear temperature-dependent conductivity and leakage.</p>
             <div class="kv"><span><b>0.59 ms</b><br>per map</span><span><b>0.23 K</b><br>mean error</span></div>
           </div>
           <div class="solver tr">
             <div class="nm">ThermStack-AI (TNN)</div>
             <div class="role">AI · real-time transient</div>
-            <p>Decoder-only transformer (GPT-style foundation-model architecture): 100 frames of performance-counter telemetry in, the full-chip transient thermal image out — no power map, no floorplan, validated against infrared measurement.</p>
+            <p>Transformer-based engine: standard performance-counter telemetry in, the full-chip transient thermal image out — no power map, no floorplan, validated against infrared measurement of live silicon.</p>
             <div class="kv"><span><b>14 ms</b><br>per map</span><span><b>0.36 K</b><br>avg RMSE</span></div>
           </div>
         </div>
 
         <div class="eqbox reveal">
           <div class="label">Why it's fast</div>
-          <p class="why">A 3D FEM or FVM solver has to mesh the volume, so its cost is tied to how finely the geometry is resolved: doubling the lateral resolution multiplies the work several-fold, and the packages that most need resolving — fine 7 nm floorplans, concentrated hotspots, stepped stacks — are exactly the ones that make it unaffordable. ThermStack's cost is set by the size of its spectral basis instead, so the geometry can be resolved at 128×128 while the solve itself stays the same size. Matching that fidelity with the references costs 31×–68× more time, on average, for the same answer.</p>
+          <p class="why">A 3D FEM or FVM solver has to mesh the volume, so its cost is tied to how finely the geometry is resolved: doubling the lateral resolution multiplies the work several-fold, and the packages that most need resolving — fine 7 nm floorplans, concentrated hotspots, stepped stacks — are exactly the ones that make it unaffordable. ThermStack decouples cost from resolution: the geometry can be resolved at 128×128 while the solve itself stays the same size. How that's achieved is our core IP — what's measurable is that matching this fidelity with the references costs 31×–68× more time, on average, for the same answer.</p>
           <div class="chips">
-            <span class="chip">spectral method</span>
+            <span class="chip">proprietary fast core</span>
             <span class="chip">geometry-resolved stack</span>
             <span class="chip">in-plane material variation</span>
             <span class="chip">resolution decoupled from cost</span>
@@ -789,7 +789,7 @@
               <tr class="win"><td>ThermStack</td><td class="mono">128×128×115</td><td class="mono">1,884,160</td><td class="mono">347.6 K</td><td class="mono">2.14 s</td></tr>
             </tbody>
           </table>
-          <div class="note">The volumetric references pay for every cell: going from 39×37 to 71×67 multiplies their cost by roughly 8× while the answer moves by 1.46 K. ThermStack resolves the footprint at 128×128 — 3.4× more lateral cells than the finest reference grid — for 2.14 s, because its cost is set by the spectral basis rather than by the raster.</div>
+          <div class="note">The volumetric references pay for every cell: going from 39×37 to 71×67 multiplies their cost by roughly 8× while the answer moves by 1.46 K. ThermStack resolves the footprint at 128×128 — 3.4× more lateral cells than the finest reference grid — for 2.14 s, because its cost is decoupled from the raster resolution.</div>
         </div>
       </div>
 
@@ -942,7 +942,7 @@
               <tr class="win"><td>ThermStack-AI (TNN)</td><td class="mono">0.36 K</td><td class="mono">2.78 K</td><td class="mono">14 ms</td></tr>
             </tbody>
           </table>
-          <div class="note">A decoder-only transformer reads <b>100 frames of performance-counter telemetry</b> and outputs the full-chip <b>transient</b> thermal image (223×280) — no power map, no floorplan, no thermal-sensor grid. Against infrared measurement it lands at <b>0.36 K average RMSE (0.8% of full scale)</b> — <b>1.7× more accurate than the GAN baseline and 6.1× more accurate than the LSTM baseline</b> — with stable transient tracking and 14 ms inference, fast enough for runtime thermal management.</div>
+          <div class="note">The transformer engine reads <b>standard performance-counter telemetry</b> and outputs the full-chip <b>transient</b> thermal image — no power map, no floorplan, no thermal-sensor grid. Against infrared measurement it lands at <b>0.36 K average RMSE (0.8% of full scale)</b> — <b>1.7× more accurate than the GAN baseline and 6.1× more accurate than the LSTM baseline</b> — with stable transient tracking and 14 ms inference, fast enough for runtime thermal management.</div>
         </div>
       </div>
     </div>
@@ -969,7 +969,7 @@
     <div class="foot-grid">
       <div class="foot-brand">
         <a class="brand" href="#top"><span class="dot"></span>ThermStack</a>
-        <p>ThermStack (ChipletTherm) — fast, FEM-grade static and transient thermal analysis for 2.5D and 3D chiplet designs — a hybrid engine of a geometry-resolved spectral numerical solver and AI-accelerated neural solvers.</p>
+        <p>ThermStack (ChipletTherm) — fast, FEM-grade static and transient thermal analysis for 2.5D and 3D chiplet designs — a hybrid engine of a geometry-resolved numerical solver and AI-accelerated neural solvers.</p>
       </div>
       <div class="foot-cols">
         <div class="foot-col">

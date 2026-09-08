@@ -5,9 +5,9 @@
 ThermStack (formerly ChipletTherm) computes full-chip, full-stack temperature fields for
 heterogeneous-integration designs — every die, bond line, TSV field, interposer and lid resolved in
 3D on the design's own **IEEE 3Dblox** geometry — at a fraction of the cost of a full 3D
-finite-element or finite-volume solve. It is powered by a fast **spectral** engine whose cost is set
-by the size of its spectral basis rather than by how finely the geometry is rasterized, so a package
-can be resolved at 128x128 laterally while the solve itself stays small.
+finite-element or finite-volume solve. It is powered by a fast proprietary engine whose cost is
+decoupled from how finely the geometry is rasterized, so a package can be resolved at 128x128
+laterally while the solve itself stays small.
 
 This repository hosts the **ThermStack** promotion site live at
 **<https://sheldonucr.github.io/chipletTherm_io/>**.
