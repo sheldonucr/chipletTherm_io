@@ -154,8 +154,10 @@ per-design tables live in `thermstack_io_results/`.
 
 ## The website
 
-`index.html` is a single, self-contained page (no build step, no web fonts; the only external files
-are the figures in `assets/figs/`). To preview locally:
+`index.html` is a single, self-contained page (no build step; the only external resources are the
+figures in `assets/figs/` and the Inter / JetBrains Mono web fonts from Google Fonts, matching
+noveety-ai.com). The color scheme follows the noveety-ai.com light palette — teal `#0aa088`, blue
+`#1668d8`, violet `#7a4fe0` on `#f7f9fc`. To preview locally:
 
 ```bash
 python3 -m http.server 8000   # then open http://localhost:8000
