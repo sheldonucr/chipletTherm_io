@@ -516,7 +516,7 @@
         <div class="tf-stage engine">
           <div class="tf-label">ThermStack · pick the solver</div>
           <div class="tf-algo acc"><b>3D · ThermStack</b><span>numerical, geometry-resolved — sign-off accuracy</span></div>
-          <div class="tf-algo ai"><b>ThermStack-AI (PINN)</b><span>physics-informed neural — parametric sweeps &amp; UQ</span></div>
+          <div class="tf-algo ai"><b>ThermStack-AI (GNN)</b><span>graph neural surrogate — parametric sweeps</span></div>
           <div class="tf-algo tr"><b>ThermStack-AI (TNN)</b><span>transformer — real-time maps from telemetry</span></div>
         </div>
         <div class="tf-arrow">→</div>
@@ -576,8 +576,8 @@
       </div>
       <div class="feat reveal">
         <div class="tag">AI · PARAMETRIC</div>
-        <h3><span class="emoji">🧠</span> Physics-informed neural solves</h3>
-        <p>ThermStack-AI (PINN) trains on the heat equation itself — no simulation database — and one trained model covers a whole (ambient, cooling) design space: 0.59 ms per full-chip map, 113× faster Monte-Carlo uncertainty quantification than commercial FEM, with nonlinear temperature-dependent conductivity and leakage built in.</p>
+        <h3><span class="emoji">🧠</span> Graph-neural design-space surrogate</h3>
+        <p>ThermStack-AI (GNN) learns one package once, then answers any point in its design space in milliseconds: <b>10.6 ms per full 3D map against FEM-3D&rsquo;s 2.19 s — 207×</b> — at <b>0.32 K mean RMSE</b> across 360 unseen power-and-cooling combinations on a non-coplanar 7&nbsp;nm HBM+CPU package. Built for sweeps and optimization loops, where the same geometry is evaluated thousands of times.</p>
       </div>
       <div class="feat reveal">
         <div class="tag">AI · REAL-TIME</div>
@@ -644,7 +644,7 @@
     <div class="sec-head reveal">
       <div class="kicker">Under the hood</div>
       <h2>A hybrid engine: fast numerical solve + AI acceleration</h2>
-      <p>ThermStack is built on two complementary solver families. The <b>numerical</b> engine solves the design's real layer structure in a compact proprietary formulation and returns the full 3D map — keeping the in-plane material detail that layer-averaged models have to throw away, at a cost that doesn't grow with how finely the geometry is resolved. The <b>AI-accelerated</b> family: <b>ThermStack-AI (PINN)</b>, a physics-informed neural solver that needs no simulation database and amortizes a whole parametric design space into one model, and <b>ThermStack-AI (TNN)</b>, a transformer-based engine that estimates full-chip transient thermal maps in real time straight from runtime telemetry. <span class="muted-tag">How the engines work inside is our core IP — the benchmarks below are the proof.</span></p>
+      <p>ThermStack is built on two complementary solver families. The <b>numerical</b> engine solves the design's real layer structure in a compact proprietary formulation and returns the full 3D map — keeping the in-plane material detail that layer-averaged models have to throw away, at a cost that doesn't grow with how finely the geometry is resolved. The <b>AI-accelerated</b> family: <b>ThermStack-AI (GNN)</b>, a graph-neural surrogate that amortizes a whole parametric design space into one model and returns a full 3D map in milliseconds, and <b>ThermStack-AI (TNN)</b>, a transformer-based engine that estimates full-chip transient thermal maps in real time straight from runtime telemetry. <span class="muted-tag">How the engines work inside is our core IP — the benchmarks below are the proof.</span></p>
     </div>
     <div class="tech-grid">
       <div class="pipe reveal">
@@ -684,10 +684,10 @@
 
         <div class="twocard reveal" style="margin-top:14px">
           <div class="solver ai">
-            <div class="nm">ThermStack-AI (PINN)</div>
-            <div class="role">AI · parametric &amp; UQ</div>
-            <p>Physics-informed neural solver — trained on the physics, with no simulation database to build. One model spans a whole (ambient, cooling) parameter space, including nonlinear temperature-dependent conductivity and leakage.</p>
-            <div class="kv"><span><b>0.59 ms</b><br>per map</span><span><b>0.23 K</b><br>mean error</span></div>
+            <div class="nm">ThermStack-AI (GNN)</div>
+            <div class="role">AI · parametric sweeps</div>
+            <p>Graph-neural surrogate — a graph encoder over the package&rsquo;s dies feeding a multiscale decoder. One model spans a whole (power allocation, cooling) space for a given package and returns the full 3D field with no mesh and no solve.</p>
+            <div class="kv"><span><b>10.6 ms</b><br>per 3D map</span><span><b>0.32 K</b><br>mean RMSE</span></div>
           </div>
           <div class="solver tr">
             <div class="nm">ThermStack-AI (TNN)</div>
@@ -726,7 +726,7 @@
     <div class="sec-head reveal">
       <div class="kicker">Validation</div>
       <h2>Measured against full 3D FVM and FEM — and real silicon</h2>
-      <p>Every number below was produced by the runs in <span class="mono">thermstack_io_results/</span>, benchmarked against hard references. Numerical engine: a 3D finite-volume (FVM) and a consistent-mass 3D finite-element (FEM) solver, both run on the identical IEEE&nbsp;3Dblox geometry at three lateral resolutions (31×31–41×39 to 63×63–73×69), across 8 real packages from a 3-layer stack to an 11-layer 3D IC and two 7&nbsp;nm HBM+CPU assemblies — one of them with a non-coplanar stepped top. AI solvers: commercial FEM (COMSOL) ground truth for ThermStack-AI (PINN), and direct infrared thermal-camera measurement of a live 8-core CPU for ThermStack-AI (TNN).</p>
+      <p>Every number below was produced by the runs in <span class="mono">thermstack_io_results/</span>, benchmarked against hard references. Numerical engine: a 3D finite-volume (FVM) and a consistent-mass 3D finite-element (FEM) solver, both run on the identical IEEE&nbsp;3Dblox geometry at three lateral resolutions (31×31–41×39 to 63×63–73×69), across 8 real packages from a 3-layer stack to an 11-layer 3D IC and two 7&nbsp;nm HBM+CPU assemblies — one of them with a non-coplanar stepped top. AI solvers: the FEM-3D reference on the identical IEEE&nbsp;3Dblox geometry for ThermStack-AI (GNN), and direct infrared thermal-camera measurement of a live 8-core CPU for ThermStack-AI (TNN).</p>
     </div>
 
     <!-- STATIC -->
@@ -910,22 +910,51 @@
     <div class="res-group">
       <div class="res-label ai reveal">AI-accelerated — neural thermal engines</div>
       <div class="res-grid">
-        <!-- ThermStack-AI (PINN) -->
+        <!-- ThermStack-AI (GNN) -->
         <div class="panel reveal">
           <div class="phead">
-            <div><h3>ThermStack-AI (PINN) — parametric full-chip thermal</h3><div class="psub">Quad-core full-chip benchmark · commercial FEM (COMSOL) ground truth</div></div>
-            <span class="badge" style="color:#a78bfa;background:rgba(167,139,250,.07)">physics-informed</span>
+            <div><h3>ThermStack-AI (GNN) — parametric design-space surrogate</h3><div class="psub">7&nbsp;nm stepped HBM+CPU package · FEM-3D ground truth · 360 unseen cases</div></div>
+            <span class="badge" style="color:#a78bfa;background:rgba(167,139,250,.07)">graph neural</span>
           </div>
           <table class="data">
-            <thead><tr><th>Method</th><th>Mean error</th><th>Per map</th></tr></thead>
+            <thead><tr><th>Method</th><th>Mean RMSE</th><th>Peak error</th><th>Per 3D map</th></tr></thead>
             <tbody>
-              <tr><td>COMSOL FEM <span class="muted-tag">reference</span></td><td class="mono">—</td><td class="mono">5 s</td></tr>
-              <tr><td>VarSim <span class="muted-tag">analytical baseline</span></td><td class="mono">0.61 K</td><td class="mono">1.3 ms</td></tr>
-              <tr><td>Plain PINN <span class="muted-tag">150× slower to train</span></td><td class="mono">0.05 K</td><td class="mono">1.04 ms</td></tr>
-              <tr class="win"><td>ThermStack-AI (PINN)</td><td class="mono">0.23 K</td><td class="mono">0.59 ms</td></tr>
+              <tr><td>FEM-3D <span class="muted-tag">reference</span></td><td class="mono">—</td><td class="mono">—</td><td class="mono">2.19 s</td></tr>
+              <tr class="win"><td>ThermStack-AI (GNN)</td><td class="mono">0.32 K</td><td class="mono">0.93 K</td><td class="mono">10.6 ms</td></tr>
+              <tr><td>ThermStack-AI (GNN) <span class="muted-tag">batched ×8</span></td><td class="mono">0.32 K</td><td class="mono">0.93 K</td><td class="mono">3.15 ms</td></tr>
             </tbody>
           </table>
-          <div class="note">Trained by the physics alone — no simulation database — in 34 s, <b>150× faster than a conventional PINN</b>, and <b>~3× more accurate and 2× faster than VarSim</b>. One parametric model then covers a whole (ambient, cooling) design space: a <b>3,171-case sweep</b> runs 6× faster than COMSOL end-to-end, and <b>5,000-sample Monte-Carlo uncertainty quantification runs 113× faster</b> (199 s vs 6.3 h), predicting peak temperature within 0.59 K.</div>
+          <div class="note">One model, trained once on a single package, spans its whole <b>(power allocation, cooling)</b> design space — 19 independent heat sources swept 0.3–1.7× and cooling from forced air to liquid cold plate (5,000–40,000 W/m²K), giving peak rises from 17 K to 228 K. Across <b>360 unseen combinations</b> it holds <b>0.32 K mean RMSE</b> — 0.45% of the mean peak rise — with <b>94.7% of cases within 2 K on peak temperature</b>, at <b>207× the speed of FEM-3D</b> (696× batched). No mesh is built and no system is solved at query time.</div>
+        </div>
+
+        <!-- GNN figures + sweep economics -->
+        <div class="panel reveal" style="grid-column:1/-1">
+          <div class="phead">
+            <div><h3>Same field, 207× faster</h3><div class="psub">Cross-section through the stepped package · 317&nbsp;W total, h&nbsp;=&nbsp;15,400&nbsp;W/m²K · a case the model never saw</div></div>
+            <span class="badge" style="color:#a78bfa;background:rgba(167,139,250,.07)">graph neural</span>
+          </div>
+          <figure class="fig reveal" style="margin-top:0">
+            <img src="assets/figs/gnn_vs_fem3d_hbm_cpu_7nm_stepped.png" alt="Side-by-side temperature cross-sections: FEM-3D reference and ThermStack-AI (GNN), 7 nm stepped HBM+CPU package" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
+            <div class="ph">assets/figs/gnn_vs_fem3d_hbm_cpu_7nm_stepped.png</div>
+            <figcaption><b>FEM-3D and ThermStack-AI (GNN) on the same design point.</b> Vertical cross-section through the package centre — the two HBM stacks standing 746&nbsp;µm above the logic die, with heat spreading down through the interposer into the substrate. Same colour scale on both. Peak 344.2&nbsp;K against 344.5&nbsp;K; <b>2,194&nbsp;ms against 15&nbsp;ms</b>.</figcaption>
+          </figure>
+          <figure class="fig reveal">
+            <img src="assets/figs/gnn_error_map_hbm_cpu_7nm_stepped.png" alt="Signed error map, ThermStack-AI (GNN) minus FEM-3D, on the same cross-section" loading="lazy" onerror="this.closest('.fig').classList.add('noimg')">
+            <div class="ph">assets/figs/gnn_error_map_hbm_cpu_7nm_stepped.png</div>
+            <figcaption><b>Where the difference sits.</b> Signed error on the same slice, at its own scale — note the range is ±1&nbsp;K on a field spanning 46&nbsp;K. The residual is a slight asymmetry between the two HBM stacks; the logic die, which sets the junction temperature, is the best-matched region.</figcaption>
+          </figure>
+          <div class="note" style="margin-top:18px"><b>Where a surrogate pays for itself.</b> The engine is built for <b>parameterized design exploration</b> — one package geometry, evaluated over and over at different power allocations and cooling assumptions. Cost of sweeping <b>N</b> design points:
+            <table class="data" style="margin-top:12px">
+              <thead><tr><th>Design points swept</th><th>FEM-3D</th><th>ThermStack-AI (GNN)</th><th>Batched ×8</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">1</td><td class="mono">2.2 s</td><td class="mono">11 ms</td><td class="mono">3 ms</td></tr>
+                <tr><td class="mono">100</td><td class="mono">3.7 min</td><td class="mono">1.1 s</td><td class="mono">315 ms</td></tr>
+                <tr class="win"><td class="mono">1,000</td><td class="mono">36.6 min</td><td class="mono">10.6 s</td><td class="mono">3.1 s</td></tr>
+                <tr class="win"><td class="mono">15,000</td><td class="mono">9.1 h</td><td class="mono">2.6 min</td><td class="mono">47 s</td></tr>
+              </tbody>
+            </table>
+            <div style="margin-top:12px">A thousand-point power-budget study drops from <b>over half an hour to ten seconds</b>; a fifteen-thousand-point optimization loop from <b>nine hours to under a minute</b>. Training the model for a package is a one-time cost of about an hour, after which every query is free of meshing and solving. For one-off sign-off on a new geometry, the numerical engine remains the right tool.</div>
+          </div>
         </div>
 
         <!-- ThermStack-AI (TNN) -->
@@ -983,7 +1012,7 @@
           <h5>Capabilities</h5>
           <span>Resolved 3D heat maps</span>
           <span>Transient response</span>
-          <span>AI engines — PINN + transformer</span>
+          <span>AI engines — GNN + transformer</span>
           <span>IEEE 3Dblox input</span>
           <span>Agentic EDA flow integration</span>
           <span>2.5D / 3D · up to 11 layers</span>
@@ -998,7 +1027,7 @@
     </div>
     <div class="cite">
       Benchmarks: static — ThermStack vs FDM-3D (finite volume) and FEM-3D on 8 native IEEE 3Dblox packages at three lateral grids, 0.509 K avg RMSE vs FEM-3D / 68× avg speedup; transient — same solvers, 8 packages × 100 time steps, 1.38 K RMSE / 19× mean speedup.
-      AI — ThermStack-AI (PINN) vs commercial FEM, 0.23 K mean error / 0.59 ms per map / 113× faster 5,000-sample UQ; ThermStack-AI (TNN) vs infrared measurement, 0.36 K avg RMSE / 14 ms per map, 2,944 test maps.
+      AI — ThermStack-AI (GNN) vs FEM-3D on a 7 nm stepped HBM+CPU package, 0.32 K mean RMSE / 10.6 ms per 3D map / 207× across 360 unseen power-and-cooling cases; ThermStack-AI (TNN) vs infrared measurement, 0.36 K avg RMSE / 14 ms per map, 2,944 test maps.
     </div>
     <div class="copyright">© 2026 NoveetyAI, Inc. All rights reserved.</div>
   </div>

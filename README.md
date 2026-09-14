@@ -132,6 +132,8 @@ missing the page falls back to a placeholder instead of a broken image.
 | `fem3d_3d_hbm_cpu_7nm_stepped.png` | Static results — FEM-3D reference, same case |
 | `grid_refinement_7nm_stepped.png` | Static results — reference cost vs lateral resolution |
 | `transient_peak_traces.png` | Transient — measured peak-temperature traces |
+| `gnn_vs_fem3d_hbm_cpu_7nm_stepped.png` | AI results — ThermStack-AI (GNN) and FEM-3D side by side, same design point |
+| `gnn_error_map_hbm_cpu_7nm_stepped.png` | AI results — signed error map on the same cross-section |
 
 ### Transient videos
 
