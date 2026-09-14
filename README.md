@@ -12,9 +12,10 @@ laterally while the solve itself stays small.
 This repository hosts the **ThermStack** promotion site live at
 **<https://sheldonucr.github.io/chipletTherm_io/>**.
 
-> **Naming.** The tool is **ThermStack** (previously **ChipletTherm**). A 3D finite-volume solver
-> (**FDM-3D**) and a consistent-mass 3D finite-element solver (**FEM-3D**) ship alongside as
-> ground-truth references, and every result below is measured against both on identical geometry.
+> **Naming.** The tool is **ThermStack** (previously **ChipletTherm**). It ships two numerical
+> engines — the fast proprietary ThermStack solver and a consistent-mass 3D finite-element
+> reference (**FEM-3D**) — plus one AI engine, **ThermStack-AI (GNN)**. Benchmarks below are
+> additionally cross-checked against a 3D finite-volume solver (**FDM-3D**) on identical geometry.
 
 ---
 
@@ -108,12 +109,13 @@ rasterized onto its own 3Dblox geometry, started from the matching steady state.
 - **Geometry-resolved** — the design's real structure, including **non-coplanar stepped tops**, with
   per-layer **anisotropic** materials, in-plane material variation, **interface thermal resistance**,
   volumetric heat capacity, and **Robin** boundary conditions.
-- **Predictable cost** — one structured direct solve, no iteration and no convergence tuning; the
-  same design always costs the same.
+- **Predictable cost** — no iteration and no convergence tuning; the same design always costs the
+  same.
 - **IEEE 3Dblox input** — accepts the IEEE-standard modular description language for physical
   stacking, dimensions, and logical connectivity in 2.5D and 3D-IC designs.
-- **Bundled references** — FDM-3D (finite volume) and FEM-3D ship with the tool, so any result can be
-  re-checked against ground truth on the same geometry.
+- **Bundled reference** — the FEM-3D solver ships with the tool, so any result can be re-checked
+  against ground truth on the same geometry (benchmarks are additionally cross-checked against a
+  3D finite-volume solver).
 - **Agentic EDA flow ready** — a first-class CLI and structured data interface let autonomous EDA
   agents invoke ThermStack, consume machine-readable temperature maps and margins, and feed thermal
   results back into floorplanning, stack planning, power budgeting, and optimization loops.

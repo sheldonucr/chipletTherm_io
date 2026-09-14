@@ -473,7 +473,7 @@
     <div class="stat reveal"><div class="num c1">182×</div><div class="lbl">faster than 3D FEM</div></div>
     <div class="stat reveal"><div class="num c2">0.509 K</div><div class="lbl">mean RMSE vs 3D-FEM (static)</div></div>
     <div class="stat reveal"><div class="num c3">1.9 s</div><div class="lbl">per full 3D steady-state solve</div></div>
-    <div class="stat reveal"><div class="num c4">3</div><div class="lbl">solver engines — 1 numerical + 2 AI</div></div>
+    <div class="stat reveal"><div class="num c4">3</div><div class="lbl">solver engines — 2 numerical + 1 AI</div></div>
   </div>
 </div>
 
@@ -515,6 +515,7 @@
         <div class="tf-stage engine">
           <div class="tf-label">ThermStack · pick the solver</div>
           <div class="tf-algo acc"><b>3D · ThermStack</b><span>numerical, geometry-resolved — sign-off accuracy</span></div>
+          <div class="tf-algo fast"><b>3D · FEM-3D</b><span>numerical reference — ground-truth checks</span></div>
           <div class="tf-algo ai"><b>ThermStack-AI (GNN)</b><span>graph neural surrogate — parametric sweeps</span></div>
         </div>
         <div class="tf-arrow">→</div>
@@ -668,9 +669,9 @@
             <div class="kv"><span><b>1.9 s</b><br>per case</span><span><b>0.509 K</b><br>avg RMSE</span></div>
           </div>
           <div class="solver fast">
-            <div class="nm">FVM-3D / FEM-3D</div>
-            <div class="role">bundled references</div>
-            <p>A 3D finite-volume and a consistent-mass 3D finite-element solver ship alongside as ground truth. Every ThermStack result is checked against them at several lateral resolutions, on the same geometry.</p>
+            <div class="nm">FEM-3D</div>
+            <div class="role">numerical · bundled reference</div>
+            <p>A consistent-mass 3D finite-element solver ships alongside as ground truth — every ThermStack result is checked against it at several lateral resolutions, on the same geometry. Benchmarks below additionally cross-check against a 3D finite-volume solver.</p>
             <div class="kv"><span><b>72 / 153 s</b><br>at 63×63–73×69</span><span><b>0.49 K</b><br>FVM vs FEM</span></div>
           </div>
         </div>
