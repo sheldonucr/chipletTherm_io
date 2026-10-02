@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="ThermStack">
+  <defs>
+    <linearGradient id="ts" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0aa088"/>
+      <stop offset="1" stop-color="#1668d8"/>
+    </linearGradient>
+  </defs>
+  <rect width="48" height="48" rx="11" fill="url(#ts)" fill-opacity="0.13"/>
+  <g fill="none" stroke="url(#ts)" stroke-width="2" stroke-linejoin="round">
+    <path d="M8 32l16-7 16 7-16 7z" opacity=".45"/>
+    <path d="M12 25l12-5 12 5-12 5z" opacity=".7"/>
+    <path d="M16 18l8-4 8 4-8 4z"/>
+  </g>
+  <circle cx="24" cy="17" r="2.4" fill="#7a4fe0"/>
+</svg>
