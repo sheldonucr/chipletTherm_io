@@ -22,6 +22,15 @@ The site has three areas: **Features & capabilities**, **White papers** and **Co
 - `assets/site.css` and `assets/site.js`: shared responsive styling and interactions
   (white-paper styles are the commented block at the end of `site.css`).
 - `assets/figs/amd/`: actual modeled geometry and analysis exports for the AMD study.
+  Files suffixed `_50um` are copied verbatim from the study's 50 um runs in
+  `chipletTherm/3dblox_results/results_amd_mi350_workload_study/high_resolution/`, which
+  are the runs WP-102 section 3 tabulates. The unsuffixed `gpu_3d_temperature.png`,
+  `memory_3d_temperature.png`, `top_temperature.png` and `gpu_xz_temperature.png` are the
+  earlier 250 um exports from that study's `report/assets/`; `index.html`'s cover visual
+  still uses the unsuffixed 3D render.
+  `structure_3d_cutaway_labeled.png` replaces the original `structure_3d_cutaway.png` in
+  WP-102: the original used elev=25, which hides the four XCDs on IOD 2 behind the near
+  HBM towers. Regenerate it with the study's `render_cutaway_labeled.py`.
 
 Open `index.html` directly in a browser. No development server is required.
 Legacy `#features`, `#technology`, `#results` and `#agentic` entry links on the main page

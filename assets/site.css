@@ -14,3 +14,5 @@
 .paper-abstract strong{display:block;color:var(--ink);font-size:12px;text-transform:uppercase;margin-bottom:8px}
 .paper-nav{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:26px 0;font-size:14px}
 @media print{.site-header,.contents,.cover-actions,.contact-band,.image-open+.icon,dialog{display:none!important}.wrap{max-width:none;padding:0}.page-layout{display:block}.band,.feature-section{padding:22px 0}.figure,table{break-inside:avoid}.cover-visual{print-color-adjust:exact}.view-panel[hidden]{display:block}.print-note{display:block}body{font-size:11pt}h1{font-size:28pt}h2{font-size:21pt}}
+.view-panel .figure-pair{gap:20px}.view-panel .figure-pair figure{margin:0;min-width:0}.view-panel .figure-pair img{height:320px}.view-panel .figure-pair figcaption{margin:10px 0 0;min-height:0}.view-panel>.note{margin:14px 10px 2px}
+@media(max-width:640px){.view-panel .figure-pair img{height:250px}}
