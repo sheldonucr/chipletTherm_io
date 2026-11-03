@@ -8,17 +8,22 @@ Static HTML, CSS and JavaScript; no build step, external fonts or runtime depend
 The site has three areas: **Features & capabilities**, **White papers** and **Contact**.
 
 - `index.html`: the short main page — cover, capability highlights, workflow, the white-paper
-  index (`#whitepapers`) and the contact band. It holds no technical figures or tables.
+  index (`#whitepapers`) and the contact band. It holds no tables and one technical figure:
+  the `#resolution` band shows `assets/figs/apr/apr_20um_overview.png`, which WP-104 also uses
+  (the one deliberate exception to "each figure in one place").
 - `whitepapers/wp-1xx-*.html`: the white-paper series. All technical details, benchmarks,
   figures, tables and scope notes live here, each figure/table in exactly one paper:
   - `wp-101-numerical-engine.html` — numerical workflow, model inputs/3Dblox, transient analysis.
   - `wp-102-amd-resolution-study.html` — AMD-inspired study: workloads, 250/50 µm comparison,
     interactive result views.
   - `wp-103-gnn-surrogate.html` — ThermStack-GNN benchmark and usage scope.
+  - `wp-104-resolution-on-demand.html` — ThermStack APR, resolution on demand: MI350-inspired
+    package with synthetic 10 µm GPU power maps, all XCDs at 20 µm, wall time and memory only (no coarse-grid results).
+    Results only; the APR method is not described.
   New papers follow the same template: `paper-meta` header, `paper-abstract`, numbered
   `feature-section` blocks, a closing scope section and the series `paper-nav`.
 - `features.html`: redirect stub only — its content moved into the white papers; old anchors
-  (`#numerical`, `#amd-study`, `#gnn`, …) forward to the right paper.
+  (`#numerical`, `#amd-study`, `#gnn`, `#apr`, `#resolution`, …) forward to the right paper.
 - `assets/site.css` and `assets/site.js`: shared responsive styling and interactions
   (white-paper styles are the commented block at the end of `site.css`).
 - `assets/figs/amd/`: actual modeled geometry and analysis exports for the AMD study.
@@ -31,6 +36,13 @@ The site has three areas: **Features & capabilities**, **White papers** and **Co
   `structure_3d_cutaway_labeled.png` replaces the original `structure_3d_cutaway.png` in
   WP-102: the original used elev=25, which hides the four XCDs on IOD 2 behind the near
   HBM towers. Regenerate it with the study's `render_cutaway_labeled.py`.
+- `assets/figs/apr/`: WP-104 figures, from the 10 µm power-map study in
+  `chipletTherm/3dblox_results/results_amd_mi350_workload_study/gpu_power_maps_10um/`.
+  `apr_20um_overview.png` is made by that folder's `plot_apr_overview.py` from the
+  20 µm every-XCD run (scratchpad `g_lr20_all` + `gwin20_all.pkl`; full package + XCD_6 only). The other three are copied
+  byte-for-byte from the internal APR Solver artifact (Example 3): `gpu_power_maps_10um.png`,
+  `xcd6_power_map_zoom.png` (v2 maps) and `xcd6_20um.png`. WP-104 is a marketing page: it shows
+  the high-resolution result, wall time and memory only, and no coarse-grid or alternative runs.
 
 Open `index.html` directly in a browser. No development server is required.
 Legacy `#features`, `#technology`, `#results` and `#agentic` entry links on the main page
