@@ -23,6 +23,9 @@ The site has three areas: **Features & capabilities**, **White papers** and **Co
   - `wp-105-chip-package-board.html` — chip, package and board in one model: MI350-class OAM
     module from a 3Dblox chip stack and IPC-2581 package and board files, design specs, APR 50 µm
     result with wall time and memory. Input formats and results only; no method, no tool comparisons.
+  - `wp-106-layout-level-resolution.html` — layout-level resolution: a placed-and-routed RISC
+    processor core resolved to 50 nm (APR), accuracy vs a full 1 µm single grid, wall time and memory.
+    Key numbers only; no PDK, design files, tools or method are named.
   New papers follow the same template: `paper-meta` header, `paper-abstract`, numbered
   `feature-section` blocks, a closing scope section and the series `paper-nav`.
 - `features.html`: redirect stub only — its content moved into the white papers; old anchors
@@ -51,6 +54,11 @@ The site has three areas: **Features & capabilities**, **White papers** and **Co
   `plot_3d_levels.py run_b_apr_off/fem3d_results.npz` (the APR 50 µm run) with `--clean --title ''`
   (`oam_structure_3d.png`, `oam_temperature_3d.png`) and `--hero` (`oam_hero_structure.png`,
   `oam_hero_temperature.png`), then cropped to content with 16 px padding.
+- `assets/figs/risc/`: WP-106 figures, from the internal RISC_CORE thermal study (DEF layout + per-cell
+  power, APR 1 µm / 0.2 µm / 50 nm runs). Rendered headless from the study's plotly 3D viewer with a
+  white-background overlay (close-up, structure window and whole-die views), then cropped to content with
+  32 px padding and resized to 1800 px wide. The layout shown is derived from an academic standard-cell
+  library; confirm it may be shown publicly before pushing.
 
 Open `index.html` directly in a browser. No development server is required.
 Legacy `#features`, `#technology`, `#results` and `#agentic` entry links on the main page
