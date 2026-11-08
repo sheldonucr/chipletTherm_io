@@ -25,7 +25,10 @@ The site has three areas: **Features & capabilities**, **White papers** and **Co
     result with wall time and memory. Input formats and results only; no method, no tool comparisons.
   - `wp-106-layout-level-resolution.html` — layout-level resolution: a placed-and-routed RISC
     processor core resolved to 50 nm (APR), accuracy vs a full 1 µm single grid, wall time and memory.
-    Key numbers only; no PDK, design files, tools or method are named.
+    Key numbers only; no PDK, design files, tools or method are named. Cell power only; the text, the
+    scope note and the index card point to WP-107 for power-grid Joule heating.
+  - `wp-107-power-grid-joule-heating.html` — power-grid Joule (I²R) heating on the same core, added per
+    metal layer to the cell power; bare die and flip-chip package.
   New papers follow the same template: `paper-meta` header, `paper-abstract`, numbered
   `feature-section` blocks, a closing scope section and the series `paper-nav`.
 - `features.html`: redirect stub only — its content moved into the white papers; old anchors
