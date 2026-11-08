@@ -54,9 +54,12 @@ The site has three areas: **Features & capabilities**, **White papers** and **Co
   `plot_3d_levels.py run_b_apr_off/fem3d_results.npz` (the APR 50 µm run) with `--clean --title ''`
   (`oam_structure_3d.png`, `oam_temperature_3d.png`) and `--hero` (`oam_hero_structure.png`,
   `oam_hero_temperature.png`), then cropped to content with 16 px padding.
-- Cover visual (since 2026-11-07): `assets/figs/risc/risc_hero_layers.png`, made by
-  `TS_risc_core/plot_fine.py fine_c005 --hero` (the 50 nm run, untitled, white), trimmed with 16 px padding and
-  resized to 1400 px wide. Before that the cover used the two `assets/figs/oam/oam_hero_*.png` images.
+- Cover visual (since 2026-11-07, second version): `assets/figs/risc/risc_hero_structure_signal.png`, two panels
+  from the first 3-D view of the internal RISC_CORE report: "Chip structure" (25 × 25 µm window) and "Signal wires
+  with temperature" (10 × 10 µm, 50 nm run). Each is exported headless with Plotly `toImage` (legends off),
+  flattened on white and cropped to content; panel titles added; 1800 px wide. The first version,
+  `risc_hero_layers.png` (`TS_risc_core/plot_fine.py fine_c005 --hero`), is kept but unused. Before that the
+  cover used the two `assets/figs/oam/oam_hero_*.png` images.
 - `assets/figs/risc/`: WP-106 figures, from the internal RISC_CORE thermal study (DEF layout + per-cell
   power, APR 1 µm / 0.2 µm / 50 nm runs). Rendered headless from the study's plotly 3D viewer with a
   white-background overlay (close-up, structure window and whole-die views), then cropped to content with
