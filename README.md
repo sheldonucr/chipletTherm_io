@@ -65,6 +65,11 @@ The site has three areas: **Features & capabilities**, **White papers** and **Co
   white-background overlay (close-up, structure window and whole-die views), then cropped to content with
   32 px padding and resized to 1800 px wide. The layout shown is derived from an academic standard-cell
   library; confirm it may be shown publicly before pushing.
+- `assets/figs/joule/`: WP-107 figures, from the internal RISC_CORE power-grid Joule study (static grid currents,
+  I²R per segment, 5 µm runs: Joule only and cell power + Joule, bare die and flip-chip package). Rendered headless
+  from the study's Joule 3D viewer via Plotly toImage on a white background, cropped to content with 32 px padding
+  and resized to 1800 px wide. Same academic-library layout as `figs/risc/`; confirm it may be shown publicly
+  before pushing.
 
 Open `index.html` directly in a browser. No development server is required.
 Legacy `#features`, `#technology`, `#results` and `#agentic` entry links on the main page
