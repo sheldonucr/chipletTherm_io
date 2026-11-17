@@ -30,16 +30,7 @@
 <tr><td>APR 20&nbsp;&micro;m, compact plate maps</td><td>368.20&nbsp;K</td><td>&ndash;</td><td>&ndash;</td><td>adaptive, to 20&nbsp;&micro;m</td><td>28.5&nbsp;min</td><td>7.2 average</td><td>27.8&nbsp;GB</td></tr>
 </tbody></table></div>
 <p>The two single-grid peaks (344&ndash;346&nbsp;K) are the 380&nbsp;&micro;m cell averages, not the hot-spot temperature; the APR rows are the resolved peaks.</p>
-</section>
-<section class="feature-section" id="validation"><p class="feature-number">6 / VALIDATION STATUS</p><h2>What is checked, and what is still open</h2><p>There is no external reference for this exact case yet. What is checked:</p>
-<div class="table-wrap"><table><thead><tr><th>Check</th><th>Result</th></tr></thead><tbody>
-<tr><td>Energy balance, ThermStack Flow</td><td>Heat into the water equals 950&nbsp;W to 5.5&times;10<sup>&minus;6</sup> relative; mass balance exact</td></tr>
-<tr><td>APR convergence, hottest window</td><td>366.88&nbsp;&plusmn;&nbsp;1.24&nbsp;K (&plusmn;1.8&nbsp;% of the rise); the 20&nbsp;&micro;m peak is inside</td></tr>
-<tr><td>ThermStack Flow against a commercial CFD solver, fan-cooled 2&nbsp;&times;&nbsp;2 chiplet array</td><td>Die mean &minus;0.17&nbsp;K, die maximum &minus;0.20&nbsp;K: within the 0.25&nbsp;K target</td></tr>
-<tr><td>ThermStack Flow against commercial solvers, JEDEC package in air (WP-108)</td><td>&theta;JA within 1.9&nbsp;% in a wind tunnel and 2.8&nbsp;% in still air</td></tr>
-</tbody></table></div>
-<p class="note">MI350-inspired package with a synthetic 950&nbsp;W power map; not AMD data. The cold plate is a generic copper mini-channel design, not a specific product. Steady state; water 298.15&nbsp;K at 1.5&nbsp;L/min, laminar, with temperature-dependent viscosity and conductivity; adiabatic sides, cover and substrate underside. Temperatures are absolute; rises are above the 298.15&nbsp;K inlet. Cores are threads or workers on one CPU server; &ldquo;average&rdquo; is CPU time over wall time.</p>
-</section>
+<p class="note">MI350-inspired package with a synthetic 950&nbsp;W power map; not AMD data. The cold plate is a generic copper mini-channel design, not a specific product. Steady state; water 298.15&nbsp;K at 1.5&nbsp;L/min, laminar, with temperature-dependent viscosity and conductivity; adiabatic sides, cover and substrate underside. Temperatures are absolute; rises are above the 298.15&nbsp;K inlet. Cores are threads or workers on one CPU server; &ldquo;average&rdquo; is CPU time over wall time.</p></section>
 <nav class="paper-nav" aria-label="White paper series"><span>&larr; Previous: <a href="wp-108-air-cooling-cfd.html">WP-108 — Air cooling with ThermStack Flow</a></span><span><a href="../index.html#whitepapers">All white papers</a> &rarr;</span></nav>
 </div>
 <section class="contact-band" id="contact"><div class="wrap contact-inner"><div><p class="eyebrow">From evidence to your design</p><h2>Define the study that answers your question.</h2><p>Start with your package and your cold plate. We will discuss coolant, channel geometry and resolution, input compatibility and the evidence needed for your decision.</p></div><a class="button" href="mailto:noveetyai@noveetymanagement.com?subject=ThermStack%20design%20discussion%20(WP-109)">Request a walkthrough <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a></div></section>
