@@ -8,9 +8,10 @@ Static HTML, CSS and JavaScript; no build step, external fonts or runtime depend
 The site has three areas: **Features & capabilities**, **White papers** and **Contact**.
 
 - `index.html`: the short main page — cover, capability highlights, workflow, the white-paper
-  index (`#whitepapers`) and the contact band. It holds no tables and one technical figure:
-  the `#resolution` band shows `assets/figs/apr/apr_20um_overview.png`, which WP-104 also uses
-  (the one deliberate exception to "each figure in one place").
+  index (`#whitepapers`) and the contact band. It holds no tables and two technical figures:
+  the `#resolution` band shows `assets/figs/apr/apr_20um_overview.png`, which WP-104 also uses, and the
+  `#cfd` band (ThermStack Flow) shows `assets/figs/cfd/v2b_U1_side.png`, the WP-108 hero
+  (the deliberate exceptions to "each figure in one place").
 - `whitepapers/wp-1xx-*.html`: the white-paper series. All technical details, benchmarks,
   figures, tables and scope notes live here, each figure/table in exactly one paper:
   - `wp-101-numerical-engine.html` — numerical workflow, model inputs/3Dblox, transient analysis.
@@ -29,6 +30,12 @@ The site has three areas: **Features & capabilities**, **White papers** and **Co
     scope note and the index card point to WP-107 for power-grid Joule heating.
   - `wp-107-power-grid-joule-heating.html` — power-grid Joule (I²R) heating on the same core, added per
     metal layer to the cell power; bare die and flip-chip package.
+  - `wp-108-air-cooling-cfd.html` — ThermStack Flow (conjugate CFD) on a JEDEC 2s2p board and 15 mm package:
+    JESD51-2 still air, JESD51-6 wind tunnel at 1 and 2 m/s, and the still-air power-on Zth(t). References are
+    named only as "a commercial CFD solver" / "a commercial FEM solver".
+  - `wp-109-mi350-cold-plate.html` — MI350-inspired package (synthetic power map) under a generic Cu
+    mini-channel water cold plate: ThermStack Flow plate maps feeding hierarchical APR at 20 µm. States that
+    there is no external reference for this case yet.
   New papers follow the same template: `paper-meta` header, `paper-abstract`, numbered
   `feature-section` blocks, a closing scope section and the series `paper-nav`.
 - `features.html`: redirect stub only — its content moved into the white papers; old anchors
@@ -73,6 +80,12 @@ The site has three areas: **Features & capabilities**, **White papers** and **Co
   from the study's Joule 3D viewer via Plotly toImage on a white background, cropped to content with 32 px padding
   and resized to 1800 px wide. Same academic-library layout as `figs/risc/`; confirm it may be shown publicly
   before pushing.
+- `assets/figs/cfd/`: WP-108 figures and the `#cfd` band figure, from chipletTherm `src_flow/wp_air_figs.py`
+  (`out_wp_air/`; t09 still air, t11 wind tunnel, t13 transient). `v2a_structure.png` is cropped from
+  `out_t13/v2a_3d.png`.
+- `assets/figs/coldplate/`: WP-109 figures, from `results_amd_mi350_workload_study/coldplate_t11`:
+  `mi350_cp_3d_*.png` rendered by `wp_cp_3d.py` from the internal cold-plate report's 3-D scenes (lighter colour
+  scales), `mi350_cp_structure.png` cropped from the report's stack drawing.
 
 Open `index.html` directly in a browser. No development server is required.
 Legacy `#features`, `#technology`, `#results` and `#agentic` entry links on the main page
